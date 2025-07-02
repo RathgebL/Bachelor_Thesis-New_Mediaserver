@@ -1,4 +1,4 @@
-# Medienserver für digitalisierte Musik-CDs der Hochschulbibliothek 🎵
+# Medienserver für digitalisierte Musik-CDs der Hochschulbibliothek
 
 ## Projektbeschreibung
 
