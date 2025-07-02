@@ -164,17 +164,19 @@ cython_debug/
 *.bbl
 *.blg
 *.brf
+*.bcf
 *.fls
 *.fdb_latexmk
+*.gz
 *.log
-*.out
-*.toc
 *.lof
 *.lot
-*.gz
 *.nav
+*.out
+*.run.xml
 *.snm
 *.synctex.gz
+*.toc
 *.xdv
 
 # Kompilierte PDFs (wenn nicht versioniert)
