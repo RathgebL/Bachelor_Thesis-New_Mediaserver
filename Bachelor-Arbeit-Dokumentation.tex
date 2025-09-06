@@ -37,65 +37,95 @@
     Karlsruhe, den \today
 \end{titlepage}
 
+% ------ Inhaltsverzeichnis ------
 \newpage
 \tableofcontents
 \newpage
 
+% ------ Abschnitte ------
 \section{Notizen}
-1. Server-Setup
-- Rechner mit Ubuntu (24.04.3 LTS, da längerer Support) als Betriebssystem aufsetzen.
-    - download von https://ubuntu.com/download/server aud USB-Stick
-    - Stick einstecken, Rechner booten und Installation starten
-        - dafür beim Anschalten des Rechners shift drücken
-        - darauf achten, dass der Rechner in Zukunft nicht über USB bootet
-        - Rechner per LAN Kabel mit dem Netzwerk verbinden
-- Docker installieren
-    Quickinstall:
-    \begin{minted}[linenos]{bash}
-    sudo apt update
-    sudo apt install docker.io
-    sudo systemctl start docker
-    sudo systemctl enable docker
-    \end{minted}
-    Von Docker Webseite (https://docs.docker.com/engine/install/ubuntu/):
-    \begin{minted}[breaklines, linenos]{bash}
-    # Add Docker's official GPG key:
-    sudo apt-get update
-    sudo apt-get install ca-certificates curl
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-    # Add the repository to Apt sources:
-    echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-    $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt-get update
-    \end{minted}
-    
-    Test mit:
-    \begin{minted}[linenos]{bash} 
-    sudo docker run hello-world 
-    \end{minted}
-- 
+\begin{enumerate}
+  \item Server-Setup
+    \begin{itemize}
+      \item Rechner mit Ubuntu (24.04.3 LTS, da längerer Support) als Betriebssystem aufsetzen.
+        \begin{itemize}
+          \item Download von \url{https://ubuntu.com/download/server} auf USB-Stick
+          \item Stick einstecken, Rechner booten und Installation starten
+            \begin{itemize}
+              \item dafür beim Anschalten des Rechners \texttt{Shift} drücken
+              \item darauf achten, dass der Rechner in Zukunft nicht über USB bootet
+              \item Rechner per LAN-Kabel mit dem Netzwerk verbinden
+            \end{itemize}
+        \end{itemize}
 
+      \item Docker installieren
+        \begin{itemize}
+          \item Quickinstall:
+          \begin{minted}[linenos]{bash}
+sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+          \end{minted}
 
-2. Auswahl und Installation der Medienserver-Software
+          \item Von Docker-Webseite (\url{https://docs.docker.com/engine/install/ubuntu/}):
+          \begin{minted}[breaklines, linenos]{bash}
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-3. Integration mit der bestehenden IT-Infrastruktur
+# Add the repository to Apt sources:
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+$(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+          \end{minted}
 
-4. Benutzerverwaltung und Zugriffsrechte
+          \item Test mit:
+          \begin{minted}[linenos]{bash}
+sudo docker run hello-world
+          \end{minted}
+        \end{itemize}
+    \end{itemize}
 
-5. Testen und Fehlerbehebung
+  \item Auswahl und Installation der Medienserver-Software
+    \begin{itemize}
+      \item Hier kommen die Softwareoptionen rein
+      \item Installationsschritte …
+    \end{itemize}
+
+  \item Integration mit der bestehenden IT-Infrastruktur
+    \begin{itemize}
+      \item Netzwerk-Anbindung
+      \item Datenbanken anbinden …
+    \end{itemize}
+
+  \item Benutzerverwaltung und Zugriffsrechte
+    \begin{itemize}
+      \item Nutzergruppen definieren
+      \item Rechteverwaltung testen …
+    \end{itemize}
+
+  \item Testen und Fehlerbehebung
+    \begin{itemize}
+      \item Funktionstests
+      \item Lasttests
+      \item Bugfixing dokumentieren …
+    \end{itemize}
+\end{enumerate}
+\newpage
 
 \section{Einleitung}
 % Einleitung folgt ...
 
 \section{Implementierung}
-1. Vorraussetzungen
-2. Sicherheit
-3. 
+\subsection{Vorraussetzungen}
+\subsection{Sicherheit}
 
 \section{Technischer Hintergrund}
 - Medienserver
