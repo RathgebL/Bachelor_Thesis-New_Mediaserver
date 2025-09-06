@@ -1,3 +1,0 @@
-\begin{MintedVerbatim}[commandchars=\\\{\}]
-\PYG{+w}{    }sudo\PYG{+w}{ }docker\PYG{+w}{ }run\PYG{+w}{ }hello\PYGZhy{}world
-\end{MintedVerbatim}
