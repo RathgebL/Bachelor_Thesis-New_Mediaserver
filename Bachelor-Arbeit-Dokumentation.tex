@@ -2,14 +2,16 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[ngerman]{babel}
+\usepackage[german]{babel}
+\usepackage{minted}
 \usepackage{csquotes}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[backend=biber,style=authoryear]{biblatex}
+
 \addbibresource{bibliography.bib}
 
-\title{Erstellung eines neuen Medienservers für die Bibliothek der Hochschule für Musik Karlsruhe}
+\title{Aufsetzen eines neuen Medienservers für die Bibliothek der Hochschule für Musik Karlsruhe}
 \author{Lennart Rathgeb}
 \date{\today}
 
@@ -20,14 +22,68 @@
 \tableofcontents
 \newpage
 
+\section{Notizen}
+1. Server-Setup
+- Rechner mit Ubuntu (24.04.3 LTS, da längerer Support) als Betriebssystem aufsetzen.
+    - download von https://ubuntu.com/download/server aud USB-Stick
+    - Stick einstecken, Rechner booten und Installation starten
+        - dafür beim Anschalten des Rechners shift drücken
+        - darauf achten, dass der Rechner in Zukunft nicht über USB bootet
+        - Rechner per LAN Kabel mit dem Netzwerk verbinden
+- Docker installieren
+    Quickinstall:
+    \begin{minted}[linenos]{bash}
+    sudo apt update
+    sudo apt install docker.io
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    \end{minted}
+    Von Docker Webseite (https://docs.docker.com/engine/install/ubuntu/):
+    \begin{minted}[breaklines, linenos]{bash}
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    \end{minted}
+    
+    Test mit:
+    \begin{minted}[linenos]{bash} 
+    sudo docker run hello-world 
+    \end{minted}
+- 
+
+
+2. Auswahl und Installation der Medienserver-Software
+
+3. Integration mit der bestehenden IT-Infrastruktur
+
+4. Benutzerverwaltung und Zugriffsrechte
+
+5. Testen und Fehlerbehebung
+
 \section{Einleitung}
 % Einleitung folgt ...
 
-\section{Technischer Hintergrund}
-% Hintergrund folgt ...
-
 \section{Implementierung}
-% Umsetzung folgt ...
+1. Vorraussetzungen
+2. Sicherheit
+3. 
+
+\section{Technischer Hintergrund}
+- Medienserver
+- Docker
+- Ubuntu Server
+- Navidrome
+- NAS
 
 \section{Fazit}
 % Fazit folgt ...
