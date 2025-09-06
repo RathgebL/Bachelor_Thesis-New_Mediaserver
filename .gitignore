@@ -178,6 +178,7 @@ cython_debug/
 *.synctex.gz
 *.toc
 *.xdv
+*.minted
 
 # Kompilierte PDFs (wenn nicht versioniert)
 *.pdf
