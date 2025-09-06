@@ -11,8 +11,8 @@ Das Projekt entsteht im Rahmen der Bachelorarbeit im Bereich **Musikinformatik**
 ## Aktueller Projektstatus
 
 - [x] Projektplanung und Zieldefinition
-- [ ] Auswahl der geeigneten Server- und Mediensoftware
-- [ ] Testumgebung einrichten
+- [x] Auswahl der geeigneten Server- und Mediensoftware
+- [x] Testumgebung einrichten
 - [ ] Digitalisierung & Tagging von Musik-CDs
 - [ ] Serverkonfiguration
 - [ ] Usability-Tests und Feedback
