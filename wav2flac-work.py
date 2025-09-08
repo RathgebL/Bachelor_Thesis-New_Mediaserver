@@ -181,5 +181,12 @@ def assign_tracknumbers(wav_paths: list[Path]) -> dict[Path, str]:
 
 # ---------- WAV-Finder ----------
 def find_wavs(root: Path) -> list[Path]:
+    # Findet alle .wav-Dateien rekursiv unter root
     root = Path(root)
     return [p for p in root.rglob("*") if p.is_file() and p.suffix.lower() == ".wav"]
+
+# ---------- Output-Pfade ----------
+def out_flac_path(in_wav: Path, in_root: Path, out_root: Path) -> Path:
+    # Spiegelt die Ordnerstruktur von in_root -> out_root und ersetzt .wav durch .flac
+    rel = in_wav.relative_to(in_root)
+    return (out_root / rel).with_suffix(".flac")
