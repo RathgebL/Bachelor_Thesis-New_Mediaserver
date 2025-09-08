@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# --- Imports ---
 import re, unicodedata, subprocess, sys
 import tkinter as tk
 from tkinter import filedialog
@@ -10,9 +11,9 @@ from collections import defaultdict
 from pathlib import Path
 from mutagen.flac import FLAC, Picture
 
-# ---------- Utilities ----------
+# --- Utilities ---
 def ask_options() -> dict:
-    """Fragt den Nutzer interaktiv nach Optionen für die Konvertierung."""
+    # Optonen für die Konvertierung abfragen
     print("\n=== Konverter Optionen ===")
     
     # Anzahl Threads
@@ -66,7 +67,7 @@ def norm_text(s: str) -> str: # Normalisierung für Titel, Alben und Werke
     s = re.sub(r"\b(?:no|nr)\.?\s*(\d+)(?=\D|$)", r"Nr. \1", s, flags=re.IGNORECASE) 
     return s
 
-# ---------- Classifier ----------
+# --- Classifier ---
 def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", "box" oder "unknown"
     parts = [p.name for p in wav_path.parents] # Liste der Ordnernamen im Pfad
     if "EinzelCDs" in parts:
@@ -76,7 +77,7 @@ def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", 
     else:
         return "unknown"    
 
-# ---------- Parser: EinzelCD ----------
+# --- Parser: EinzelCD ---
 def parse_single(wav_path: Path) -> dict:
     work_dir  = wav_path.parent # Komponist,Vorname-Werk
     media_dir = work_dir.parent # Komponist,Vorname-Medientitel
@@ -92,8 +93,8 @@ def parse_single(wav_path: Path) -> dict:
 
     # Titel und Satznummer aus dem Dateinamen
     fname = wav_path.name
-    m_num = re.match(r"^(?P<comp>[^-]+?)-(?P<work>.+?)-(?P<num>\d{1,3})-(?P<title>.+?)\.wav$", fname, re.I)
-    m_non = re.match(r"^(?P<comp>[^-]+?)-(?P<work>.+?)-(?P<title>.+?)\.wav$", fname, re.I)
+    m_num = re.match(r"^(?P<comp>[^-]+?)-(?P<num>\d{1,3})-(?P<title>.+?)\.wav$", fname, re.I)
+    m_non = re.match(r"^(?P<comp>[^-]+?)-(?P<title>.+?)\.wav$", fname, re.I)
 
     if m_num:
         title_raw = m_num.group("title")
@@ -121,7 +122,7 @@ def parse_single(wav_path: Path) -> dict:
         # tracknumber wird separat vergeben
     }
 
-# ---------- Parser: Box ----------
+# --- Parser: Box ---
 def parse_box(wav_path: Path) -> dict:
     work_dir = wav_path.parent # Komponist,Vorname-Werk 
     disc_dir = work_dir.parent # Komponist,Vorname-Medientitel_CDNummer
@@ -183,7 +184,7 @@ def parse_box(wav_path: Path) -> dict:
         # tracknumber wird separat vergeben
     }
 
-# ---------- Dispatcher ----------
+# --- Dispatcher ---
 def parse_path(wav_path: Path) -> dict:
     kind = classify_path(wav_path)
     if kind == "single":
@@ -191,7 +192,7 @@ def parse_path(wav_path: Path) -> dict:
     if kind == "box":
         return parse_box(wav_path)
 
-# ---------- Tracknumbers ----------
+# --- Tracknumbers ---
 def natural_key(name: str): # Natürliche Sortierung: '2' < '10'
     parts = re.split(r'(\d+)', name)
     return [int(p) if p.isdigit() else p.lower() for p in parts]
@@ -217,19 +218,19 @@ def assign_tracknumbers(wav_paths: list[Path]) -> dict[Path, str]: # Weist WAV-D
             trackmap[fp] = str(i)   # Tags: "1","2","3"... (Zero-Pad nur für Dateinamen nötig)
     return trackmap
 
-# ---------- WAV-Finder ----------
+# --- WAV-Finder ---
 def find_wavs(root: Path) -> list[Path]:
     # Findet alle .wav-Dateien rekursiv unter root
     root = Path(root)
     return [p for p in root.rglob("*") if p.is_file() and p.suffix.lower() == ".wav"]
 
-# ---------- Output-Pfade ----------
+# --- Output-Pfade ---
 def out_flac_path(in_wav: Path, in_root: Path, out_root: Path) -> Path:
     # Spiegelt die Ordnerstruktur von in_root -> out_root und ersetzt .wav durch .flac
     rel = in_wav.relative_to(in_root)
     return (out_root / rel).with_suffix(".flac")
 
-# ---------- ffmpeg-Konvertierung ----------
+# --- ffmpeg-Konvertierung ---
 def convert_wav_to_flac(in_wav: Path, out_flac: Path, compression_level: int = 5, dry_run: bool = False) -> None:
     out_flac.parent.mkdir(parents=True, exist_ok=True)
     if dry_run:
@@ -247,7 +248,7 @@ def convert_wav_to_flac(in_wav: Path, out_flac: Path, compression_level: int = 5
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"ffmpeg-Konvertierung fehlgeschlagen: {in_wav} -> {out_flac}") from e
 
-# ---------- Tags schreiben (FLAC/Vorbis-Kommentare) ----------
+# --- Tags schreiben (FLAC/Vorbis-Kommentare) ---
 def write_flac_tags(flac_file: Path, tags: dict, dry_run: bool = False) -> None:
     if dry_run:
         return
@@ -276,7 +277,7 @@ def write_flac_tags(flac_file: Path, tags: dict, dry_run: bool = False) -> None:
 
     audio.save()
 
-# ---------- Cover einbetten ----------
+# --- Cover einbetten ---
 def embed_cover_if_present(flac_file: Path, source_wav: Path, dry_run: bool = False) -> None:
     # Container bestimmen (eine Ebene über dem Werk-Ordner)
     kind = classify_path(source_wav)
@@ -320,7 +321,7 @@ def embed_cover_if_present(flac_file: Path, source_wav: Path, dry_run: bool = Fa
     audio.add_picture(pic)
     audio.save()
 
-# ---------- Hauptverarbeitung einer Datei ----------
+# --- Hauptverarbeitung einer Datei ---
 def process_one(wav: Path, in_root: Path, out_root: Path, trackmap: dict[Path, str], dry_run: bool = False) -> tuple[Path, str | None]:
     try:
         tags = parse_path(wav)  # wählt intern single/box
