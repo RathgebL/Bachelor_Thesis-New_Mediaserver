@@ -1,12 +1,55 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re, unicodedata, subprocess
+import re, unicodedata, subprocess, sys
+import tkinter as tk
+from tkinter import filedialog
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
 from collections import defaultdict
 from pathlib import Path
 from mutagen.flac import FLAC, Picture
 
 # ---------- Utilities ----------
+def ask_options() -> dict:
+    """Fragt den Nutzer interaktiv nach Optionen für die Konvertierung."""
+    print("\n=== Konverter Optionen ===")
+    
+    # Anzahl Threads
+    while True:
+        workers = input("Anzahl Threads (default=4): ").strip()
+        if workers == "":
+            workers = 4
+            break
+        elif workers.isdigit():
+            workers = int(workers)
+            break
+        else:
+            print("Bitte eine Zahl eingeben.")
+    
+    # Dry-Run
+    dry = input("Dry-Run (nur simulieren)? [y/N]: ").strip().lower()
+    dry_run = (dry == "y")
+    
+    # Force overwrite
+    force = input("Existierende FLACs überschreiben? [y/N]: ").strip().lower()
+    force_overwrite = (force == "y")
+    
+    return {
+        "workers": workers,
+        "dry_run": dry_run,
+        "force": force_overwrite,
+    }
+
+def choose_directory(prompt: str) -> Path: # GUI-Dialog zur Verzeichnisauswahl
+    root = tk.Tk()
+    root.withdraw()  # Kein Hauptfenster
+    path = filedialog.askdirectory(title=prompt)
+    if not path:
+        print(f"Abbruch: Kein Verzeichnis gewählt für {prompt}")
+        sys.exit(1)
+    return Path(path)
+
 def nfc(s: str) -> str: # Unicode-Normalisierung (NFC) für Umlaute auf macOS
     return unicodedata.normalize("NFC", s or "")
 
@@ -305,3 +348,56 @@ def process_one(wav: Path, in_root: Path, out_root: Path, trackmap: dict[Path, s
         return (wav, None)
     except Exception as e:
         return (wav, str(e))
+    
+def main():
+    # Optionen interaktiv abfragen
+    opts = ask_options()
+
+    # Ordner auswählen
+    input_root = choose_directory("Wähle den Eingabe-Ordner mit WAV-Dateien")
+    output_root = choose_directory("Wähle den Ausgabe-Ordner für FLAC-Dateien")
+
+    # WAV-Dateien finden
+    wavs = find_wavs(input_root)
+    if not wavs:
+        print("Keine WAV-Dateien gefunden.", file=sys.stderr)
+        sys.exit(1)
+
+    # Tracknummern zuweisen
+    trackmap = assign_tracknumbers(wavs)
+
+    # Dateien verarbeiten (ggf. parallel)
+    tasks = []
+    for w in wavs:
+        out_path = out_flac_path(w, input_root, output_root)
+        if out_path.exists() and not opts["force"]:
+            continue
+        tasks.append(w)
+
+    if not tasks:
+        print("Nichts zu tun (alle Zieldateien existieren bereits).")
+        sys.exit(0)
+
+    # Verarbeitung mit Fortschrittsanzeige
+    errors = []
+    with ThreadPoolExecutor(max_workers=opts["workers"]) as ex:
+        futures = {ex.submit(process_one, w, input_root, output_root, trackmap, opts["dry_run"]): w for w in tasks}
+        for fut in tqdm(as_completed(futures), total=len(futures), desc="Konvertiere"):
+            wav, err = fut.result()
+            if err:
+                errors.append((wav, err))
+
+    # Zusammenfassung
+    if errors:
+        print("\nFertig - mit Warnungen/Fehlern:")
+        for wav, err in errors[:20]:
+            print(f"  - {wav}: {err}")
+        if len(errors) > 20:
+            print(f"  ... und {len(errors)-20} weitere.")
+        sys.exit(2)
+    else:
+        print("\nFertig - alles ok.")
+
+
+if __name__ == "__main__":
+    main()
