@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re, unicodedata
+import re, unicodedata, subprocess
 from collections import defaultdict
 from pathlib import Path
 
@@ -190,3 +190,21 @@ def out_flac_path(in_wav: Path, in_root: Path, out_root: Path) -> Path:
     # Spiegelt die Ordnerstruktur von in_root -> out_root und ersetzt .wav durch .flac
     rel = in_wav.relative_to(in_root)
     return (out_root / rel).with_suffix(".flac")
+
+# ---------- ffmpeg-Konvertierung ----------
+def convert_wav_to_flac(in_wav: Path, out_flac: Path, compression_level: int = 5, dry_run: bool = False) -> None:
+    out_flac.parent.mkdir(parents=True, exist_ok=True)
+    if dry_run:
+        return
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", str(in_wav),
+        "-map_metadata", "0",
+        "-compression_level", str(compression_level),
+        str(out_flac),
+    ]
+    
+    try:
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"ffmpeg-Konvertierung fehlgeschlagen: {in_wav} -> {out_flac}") from e
