@@ -4,6 +4,7 @@
 import re, unicodedata, subprocess
 from collections import defaultdict
 from pathlib import Path
+from mutagen.flac import FLAC, Picture
 
 # ---------- Utilities ----------
 def nfc(s: str) -> str: # Unicode-Normalisierung (NFC) für Umlaute auf macOS
@@ -23,12 +24,14 @@ def norm_text(s: str) -> str: # Normalisierung für Titel, Alben und Werke
     return s
 
 # ---------- Classifier ----------
-def classify_path(wav_path: Path) -> str: # Klassifikation in "box" oder "single"
-    parts = [p.name for p in wav_path.parents] # Liste der Ordnernamen
-    if "Boxen" in parts:
-        return "box"
+def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", "box" oder "unknown"
+    parts = [p.name for p in wav_path.parents] # Liste der Ordnernamen im Pfad
     if "EinzelCDs" in parts:
         return "single"
+    elif "Boxen" in parts:
+        return "box"
+    else:
+        return "unknown"    
 
 # ---------- Parser: EinzelCD ----------
 def parse_single(wav_path: Path) -> dict:
@@ -146,35 +149,27 @@ def parse_path(wav_path: Path) -> dict:
         return parse_box(wav_path)
 
 # ---------- Tracknumbers ----------
-def _natural_key(name: str):
-    """Natürliche Sortierung: '2' < '10'."""
+def natural_key(name: str): # Natürliche Sortierung: '2' < '10'
     parts = re.split(r'(\d+)', name)
     return [int(p) if p.isdigit() else p.lower() for p in parts]
 
-def assign_tracknumbers(wav_paths: list[Path]) -> dict[Path, str]:
-    """
-    Vergibt pro CD/Disc (Container) fortlaufende Tracknummern.
-    Container = eine Ebene über dem Werkordner → wav_path.parents[1]
-    (z. B. .../EinzelCDs/<CD-Ordner>/<Werk-Ordner>/<Datei.wav>
-           .../Boxen/<Box>/<Disc-Ordner>/<Werk-Ordner>/<Datei.wav>)
-    Rückgabe: { wav_path: "1", ... }
-    """
+def assign_tracknumbers(wav_paths: list[Path]) -> dict[Path, str]: # Weist WAV-Dateien Tracknummern zu
     buckets = defaultdict(list)
 
     for p in wav_paths:
-        if p.suffix.lower() != ".wav":
+        if p.suffix.lower() != ".wav": # Datein die keine .wav sind, überspringen
             continue
         # Container-Ordner (eine Ebene über dem Werkordner); Fallback: Elternordner
         try:
             container = p.parents[1]
-        except IndexError:
+        except IndexError: # Verbesserung möglich
             container = p.parent
         buckets[container].append(p)
 
     trackmap = {}
     for container, files in buckets.items():
         # stabil sortieren: zuerst Werkordnername, dann natürlicher Dateiname
-        files_sorted = sorted(files, key=lambda x: (x.parent.name.lower(), _natural_key(x.name)))
+        files_sorted = sorted(files, key=lambda x: (x.parent.name.lower(), natural_key(x.name)))
         for i, fp in enumerate(files_sorted, start=1):
             trackmap[fp] = str(i)   # Tags: "1","2","3"... (Zero-Pad nur für Dateinamen nötig)
     return trackmap
@@ -203,8 +198,110 @@ def convert_wav_to_flac(in_wav: Path, out_flac: Path, compression_level: int = 5
         "-compression_level", str(compression_level),
         str(out_flac),
     ]
-    
+
     try:
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"ffmpeg-Konvertierung fehlgeschlagen: {in_wav} -> {out_flac}") from e
+
+# ---------- Tags schreiben (FLAC/Vorbis-Kommentare) ----------
+def write_flac_tags(flac_file: Path, tags: dict, dry_run: bool = False) -> None:
+    if dry_run:
+        return
+    audio = FLAC(str(flac_file))
+
+    def setif(key, val):
+        if val is not None and val != "":
+            audio[key] = [str(val)]
+
+    # Standard
+    setif("artist",         tags.get("artist"))
+    setif("albumartist",    tags.get("albumartist"))
+    setif("composer",       tags.get("composer"))
+    setif("album",          tags.get("album"))
+    setif("title",          tags.get("title"))
+    setif("tracknumber",    tags.get("tracknumber"))
+    setif("discnumber",     tags.get("discnumber"))
+    # setif("date",           tags.get("date"))        # Daten nicht verfügbar
+    # setif("genre",          tags.get("genre"))       # Daten nicht verfügbar
+
+    # Klassik
+    setif("work",           tags.get("work"))
+    setif("movement",       tags.get("movement"))
+    setif("movementnumber", tags.get("movementnumber"))
+    setif("boxset",         tags.get("boxset"))
+
+    audio.save()
+
+# ---------- Cover einbetten ----------
+def embed_cover_if_present(flac_file: Path, source_wav: Path, dry_run: bool = False) -> None:
+    # Container bestimmen (eine Ebene über dem Werk-Ordner)
+    kind = classify_path(source_wav)
+    if kind == "single":
+        container = source_wav.parents[1]
+    elif kind == "box":
+        container = source_wav.parents[2]
+    elif kind == "unknown":
+        print(f"[COVER] Kein Medientyp erkannt: {source_wav}")
+        return False
+
+    # Kandidaten für Coverbilder
+    candidates: list[Path] = [
+        container / "booklet" / "booklet-b.jpg",
+        container / "booklet" / "booklet-b.jpeg",
+    ]
+
+    # Kandidat wählen
+    img_path = next((p for p in candidates if p.exists()), None)
+    if not img_path:
+        print(f"[COVER] Kein Cover gefunden in: {container}")
+        return
+
+    if dry_run:
+        return
+
+    # MIME aus Endung bestimmen
+    ext = img_path.suffix.lower()
+    if ext in (".jpg", ".jpeg"):
+        mime = "image/jpeg"
+
+    audio = FLAC(str(flac_file))
+    pic = Picture()
+    pic.type = 3  # Front cover
+    pic.mime = mime
+    pic.desc = "Cover"
+
+    with open(img_path, "rb") as f:
+        pic.data = f.read()
+
+    audio.add_picture(pic)
+    audio.save()
+
+# ---------- Hauptverarbeitung einer Datei ----------
+def process_one(wav: Path, in_root: Path, out_root: Path, trackmap: dict[Path, str], dry_run: bool = False) -> tuple[Path, str | None]:
+    try:
+        tags = parse_path(wav)  # wählt intern single/box
+        if tags is None:
+            return (wav, "Parser gab None zurück")
+
+        tn = trackmap.get(wav)
+        if not tn:
+            return (wav, "Keine Tracknummer ermittelt")
+
+        tags["tracknumber"] = tn
+
+        # Zielpfad
+        out_flac = out_flac_path(wav, in_root=in_root, out_root=out_root)
+
+        # Konvertieren
+        convert_wav_to_flac(wav, out_flac, compression_level=5, dry_run=dry_run)
+
+        # Tags schreiben
+        write_flac_tags(out_flac, tags, dry_run=dry_run)
+
+        # Cover einbetten
+        embed_cover_if_present(out_flac, wav, dry_run=dry_run)
+
+        return (wav, None)
+    except Exception as e:
+        return (wav, str(e))
