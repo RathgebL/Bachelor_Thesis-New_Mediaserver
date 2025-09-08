@@ -178,3 +178,8 @@ def assign_tracknumbers(wav_paths: list[Path]) -> dict[Path, str]:
         for i, fp in enumerate(files_sorted, start=1):
             trackmap[fp] = str(i)   # Tags: "1","2","3"... (Zero-Pad nur für Dateinamen nötig)
     return trackmap
+
+# ---------- WAV-Finder ----------
+def find_wavs(root: Path) -> list[Path]:
+    root = Path(root)
+    return [p for p in root.rglob("*") if p.is_file() and p.suffix.lower() == ".wav"]
