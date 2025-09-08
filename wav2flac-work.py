@@ -61,6 +61,7 @@ def norm_name(s: str) -> str: # Normalisierung für Personennamen
 
 def norm_text(s: str) -> str: # Normalisierung für Titel, Alben und Werke
     s = s.replace("_", " ") # Unterstriche zu Leerzeichen
+    s = s.replace("--", "—") # Doppelter Bindestrich zu einfachem Bindestrich
     s = re.sub(r"\b[oO][pP]\.?\s*", "op. ", s) # Opus vereinheitlichen 
     # Nummer vereinheitlichen
     s = s.replace("Nº", "No")
@@ -93,7 +94,7 @@ def parse_single(wav_path: Path) -> dict:
 
     # Titel und Satznummer aus dem Dateinamen
     fname = wav_path.name
-    m_num = re.match(r"^(?P<comp>[^-]+?)-(?P<num>\d{1,3})-(?P<title>.+?)\.wav$", fname, re.I)
+    m_num = re.match(r"^(?P<comp>[^-]+?)-(?P<work>.+?)-(?P<num>\d{1,3})-(?P<title>.+?)\.wav$", fname, re.I)
     m_non = re.match(r"^(?P<comp>[^-]+?)-(?P<title>.+?)\.wav$", fname, re.I)
 
     if m_num:
@@ -238,7 +239,7 @@ def convert_wav_to_flac(in_wav: Path, out_flac: Path, compression_level: int = 5
     cmd = [
         "ffmpeg", "-y",
         "-i", str(in_wav),
-        "-map_metadata", "0",
+        "-map_metadata", "-1", # Keine Metadaten von der Quelle übernehmen
         "-compression_level", str(compression_level),
         str(out_flac),
     ]
