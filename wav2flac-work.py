@@ -33,14 +33,9 @@ def ask_options() -> dict:
     dry = input("Dry-Run (nur simulieren)? [y/N]: ").strip().lower()
     dry_run = (dry == "y")
     
-    # Force overwrite
-    force = input("Existierende FLACs überschreiben? [y/N]: ").strip().lower()
-    force_overwrite = (force == "y")
-    
     return {
         "workers": workers,
         "dry_run": dry_run,
-        "force": force_overwrite,
     }
 
 def choose_directory(prompt: str) -> Path: # GUI-Dialog zur Verzeichnisauswahl
@@ -351,7 +346,8 @@ def process_one(wav: Path, in_root: Path, out_root: Path, trackmap: dict[Path, s
         return (wav, None)
     except Exception as e:
         return (wav, str(e))
-    
+
+# --- Main ---    
 def main():
     # Optionen interaktiv abfragen
     opts = ask_options()
@@ -361,6 +357,7 @@ def main():
     output_root = choose_directory("Wähle den Ausgabe-Ordner für FLAC-Dateien")
     run_ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
     output_root = output_root / run_ts
+    print(f"Ausgabe-Ordner: {output_root}")
 
     # WAV-Dateien finden
     wavs = find_wavs(input_root)
@@ -371,22 +368,14 @@ def main():
     # Tracknummern zuweisen
     trackmap = assign_tracknumbers(wavs)
 
-    # Dateien verarbeiten (ggf. parallel)
-    tasks = []
-    for w in wavs:
-        out_path = out_flac_path(w, input_root, output_root)
-        if out_path.exists() and not opts["force"]:
-            continue
-        tasks.append(w)
-
-    if not tasks:
+    if not wavs:
         print("Nichts zu tun (alle Zieldateien existieren bereits).")
         sys.exit(0)
 
     # Verarbeitung mit Fortschrittsanzeige
     errors = []
     with ThreadPoolExecutor(max_workers=opts["workers"]) as ex:
-        futures = {ex.submit(process_one, w, input_root, output_root, trackmap, opts["dry_run"]): w for w in tasks}
+        futures = {ex.submit(process_one, w, input_root, output_root, trackmap, opts["dry_run"]): w for w in wavs}
         for fut in tqdm(as_completed(futures), total=len(futures), desc="Konvertiere"):
             wav, err = fut.result()
             if err:
@@ -397,8 +386,8 @@ def main():
         print("\nFertig - mit Warnungen/Fehlern:")
         for wav, err in errors[:20]:
             print(f"  - {wav}: {err}")
-        if len(errors) > 20:
-            print(f"  ... und {len(errors)-20} weitere.")
+        if len(errors) > 100:
+            print(f"  ... und {len(errors)-100} weitere.")
         sys.exit(2)
     else:
         print("\nFertig - alles ok.")
