@@ -369,10 +369,6 @@ def main():
     # Tracknummern zuweisen
     trackmap = assign_tracknumbers(wavs)
 
-    if not wavs:
-        print("Nichts zu tun (alle Zieldateien existieren bereits).")
-        sys.exit(0)
-
     # Verarbeitung mit Fortschrittsanzeige
     errors = []
     with ThreadPoolExecutor(max_workers=opts["workers"]) as ex:
