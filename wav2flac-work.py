@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # --- Imports ---
-import re, unicodedata, subprocess, sys
+import os, re, unicodedata, subprocess, sys
 import tkinter as tk
 from tkinter import filedialog
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -17,21 +17,22 @@ def ask_options() -> dict:
     # Optonen für die Konvertierung abfragen
     print("\n=== Konverter Optionen ===")
     
-    # Anzahl Threads
-    while True:
-        workers = input("Anzahl Threads (default=4): ").strip()
-        if workers == "":
-            workers = 4
-            break
-        elif workers.isdigit():
-            workers = int(workers)
-            break
-        else:
-            print("Bitte eine Zahl eingeben.")
+    # Anzahl der Paralell laufenden Prozesse abhängig vom Operating System setzen
+    workers = os.cpu_count() or 4   # Fallback: 4
+    print(f"Threads automatisch auf {workers} gesetzt (Anzahl CPU-Kerne).")
     
     # Dry-Run
-    dry = input("Dry-Run (nur simulieren)? [y/N]: ").strip().lower()
-    dry_run = (dry == "y")
+    while True:
+        dry = input("Dry-Run (nur simulieren)? [y/n(Default)]: ").strip().lower()
+        if dry not in ("y", "n", ""):
+            print("Bitte 'y' oder 'n' eingeben.")
+            continue
+        elif dry == "y":
+            dry_run = True
+            break
+        else:
+            dry_run = False
+            break
     
     return {
         "workers": workers,
@@ -130,7 +131,7 @@ def parse_box(wav_path: Path) -> dict:
     boxtitle = norm_text(nfc(m_box.group("box"))) if m_box else "Unknown Album"
 
     # Disc-Titel aus dem Disc-Ordner
-    m_disc = re.match(r"^(?P<comp>[^-]+?)\s*-\s*(?P<title>.+?)(?:[._ ]CD(?P<discnum>\d{1,2}))?$", disc_dir.name, re.IGNORECASE)
+    m_disc = re.match(r"^(?P<comp>[^-]+?)\s*-\s*(?P<title>.+?)(?:\._CD(?P<discnum>\d{1,2}))?$", disc_dir.name)
     disctitle = norm_text(nfc(m_disc.group("title"))) if m_disc else "Unknown Album" # Weist Disc-Titel zu, wenn nicht gefunden "Unknown Album"
     discnumber = m_disc.group("discnum") if m_disc and m_disc.group("discnum") else "" # Weist Discnummer zu, wenn nicht gefunden leer
 
@@ -219,7 +220,7 @@ def assign_tracknumbers(wav_paths: list[Path]) -> dict[Path, str]: # Weist WAV-D
 def find_wavs(root: Path) -> list[Path]:
     # Findet alle .wav-Dateien rekursiv unter root
     root = Path(root)
-    return [p for p in root.rglob("*") if p.is_file() and p.suffix.lower() == ".wav"]
+    return [p for p in root.rglob("*") if p.is_file() and p.suffix.lower() == ".wav" and not p.name.startswith(".")]
 
 # --- Output-Pfade ---
 def out_flac_path(in_wav: Path, in_root: Path, out_root: Path) -> Path:
