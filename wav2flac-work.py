@@ -381,7 +381,7 @@ def main():
     # Zusammenfassung
     if errors:
         print("\nFertig - mit Warnungen/Fehlern:")
-        for wav, err in errors[:20]:
+        for wav, err in errors[:100]:
             print(f"  - {wav}: {err}")
         if len(errors) > 100:
             print(f"  ... und {len(errors)-100} weitere.")
