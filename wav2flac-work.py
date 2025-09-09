@@ -75,7 +75,7 @@ def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", 
     else:
         return "unknown"    
 
-# --- Parser: EinzelCD ---
+# --- Parser ---
 def parse_single(wav_path: Path) -> dict:
     work_dir  = wav_path.parent # Komponist,Vorname-Werk
     media_dir = work_dir.parent # Komponist,Vorname-Medientitel
@@ -120,7 +120,6 @@ def parse_single(wav_path: Path) -> dict:
         # tracknumber wird separat vergeben
     }
 
-# --- Parser: Box ---
 def parse_box(wav_path: Path) -> dict:
     work_dir = wav_path.parent # Komponist,Vorname-Werk 
     disc_dir = work_dir.parent # Komponist,Vorname-Medientitel_CDNummer
@@ -182,7 +181,6 @@ def parse_box(wav_path: Path) -> dict:
         # tracknumber wird separat vergeben
     }
 
-# --- Dispatcher ---
 def parse_path(wav_path: Path) -> dict:
     kind = classify_path(wav_path)
     if kind == "single":
@@ -191,7 +189,7 @@ def parse_path(wav_path: Path) -> dict:
         return parse_box(wav_path)
 
 # --- Tracknumbers ---
-def natural_key(name: str): # Natürliche Sortierung: '2' < '10'
+def natural_key(name: str): # Natürliche Sortierung ('2' < '10')
     parts = re.split(r'(\d+)', name)
     return [int(p) if p.isdigit() else p.lower() for p in parts]
 
