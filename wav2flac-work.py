@@ -10,6 +10,7 @@ from tqdm import tqdm
 from collections import defaultdict
 from pathlib import Path
 from mutagen.flac import FLAC, Picture
+from datetime import datetime
 
 # --- Utilities ---
 def ask_options() -> dict:
@@ -358,6 +359,8 @@ def main():
     # Ordner auswählen
     input_root = choose_directory("Wähle den Eingabe-Ordner mit WAV-Dateien")
     output_root = choose_directory("Wähle den Ausgabe-Ordner für FLAC-Dateien")
+    run_ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    output_root = output_root / run_ts
 
     # WAV-Dateien finden
     wavs = find_wavs(input_root)
