@@ -13,40 +13,44 @@ from mutagen.flac import FLAC, Picture
 from datetime import datetime
 
 # --- Utilities ---
-def ask_options() -> dict:
-    # Optonen für die Konvertierung abfragen
-    print("\n=== Konverter Optionen ===")
-    
-    # Anzahl der Paralell laufenden Prozesse abhängig vom Operating System setzen
-    workers = os.cpu_count() or 4   # Fallback: 4
-    print(f"Threads automatisch auf {workers} gesetzt (Anzahl CPU-Kerne).")
-    
-    # Dry-Run
+def ask_dry_run() -> bool: # Abfrage, ob Dry-Run
     while True:
-        dry = input("Dry-Run (nur simulieren)? [y/n(Default)]: ").strip().lower()
-        if dry not in ("y", "n", ""):
-            print("Bitte 'y' oder 'n' eingeben.")
-            continue
-        elif dry == "y":
-            dry_run = True
-            break
-        else:
-            dry_run = False
-            break
-    
-    return {
-        "workers": workers,
-        "dry_run": dry_run,
-    }
+        ans = input("Dry-Run (nur simulieren)? [y/N]: ").strip().lower()
+        if ans in ("y", "yes", "j", "ja"):
+            return True
+        if ans in ("n", "no", ""):
+            return False
+        print("Bitte 'y' oder 'n' eingeben.")
 
-def choose_directory(prompt: str) -> Path: # GUI-Dialog zur Verzeichnisauswahl
-    root = tk.Tk()
-    root.withdraw()  # Kein Hauptfenster
-    path = filedialog.askdirectory(title=prompt)
-    if not path:
-        print(f"Abbruch: Kein Verzeichnis gewählt für {prompt}")
-        sys.exit(1)
-    return Path(path)
+def ask_terminal_mode() -> bool: # Abfrage, ob im Terminal oder mit GUI
+    while True:
+        ans = input("Im Terminal ausführen (kein GUI)? [y/N]: ").strip().lower()
+        if ans in ("y", "yes", "j", "ja"):
+            return True
+        if ans in ("n", "no", ""):
+            return False
+        print("Bitte 'y' oder 'n' eingeben.")
+
+def choose_directory(prompt: str, terminal: bool = False) -> Path: # GUI-Dialog zur Verzeichnisauswahl
+    if terminal:
+        while True:
+            path = input(f"{prompt}: ").strip()
+            if not path:
+                print("Abbruch: Kein Verzeichnis eingegeben.")
+                sys.exit(1)
+            p = Path(path).expanduser()
+            if p.exists() and p.is_dir():
+                return p
+            else:
+                print("Pfad existiert nicht oder ist kein Verzeichnis, bitte erneut eingeben.")
+    else:
+        root = tk.Tk()
+        root.withdraw()  # Kein Hauptfenster
+        path = filedialog.askdirectory(title=prompt)
+        if not path:
+            print(f"Abbruch: Kein Verzeichnis gewählt für {prompt}")
+            sys.exit(1)
+        return Path(path)
 
 def nfc(s: str) -> str: # Unicode-Normalisierung (NFC) für Umlaute auf macOS
     return unicodedata.normalize("NFC", s or "")
@@ -348,12 +352,23 @@ def process_one(wav: Path, in_root: Path, out_root: Path, trackmap: dict[Path, s
 
 # --- Main ---    
 def main():
-    # Optionen interaktiv abfragen
-    opts = ask_options()
+    print("\n=== Konverter Optionen ===")
+    
+    # Anzahl der parallel laufenden Prozesse abhängig vom Operating System setzen
+    workers = os.cpu_count() or 4   # Fallback: 4
+    print(f"Threads automatisch auf {workers} gesetzt (Anzahl CPU-Kerne).")
 
-    # Ordner auswählen
-    input_root = choose_directory("Wähle den Eingabe-Ordner mit WAV-Dateien")
-    output_root = choose_directory("Wähle den Ausgabe-Ordner für FLAC-Dateien")
+    # Terminal-Modus abfragen
+    terminal = ask_terminal_mode()
+
+    # Dry-Run abfragen
+    dry_run = ask_dry_run()
+
+    # Ordner auswählen (je nach Modus)
+    input_root = choose_directory("Wähle den Eingabe-Ordner mit WAV-Dateien", terminal=terminal)
+    output_root = choose_directory("Wähle den Ausgabe-Ordner für FLAC-Dateien", terminal=terminal)
+
+    # Ausgabeordner mit Timestamp
     run_ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
     output_root = output_root / run_ts
     print(f"Ausgabe-Ordner: {output_root}")
@@ -369,8 +384,11 @@ def main():
 
     # Verarbeitung mit Fortschrittsanzeige
     errors = []
-    with ThreadPoolExecutor(max_workers=opts["workers"]) as ex:
-        futures = {ex.submit(process_one, w, input_root, output_root, trackmap, opts["dry_run"]): w for w in wavs}
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futures = {
+            ex.submit(process_one, w, input_root, output_root, trackmap, dry_run): w
+            for w in wavs
+        }
         for fut in tqdm(as_completed(futures), total=len(futures), desc="Konvertiere"):
             wav, err = fut.result()
             if err:
