@@ -6,7 +6,7 @@
 \usepackage{minted}
 \usepackage{csquotes}
 \usepackage{graphicx}
-\usepackage{hyperref}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=cyan]{hyperref}
 \usepackage[backend=biber,style=authoryear]{biblatex}
 
 \addbibresource{bibliography.bib}
@@ -21,7 +21,7 @@
 
     {\Large \textbf{Bachelorarbeit} \\[2em]}
 
-    {\LARGE \textbf{Aufsetzen eines neuen Medienservers für die Bibliothek der Hochschule für Musik Karlsruhe} \\[6em]}
+    {\LARGE \textbf{Neuer Medienservers für die Bibliothek der Hochschule für Musik Karlsruhe} \\[6em]}
 
     \begin{minipage}{0.9\textwidth}
         \raggedright
@@ -121,7 +121,30 @@ sudo docker run hello-world
 \newpage
 
 \section{Einleitung}
-% Einleitung folgt ...
+In der Vergangenheit gab es bereits Projekte einen Medienserver für die Bibliothek der Hochschule für Musik Karlsruhe aufzusetzen. 
+Diese Projekte wurden jedoch nie abgeschlossen oder die Systeme wurden nicht dauerhaft betrieben.
+Es soll einen ersten Medienserver gegeben haben, jedoch nur mit limitiererter Funktionalität, 
+sodass Frederik Schroff im Jahr 2015 als Masterarbeit einen verbesserten Medienserver inklusive Datenbank aufsetzte.
+Dieser ist allerdings seit einigen Jahren nicht mehr in Betrieb.
+Während meiner Arbeit als Tutor am Medienserver, war meine offizielle Aufgabe stehts nur CDs einzulesen, zu benennen und abzuspeichern.
+Diese waren anschließend aber nicht abrufbar, sodass ich anfing die Arbeit zu hinterfragen.
+Nachdem ich als Praxisarbeit bereits den Digitalisierungsprozess der CDs durch die Erneuerung des dafür verwendeten Skripts verbesserte, 
+möchte ich nun den Medienserver neu aufsetzen, damit die angesammelten Daten auch genutzt werden können.
+
+Ziel ist es den Server so zu gestalten, dass er einfach zu betreiben ist und über eine benutzerfreundliche Oberfläche verfügt.
+Es soll ermöglicht werden, die digitalisierten CDs damit unter Beachtung rechtlicher Rahmenbedingungen zu streamen.
+
+\subsection{Zur Dokumentation}
+Die Dokumentation Gliedert sich in zwei Teile, wobei der erste Teil die praktische Umsetzung beschreibt
+und der zweite Teil auf technische Hintergründe eingeht.
+Sie dient dazu eine Anleitung zur Nutzung und Wartung des Medienservers zu geben 
+und einige technische Hintergründe zu verschiedenen Themen aus dem Bereich Netzwerk 
+und Serveradministration zu geben, 
+um ein besseres Verständnis für die Funktionsweise eines Medienservers zu schaffen.
+Zunächst wird im Kapitel zum Setup des Servers die einzelnen Schritte zur Installation und Konfiguration beschrieben.
+Danach wird auf das Skript zur Datenkonvertierung und Metadatenvergabe eingegangen,
+welches wichtiger Betanstandteil ist, um weitere Medien in den Server einzupflegen.
+
 
 \section{Implementierung}
 \subsection{Vorraussetzungen}
