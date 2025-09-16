@@ -111,6 +111,10 @@ def parse_single(wav_path: Path) -> dict:
 
     title = norm_text(nfc(title_raw))
 
+    # Booklet-URL aus dem kompletten Medienordnernamen bauen
+    folder_name = norm_text(nfc(media_dir.name))
+    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}"
+
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
         "albumartist":    composer, # Komponist als Albuminterpret, da fehlende Info, aber Pflichtangabe
@@ -121,6 +125,8 @@ def parse_single(wav_path: Path) -> dict:
         "movement":       title,
         "movementnumber": movementnumber, 
         "discnumber":     "",
+        "conductor":      "", # Daten (noch) nicht verfügbar
+        "bookleturl":     bookleturl, # später auf subtitle geschrieben, 
         # tracknumber wird separat vergeben
     }
 
@@ -170,6 +176,9 @@ def parse_box(wav_path: Path) -> dict:
         album = disctitle
         boxset = boxtitle
 
+    # Booklet-URL aus dem kompletten Medienordnernamen bauen
+    folder_name = norm_text(nfc(box_dir.name))
+    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}"
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
@@ -182,6 +191,8 @@ def parse_box(wav_path: Path) -> dict:
         "movementnumber": movementnumber,
         "discnumber":     discnumber,
         "boxset":         boxset, # bei abweichenden Titeln
+        "conductor":      "", # Daten (noch) nicht verfügbar
+        "bookleturl":     bookleturl, # später auf subtitle geschrieben,
         # tracknumber wird separat vergeben
     }
 
@@ -269,11 +280,15 @@ def write_flac_tags(flac_file: Path, tags: dict, dry_run: bool = False) -> None:
     # setif("date",           tags.get("date"))        # Daten nicht verfügbar
     # setif("genre",          tags.get("genre"))       # Daten nicht verfügbar
 
-    # Klassik
+    # Zusatz
     setif("work",           tags.get("work"))
     setif("movement",       tags.get("movement"))
     setif("movementnumber", tags.get("movementnumber"))
     setif("boxset",         tags.get("boxset"))
+    setif("bookleturl",     tags.get("bookleturl"))
+    setif("subtitle",       tags.get("bookleturl"))    # Workaround für booklet: bookleturl auf subtitle schreiben (werden nur so unter "get info" angezeigt)
+    # setif(conductor",       tags.get("conductor"))   # Daten nicht verfügbar
+    # setif("comment",        tags.get("comment"))     # Optional für Anmerkungen
 
     audio.save()
 
