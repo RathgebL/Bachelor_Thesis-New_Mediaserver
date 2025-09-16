@@ -146,7 +146,7 @@ def parse_box(wav_path: Path) -> dict:
     # Titel aus Dateiname
     fname = wav_path.name
     m_num = re.match(r"^(?P<comp>[^-]+?)-(?P<work>.+?)-(?P<num>\d{1,3})-(?P<title>.+?)\.wav$", fname, re.I)
-    m_non = re.match(r"^(?P<comp>[^-]+?)-(?P<work>.+?)-(?P<title>.+?)\.wav$", fname, re.I)
+    m_non = re.match(r"^(?P<comp>[^-]+?)-(?P<title>.+?)\.wav$", fname, re.I)
 
     if m_num:
         title_raw = m_num.group("title")
