@@ -289,36 +289,57 @@ def embed_cover_if_present(flac_file: Path, source_wav: Path, dry_run: bool = Fa
         print(f"[COVER] Kein Medientyp erkannt: {source_wav}")
         return False
 
-    # Kandidaten für Coverbilder
-    candidates: list[Path] = [
-        container / "booklet" / "booklet-b.jpg",
-        container / "booklet" / "booklet-b.jpeg",
-    ]
-
-    # Kandidat wählen
-    img_path = next((p for p in candidates if p.exists()), None)
-    if not img_path:
-        print(f"[COVER] Kein Cover gefunden in: {container}")
+    # Booklet-Ordner finden
+    booklet_dir = container / "booklet"
+    if not booklet_dir.exists():
+        print(f"[COVER] Kein Booklet-Ordner gefunden in: {container}")
         return
+
+    # Kandidaten: cover und weitere booklet-Dateien
+    candidates: list[Path] = []
+    for ext in (".jpg", ".jpeg"):
+        candidates.extend(booklet_dir.glob(f"booklet-b{ext}"))
+        candidates.extend(booklet_dir.glob(f"booklet{ext}"))
+        candidates.extend(booklet_dir.glob(f"booklet[0-9][0-9][0-9][0-9]{ext}"))
+
+    if not candidates:
+        print(f"[COVER] Keine passenden Booklet-Bilder gefunden in: {booklet_dir}")
+        return
+
+    # Sortieren: zuerst booklet-b, dann booklet, dann booklet0001...
+    def sort_key(p: Path):
+        if p.stem == "booklet-b":
+            return (0, "")
+        if p.stem == "booklet":
+            return (1, "")
+        return (2, p.stem)
+
+    candidates = sorted(candidates, key=sort_key)
 
     if dry_run:
+        print(f"[COVER] {len(candidates)} Bilder gefunden, aber Dry-Run aktiv.")
         return
 
-    # MIME aus Endung bestimmen
-    ext = img_path.suffix.lower()
-    if ext in (".jpg", ".jpeg"):
-        mime = "image/jpeg"
-
     audio = FLAC(str(flac_file))
-    pic = Picture()
-    pic.type = 3  # Front cover
-    pic.mime = mime
-    pic.desc = "Cover"
 
-    with open(img_path, "rb") as f:
-        pic.data = f.read()
+    # Bilder einbetten
+    for i, img_path in enumerate(candidates):
+        ext = img_path.suffix.lower()
+        if ext in (".jpg", ".jpeg"):
+            mime = "image/jpeg"
+        else:
+            continue
 
-    audio.add_picture(pic)
+        pic = Picture()
+        pic.type = 3 if img_path.stem == "booklet-b" else 0
+        pic.mime = mime
+        pic.desc = "Cover" if pic.type == 3 else f"Booklet page {i}"
+
+        with open(img_path, "rb") as f:
+            pic.data = f.read()
+
+        audio.add_picture(pic)
+
     audio.save()
 
 # --- Hauptverarbeitung einer Datei ---
