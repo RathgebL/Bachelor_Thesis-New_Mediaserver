@@ -113,7 +113,7 @@ def parse_single(wav_path: Path) -> dict:
 
     # Booklet-URL aus dem kompletten Medienordnernamen bauen
     folder_name = norm_text(nfc(media_dir.name))
-    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}"
+    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}.pdf"
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
@@ -178,7 +178,7 @@ def parse_box(wav_path: Path) -> dict:
 
     # Booklet-URL aus dem kompletten Medienordnernamen bauen
     folder_name = norm_text(nfc(box_dir.name))
-    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}"
+    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}.pdf"
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
