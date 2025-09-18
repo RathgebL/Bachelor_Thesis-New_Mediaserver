@@ -29,37 +29,25 @@ def natural_sort_key(s: str):
 # --- Data parsing ---
 
 def parse_column_b(value):
-    # Parse column B into Composer, Mediatitle, Interpreter(s).
+    # Parse column B into Composer, Mediatitle, Interpreter(s)
     if pd.isna(value):
         return "", "", ""
 
-    # Normalize dash variants with flexible spacing
-    parts = re.split(r"\s*[-–]\s*", value)
+    # Split only on the FIRST dash (minus or en dash, spaces optional)
+    parts = re.split(r"\s*[-–]\s*", value, maxsplit=1)
 
-    composer, mediatitle, interpreters = "", "", ""
+    composer = norm_name(parts[0]) if parts else ""
+    mediatitle, interpreters = "", ""
 
-    if len(parts) == 1:
-        # No dash at all
-        composer = parts[0]
-
-    elif len(parts) == 2:
-        # Normal case: Composer – Rest
-        composer = norm_name(parts[0])
+    if len(parts) > 1:
         rest = parts[1]
-
-        # Split at last ". " if available
+        # Split at the *last* ". " to separate mediatitle from interpreters
         if ". " in rest:
             last_dot = rest.rfind(". ")
             mediatitle = rest[:last_dot]
             interpreters = rest[last_dot + 2 :]
         else:
             mediatitle = rest
-
-    else:
-        # Special case: Composer – Mediatitle – Interpreters
-        composer = parts[0]
-        mediatitle = " – ".join(parts[1:-1])  # in case there are >2 dashes
-        interpreters = parts[-1]
 
     return norm_name(composer), norm_text(mediatitle), norm_name(interpreters)
 
