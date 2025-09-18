@@ -1,5 +1,6 @@
-import re, unicodedata, pandas as pd, pathlib as Path
+import re, unicodedata, pandas as pd
 from tkinter import Tk, filedialog
+from pathlib import Path
 
 # --- Utilities ---
 
@@ -31,18 +32,35 @@ def parse_column_b(value):
     # Parse column B into Composer, Mediatitle, Interpreter(s).
     if pd.isna(value):
         return "", "", ""
-    parts = value.split(" - ", 1)
-    composer = norm_name(parts[0]) if parts else ""
-    mediatitle, interpreters = "", ""
-    if len(parts) > 1:
+
+    # Normalize dash variants with flexible spacing
+    parts = re.split(r"\s*[-–]\s*", value)
+
+    composer, mediatitle, interpreters = "", "", ""
+
+    if len(parts) == 1:
+        # No dash at all
+        composer = parts[0]
+
+    elif len(parts) == 2:
+        # Normal case: Composer – Rest
+        composer = norm_name(parts[0])
         rest = parts[1]
-        # Split at the last ". "
+
+        # Split at last ". " if available
         if ". " in rest:
             last_dot = rest.rfind(". ")
             mediatitle = rest[:last_dot]
-            interpreters = rest[last_dot + 2 :]  # skip ". "
+            interpreters = rest[last_dot + 2 :]
         else:
             mediatitle = rest
+
+    else:
+        # Special case: Composer – Mediatitle – Interpreters
+        composer = parts[0]
+        mediatitle = " – ".join(parts[1:-1])  # in case there are >2 dashes
+        interpreters = parts[-1]
+
     return norm_name(composer), norm_text(mediatitle), norm_name(interpreters)
 
 def convert_date(date_series):
