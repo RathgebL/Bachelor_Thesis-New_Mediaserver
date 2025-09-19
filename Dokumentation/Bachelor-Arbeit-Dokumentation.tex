@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt,a4paper]{report}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -42,7 +42,189 @@
 \tableofcontents
 \newpage
 
-% ------ Abschnitte ------
+% ------ Einleitung ------
+\section{Einleitung}
+In der Vergangenheit gab es bereits Projekte einen Medienserver für die Bibliothek der Hochschule für Musik Karlsruhe aufzusetzen. 
+Diese Projekte wurden jedoch nie abgeschlossen oder die Systeme wurden nicht dauerhaft betrieben.
+Es soll einen ersten Medienserver gegeben haben, jedoch nur mit limitiererter Funktionalität, 
+sodass Frederik Schroff im Jahr 2015 als Masterarbeit einen verbesserten Medienserver inklusive Datenbank aufsetzte.
+Dieser ist allerdings seit einigen Jahren nicht mehr in Betrieb.
+Während meiner Arbeit als Tutor in der Bibliothek, war meine offizielle Aufgabe stehts nur CDs einzulesen, zu benennen und abzuspeichern.
+Diese waren anschließend aber nicht abrufbar, sodass ich anfing die Arbeit zu hinterfragen.
+Nachdem ich als Praxisarbeit bereits den Digitalisierungsprozess der CDs durch die Erneuerung des dafür verwendeten Skripts verbesserte, 
+möchte ich nun den Medienserver neu aufsetzen, damit die angesammelten Daten auch genutzt werden können.
+
+Ziel ist es den Server so zu gestalten, dass er einfach zu betreiben ist und über eine benutzerfreundliche Oberfläche verfügt.
+Es soll ermöglicht werden, die digitalisierten CDs damit unter Beachtung rechtlicher Rahmenbedingungen zu streamen.
+
+  \subsection{Zur Dokumentation}
+  Die Dokumentation Gliedert sich in zwei Teile, wobei der erste Teil die technischen Hintergründe beschreibt
+  und der zweite Teil auf die praktische Umsetzung in der Bibliothek eingeht.
+  Damit dient sie nicht nur dazu einen Einstieg in den Themenbereich Netzwerk und Serveradminastration zu geben, 
+  sondert bildet auch die Anleitung zur Nutzung und Wartung des Medienservers in der Bibliothek ab.
+  Zunächst wird im Kapitel ...
+
+% ------ Theoretische Grundlagen ------
+\chapter{Theoretische Grundlagen}
+
+\section{Einführung in Server und Medienserver}
+Server bilden das Fundament moderner IT-Infrastrukturen. In diesem Abschnitt werden grundlegende Begriffe erläutert, die historische Entwicklung skizziert und typische Einsatzszenarien von Medienservern dargestellt.
+
+  \subsection{Begriffsdefinitionen}
+  Definition zentraler Konzepte wie Server, Client, Medienserver und Streaming.
+
+  \subsection{Historische Entwicklung}
+  Von physischen Medienträgern hin zu digitalen Streaming-Diensten.
+
+  \subsection{Anwenwendungsbereiche}
+  Medienserver im privaten Umfeld, in Unternehmen und in öffentlichen Institutionen wie Bibliotheken.
+
+\section{Grundlagen der Serverarchitektur}
+Serverarchitekturen umfassen sowohl Hardware- als auch Softwareaspekte. Hier werden die technischen Grundlagen erläutert, die für den Betrieb eines Medienservers erforderlich sind.
+
+  \subsection{Hardware- und Softwareaspekte}
+  Überblick über grundlegende Komponenten und Betriebssysteme.
+
+  \subsection{Betriebssysteme für Server}
+  Vergleich verschiedener Systeme wie Linux-Distributionen, Windows Server oder FreeBSD.
+
+  \subsection{Virtualisierung und Containerisierung}
+  Techniken wie Virtual Machines, Docker und Kubernetes zur flexiblen Bereitstellung von Diensten.
+
+  \subsection{Dateisysteme und Speicherlösungen}
+  NAS, SAN, RAID und deren Rolle in der Datenhaltung.
+
+\section{Serveradministration}
+Die Administration eines Servers umfasst grundlegende Prozesse der Benutzerverwaltung, Wartung und Absicherung.
+
+  \subsection{Benutzer- und Rechteverwaltung}
+  Konzepte für Rollen und Zugriffsrechte.
+
+  \subsection{Dienste und Prozesse}
+  Installation, Konfiguration und laufender Betrieb von Serverdiensten.
+
+  \subsection{Monitoring und Logging}
+  Überwachung von Serverzuständen und Protokollierung von Ereignissen.
+
+  \subsection{Backup- und Recovery-Strategien}
+  Methoden zur Datensicherung und Wiederherstellung.
+
+  \subsection{Sicherheitsaspekte}
+  Firewalls, Verschlüsselung, Authentifizierung und Zugriffskontrolle.
+
+\section{Netzwerktechnik für Medienserver}
+Netzwerke sind die Grundlage für den Zugriff auf Medienserver. Dieser Abschnitt behandelt die wichtigsten Konzepte und Protokolle.
+
+  \subsection{Grundlagen der Netzwerktechnik}
+  TCP/IP, Ports und DNS als Basis des Datenaustauschs.
+
+  \subsection{Streaming-Protokolle}
+  HTTP, RTSP, RTP, HLS und DASH für die Übertragung von Multimedia-Inhalten.
+
+  \subsection{Leistungsanforderungen}
+  Bandbreite, Latenz und Pufferung im Streaming-Betrieb.
+
+  \subsection{Qualität und Sicherheit}
+  Quality of Service (QoS) sowie Netzwerksicherheit mit TLS/SSL und VPN.
+
+\section{Spezifisches zu Medienservern}
+Medienserver unterscheiden sich durch Software, Formate und rechtliche Rahmenbedingungen. Dieser Abschnitt stellt relevante Systeme und Standards vor.
+
+  \subsection{Typische Medienserver-Software}
+  Plex, Jellyfin, Emby, Kodi, VLC-Streaming, Icecast und DLNA-basierte Systeme.
+
+  \subsection{Datenformate und Standards}
+\begin{itemize}
+    \item Audioformate: MP3, FLAC, AAC, WAV
+    \item Containerformate: MKV, MP4
+    \item Metadatenstandards: ID3, Dublin Core (insbesondere im Bibliothekskontext)
+\end{itemize}
+
+  \subsection{Rechtefragen}
+    \begin{itemize}
+        \item Lizenzen und Lizenzmodelle
+        \item Urheberrechtliche Rahmenbedingungen
+        \item Bibliotheksrecht im Hochschulkontext
+    \end{itemize}
+
+\section{Medienserver im Bibliothekskontext}
+Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugriff auf digitalisierte Bestände, stellt jedoch auch besondere Anforderungen an Recht, Technik und Nachhaltigkeit.
+
+  \subsection{Digitalisierung von Beständen}
+  Beispiel: Umwandlung und Speicherung von Audio-CDs in digitale Formate.
+
+  \subsection{Zugriff und Rechteverwaltung}
+  Einschränkungen des Zugriffs, etwa nur im Hochschulnetz oder über VPN.
+
+  \subsection{Nachhaltigkeit und Langzeitarchivierung}
+  Strategien zur dauerhaften Sicherung digitaler Medien.
+
+  \subsection{Lokale vs.\ Cloud-basierte Lösungen}
+  Vergleich der Vor- und Nachteile unterschiedlicher Implementierungsansätze.
+
+% ------ Praktische Umsetzung ------
+\chapter{Praktische Umsetzung}
+
+\section{Zielsetzung}
+  \subsection{Funktionalität}
+  \subsection{Benutzerfreundlichkeit}
+  \subsection{Wartbarkeit}
+  \subsection{Sicherheit}
+  \subsection{Rechtliche Rahmenbedingungen}
+\section{Vorraussetzungen}
+  \subsection{Hardware}
+  \subsection{Software}
+  \subsection{Netzwerk}
+  \subsection{Rechtliche Rahmenbedingungen}
+\section{Installation}
+  \subsection{Ubuntu Server}
+  \subsection{Docker}
+  \subsection{Navidrome}
+  \subsection{nginx}
+  \subsection{SSH}
+  \subsection{UFW}
+\subsection{Konfiguration}
+  \subsection{Ubuntu Server}
+  \subsection{Docker}
+  \subsection{Navidrome}
+  \subsection{nginx}
+  \subsection{SSH}
+  \subsection{UFW}
+\subsection{Datenbank}
+  \subsubsection{Datenstruktur}
+    Benennungskonvention
+  \subsubsection{Dateiformate}
+  \subsubsection{Metadaten}
+    \begin{itemize}
+      \item ID3-Tags
+      \item Vorbis Comments
+      \item FLAC-Metadaten
+      \item MusicBrainz
+    \end{itemize}
+  \subsubsection{Datenverwaltung}
+    Datenpflege
+    Backup-Strategie
+  \subsubsection{Datenquelle}
+    Skript zur Digitalisierung
+    Skript zur Metadatenanreicherung
+    Externe Quellen
+  \subsubsection{Datenimport}
+\section{Integration in die bestehende IT-Infrastruktur}
+  \subsection{Netzwerk-Anbindung}  
+  \subsection{Datenbank anbinden}
+\section{Benutzerverwaltung und Zugriffsrechte}
+  \subsection{Nutzergruppen definieren}
+\section{Testen und Fehlerbehebung}
+  \subsection{Funktionstests}
+  \subsection{Problemlösung}   
+
+
+\section{Fazit}
+% Fazit folgt ...
+\subsection{Ausblick}
+% Ausblick folgt ...}
+
+% ------ Notizen (am Ende entfernen!) ------
 \section{Notizen}
 
 \begin{enumerate}
@@ -119,47 +301,6 @@ sudo docker run hello-world
     \end{itemize}
 \end{enumerate}
 \newpage
-
-\section{Einleitung}
-In der Vergangenheit gab es bereits Projekte einen Medienserver für die Bibliothek der Hochschule für Musik Karlsruhe aufzusetzen. 
-Diese Projekte wurden jedoch nie abgeschlossen oder die Systeme wurden nicht dauerhaft betrieben.
-Es soll einen ersten Medienserver gegeben haben, jedoch nur mit limitiererter Funktionalität, 
-sodass Frederik Schroff im Jahr 2015 als Masterarbeit einen verbesserten Medienserver inklusive Datenbank aufsetzte.
-Dieser ist allerdings seit einigen Jahren nicht mehr in Betrieb.
-Während meiner Arbeit als Tutor am Medienserver, war meine offizielle Aufgabe stehts nur CDs einzulesen, zu benennen und abzuspeichern.
-Diese waren anschließend aber nicht abrufbar, sodass ich anfing die Arbeit zu hinterfragen.
-Nachdem ich als Praxisarbeit bereits den Digitalisierungsprozess der CDs durch die Erneuerung des dafür verwendeten Skripts verbesserte, 
-möchte ich nun den Medienserver neu aufsetzen, damit die angesammelten Daten auch genutzt werden können.
-
-Ziel ist es den Server so zu gestalten, dass er einfach zu betreiben ist und über eine benutzerfreundliche Oberfläche verfügt.
-Es soll ermöglicht werden, die digitalisierten CDs damit unter Beachtung rechtlicher Rahmenbedingungen zu streamen.
-
-\subsection{Zur Dokumentation}
-Die Dokumentation Gliedert sich in zwei Teile, wobei der erste Teil die praktische Umsetzung beschreibt
-und der zweite Teil auf technische Hintergründe eingeht.
-Sie dient dazu eine Anleitung zur Nutzung und Wartung des Medienservers zu geben 
-und einige technische Hintergründe zu verschiedenen Themen aus dem Bereich Netzwerk 
-und Serveradministration zu geben, 
-um ein besseres Verständnis für die Funktionsweise eines Medienservers zu schaffen.
-Zunächst wird im Kapitel zum Setup des Servers die einzelnen Schritte zur Installation und Konfiguration beschrieben.
-Danach wird auf das Skript zur Datenkonvertierung und Metadatenvergabe eingegangen,
-welches wichtiger Betanstandteil ist, um weitere Medien in den Server einzupflegen.
-
-
-\section{Implementierung}
-\subsection{Vorraussetzungen}
-\subsection{Sicherheit}
-
-\section{Technischer Hintergrund}
-- Medienserver
-- Docker
-- Ubuntu Server
-- Navidrome
-- NAS
-
-\section{Fazit}
-% Fazit folgt ...
-
 
 % Beispiel für Zitation
 Wie in \textcite{kuster2005musikinformatik} beschrieben, ...
