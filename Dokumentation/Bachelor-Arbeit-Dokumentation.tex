@@ -38,12 +38,26 @@
 \end{titlepage}
 
 % ------ Inhaltsverzeichnis ------
-\newpage
+\cleardoublepage
+\pagenumbering{roman}
 \tableofcontents
-\newpage
+
+% ------ Abbildungsverzeichnis ------
+\cleardoublepage
+\listoffigures
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+\listoftables
+\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
 
 % ------ Einleitung ------
-\section{Einleitung}
+\cleardoublepage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\chapter*{Einleitung}
+\addcontentsline{toc}{chapter}{Einleitung}
+\setcounter{section}{0}
+\renewcommand\thesection{\arabic{section}}
+
 In der Vergangenheit gab es bereits Projekte einen Medienserver für die Bibliothek der Hochschule für Musik Karlsruhe aufzusetzen. 
 Diese Projekte wurden jedoch nie abgeschlossen oder die Systeme wurden nicht dauerhaft betrieben.
 Es soll einen ersten Medienserver gegeben haben, jedoch nur mit limitiererter Funktionalität, 
@@ -57,15 +71,17 @@ möchte ich nun den Medienserver neu aufsetzen, damit die angesammelten Daten au
 Ziel ist es den Server so zu gestalten, dass er einfach zu betreiben ist und über eine benutzerfreundliche Oberfläche verfügt.
 Es soll ermöglicht werden, die digitalisierten CDs damit unter Beachtung rechtlicher Rahmenbedingungen zu streamen.
 
-  \subsection{Zur Dokumentation}
-  Die Dokumentation Gliedert sich in zwei Teile, wobei der erste Teil die technischen Hintergründe beschreibt
-  und der zweite Teil auf die praktische Umsetzung in der Bibliothek eingeht.
-  Damit dient sie nicht nur dazu einen Einstieg in den Themenbereich Netzwerk und Serveradminastration zu geben, 
-  sondert bildet auch die Anleitung zur Nutzung und Wartung des Medienservers in der Bibliothek ab.
-  Zunächst wird im Kapitel ...
+\section{Zur Dokumentation}
+Die Dokumentation Gliedert sich in zwei Teile, wobei der erste Teil die technischen Hintergründe beschreibt
+und der zweite Teil auf die praktische Umsetzung in der Bibliothek eingeht.
+Damit dient sie nicht nur dazu einen Einstieg in den Themenbereich Netzwerk und Serveradminastration zu geben, 
+sondert bildet auch die Anleitung zur Nutzung und Wartung des Medienservers in der Bibliothek ab.
+Zunächst wird im Kapitel ...
 
 % ------ Theoretische Grundlagen ------
-\chapter{Theoretische Grundlagen}
+\chapter*{Theoretische Grundlagen}
+\addcontentsline{toc}{chapter}{Theoretische Grundlagen}
+\setcounter{section}{0}
 
 \section{Einführung in Server und Medienserver}
 Server bilden das Fundament moderner IT-Infrastrukturen. In diesem Abschnitt werden grundlegende Begriffe erläutert, die historische Entwicklung skizziert und typische Einsatzszenarien von Medienservern dargestellt.
@@ -163,7 +179,9 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
   Vergleich der Vor- und Nachteile unterschiedlicher Implementierungsansätze.
 
 % ------ Praktische Umsetzung ------
-\chapter{Praktische Umsetzung}
+\chapter*{Praktische Umsetzung}
+\addcontentsline{toc}{chapter}{Praktische Umsetzung}
+\setcounter{section}{0}
 
 \section{Zielsetzung}
   \subsection{Funktionalität}
@@ -219,9 +237,12 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
   \subsection{Problemlösung}   
 
 
-\section{Fazit}
+\chapter*{Fazit}
+\addcontentsline{toc}{chapter}{Fazit}
+\setcounter{section}{0}
 % Fazit folgt ...
-\subsection{Ausblick}
+
+\section{Ausblick}
 % Ausblick folgt ...}
 
 % ------ Notizen (am Ende entfernen!) ------
@@ -306,8 +327,9 @@ sudo docker run hello-world
 Wie in \textcite{kuster2005musikinformatik} beschrieben, ...
 Weitere Informationen finden sich bei Navidrome \parencite{navidrome2024}.
 
-\section{Literaturverzeichnis}
-%Literaturverzeichnis folgt ...
+\chapter*{Literaturverzeichnis}
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\setcounter{section}{0}
 
 \printbibliography
 
