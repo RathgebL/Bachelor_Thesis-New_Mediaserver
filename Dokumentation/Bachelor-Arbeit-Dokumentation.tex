@@ -16,7 +16,7 @@
 % ------ Titelblatt ------
 \begin{titlepage}
     \centering
-    {\Large Hochschule für Musik Karlsruhe \\ [1em]}
+    {\Large Hochschule für Musik Karlsruhe \\[1em]}
     {\large Institut für Musikinformatik und Musikwissenschaft \\[6em]}
 
     {\Large \textbf{Bachelorarbeit} \\[2em]}
@@ -76,7 +76,28 @@ Die Dokumentation Gliedert sich in zwei Teile, wobei der erste Teil die technisc
 und der zweite Teil auf die praktische Umsetzung in der Bibliothek eingeht.
 Damit dient sie nicht nur dazu einen Einstieg in den Themenbereich Netzwerk und Serveradminastration zu geben, 
 sondert bildet auch die Anleitung zur Nutzung und Wartung des Medienservers in der Bibliothek ab.
-Zunächst wird im Kapitel ...
+
+Im ersten Teil werden grundlegende Begriffe erläutert, 
+die Entwicklung von Servern und Medienservern nachgezeichnet 
+sowie deren Anwendungsbereiche dargestellt. 
+Darauf aufbauend werden technische Aspekte der Serverarchitektur, 
+der Administration und der Netzwerktechnik vorgestellt, 
+bevor auf spezifische Eigenschaften von Medienservern eingegangen wird. 
+Abschließend wird die besondere Rolle von Medienservern im 
+Bibliothekskontext betrachtet. 
+
+Der zweite Teil beschreibt die praktische Umsetzung des Projekts. 
+Hier wird zunächst die Zielsetzung definiert und die notwendigen 
+Voraussetzungen hinsichtlich Hard- und Software sowie des Netzwerks erläutert. 
+Es folgt die detaillierte Installation und Konfiguration der 
+benötigten Komponenten, die Integration in die bestehende IT-Infrastruktur 
+sowie die Einrichtung der Benutzerverwaltung und Zugriffsrechte. 
+Darüber hinaus werden Testverfahren und Strategien zur 
+Fehlerbehebung dokumentiert. 
+
+Den Abschluss der Arbeit bilden ein Fazit mit einer 
+kritischen Reflexion des Projekts sowie ein Ausblick 
+auf mögliche Weiterentwicklungen.
 
 % ------ Theoretische Grundlagen ------
 \chapter*{Theoretische Grundlagen}
@@ -84,10 +105,43 @@ Zunächst wird im Kapitel ...
 \setcounter{section}{0}
 
 \section{Einführung in Server und Medienserver}
-Server bilden das Fundament moderner IT-Infrastrukturen. In diesem Abschnitt werden grundlegende Begriffe erläutert, die historische Entwicklung skizziert und typische Einsatzszenarien von Medienservern dargestellt.
+Server bilden das Fundament moderner IT-Infrastrukturen.
+Sie übernehmen zentrale Aufgaben bei der Bereitstellung von Diensten 
+und der Verwaltung von Daten. 
+Im Zusammenhang mit Medienservern steht vor allem die Speicherung, 
+Organisation und Übertragung digitaler Inhalte wie Musik, 
+Videos oder Bilder im Vordergrund. 
+
+Medienserver ermöglichen es, solche Inhalte in Echtzeit zu streamen, 
+ohne dass ein vollständiger Download notwendig ist. 
+Ihre Entwicklung ist eng mit der allgemeinen Geschichte von Servertechnologien und Netzwerken verknüpft 
+und reicht von klassischen Rechenzentren über den Aufstieg des Internets bis hin zu modernen Heim- und Cloudlösungen. 
+
+Heute finden Medienserver Einsatz in unterschiedlichsten Bereichen - 
+von der privaten Nutzung über Unternehmen bis hin zu Bibliotheken, 
+die digitalisierte Bestände für ihre Nutzer zugänglich machen.
 
   \subsection{Begriffsdefinitionen}
-  Definition zentraler Konzepte wie Server, Client, Medienserver und Streaming.
+  Als \emph{Server} bezeichnet man einen „Rechner, 
+  der für andere in einem Netzwerk mit ihm verbundene Systeme bestimmte Aufgaben übernimmt 
+  und von dem diese ganz oder teilweise abhängig sind“. \footcite{duden_server}
+
+  In diesem Zusammenhang ist ein \emph{Netzwerk} ein Zusammenschluss von „zwei oder mehr Computern,
+  die miteinander verbunden sind, um Daten elektronisch auszutauschen.“
+  (Übersetzung nach \footcite{britannica_network})
+
+  Ein \emph{Medienserver} ist eine spezialisierte Form eines Servers, 
+  die darauf ausgelegt ist, digitale Medieninhalte wie Audio, Video oder Bilder zu speichern, 
+  zu verwalten und über ein Netzwerk für Clients bereitzustellen.\footcite[Vgl. S.~131 ff.]{steinmetz_multimedia}
+
+  Unter \emph{Streaming} versteht man die Übertragung von Audio- bzw. Videodaten von einem Server auf einen Client, 
+  wobei die Wiedergabe umgehend erfolgt.\footcite{gabler_streaming}
+  Multimedia-Inhalten können so bereits während der Übertragung konsumiert werden, 
+  ohne dass eine vollständige Speicherung der Daten auf dem Endgerät erforderlich ist.
+
+  Server und Clients bilden damit die grundlegende Kommunikationsbasis in Netzwerken. 
+  Medienserver stellen eine spezielle Ausprägung dar, 
+  die insbesondere für die effiziente Bereitstellung von Streaming-Inhalten optimiert sind.
 
   \subsection{Historische Entwicklung}
   Von physischen Medienträgern hin zu digitalen Streaming-Diensten.
@@ -327,9 +381,9 @@ sudo docker run hello-world
 Wie in \textcite{kuster2005musikinformatik} beschrieben, ...
 Weitere Informationen finden sich bei Navidrome \parencite{navidrome2024}.
 
-\chapter*{Literaturverzeichnis}
-\addcontentsline{toc}{chapter}{Literaturverzeichnis}
-\setcounter{section}{0}
+% \chapter*{Literaturverzeichnis}
+% \addcontentsline{toc}{chapter}{Literaturverzeichnis}
+% \setcounter{section}{0}
 
 \printbibliography
 
