@@ -132,7 +132,7 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
 
   Ein \emph{Medienserver} ist eine spezialisierte Form eines Servers, 
   die darauf ausgelegt ist, digitale Medieninhalte wie Audio, Video oder Bilder zu speichern, 
-  zu verwalten und über ein Netzwerk für Clients bereitzustellen.\footcite[Vgl. S.~131 ff.]{steinmetz_multimedia}
+  zu verwalten und über ein Netzwerk für Clients bereitzustellen.\footcite[Vgl.][S.~131 ff.]{steinmetz_multimedia}
 
   Unter \emph{Streaming} versteht man die Übertragung von Audio- bzw. Videodaten von einem Server auf einen Client, 
   wobei die Wiedergabe umgehend erfolgt.\footcite{gabler_streaming}
@@ -144,7 +144,38 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
   die insbesondere für die effiziente Bereitstellung von Streaming-Inhalten optimiert sind.
 
   \subsection{Historische Entwicklung}
-  Von physischen Medienträgern hin zu digitalen Streaming-Diensten.
+  Die Entwicklung von Servern und Netzwerken ist eng mit der allgemeinen Geschichte der Computerkommunikation verknüpft. 
+  Erste Formen von Rechnernetzen entstanden bereits Ende der 1950er Jahre mit dem ARPANET, 
+  das als Vorläufer des heutigen Internets gilt 
+  und den Grundstein für die paketorientierte Datenübertragung legte.\footcite[Vgl.][Kapitel~1.4.2 und 1.5.1]{tanenbaum_computernetworks}
+
+  In den frühen 1970er Jahren zeigte sich, dass die bestehenden Protokolle des ARPANET nicht ausreichten, 
+  um heterogene Netzwerke wie Funk- oder Satellitennetze zu integrieren. 
+  Vor diesem Hintergrund entwickelten Vinton Cerf und Robert Kahn 1974 das Transmission Control Protocol (TCP), 
+  das später in die heute gebräuchliche Protokollfamilie TCP/IP aufgeteilt wurde. 
+  TCP/IP ermöglichte die zuverlässige Kommunikation über unterschiedliche Netzwerke hinweg 
+  und bildete die Grundlage für die Interoperabilität moderner Netze.\footcite[Vgl.][Kapitel~1.4.2 und 1.5.1]{tanenbaum_computernetworks}
+  Im Jahr 1983 wurde TCP/IP im ARPANET als verbindlicher Standard eingeführt,
+  was gemeinhin als Geburtsstunde des modernen Internets gilt.\footcite[Vgl.][S.~2]{postel_rfc801}\footcite[Vgl.][]{britannica_tcpip}
+
+  In den 1980er und 1990er Jahren etablierte sich das Client-Server-Modell als dominierendes Paradigma für den Datenaustausch. 
+  Hierbei übernehmen Server die Rolle zentraler Dienstleister, 
+  während Clients auf deren Ressourcen zugreifen.\footcite[Vgl.][Kapitel~1.7.1 und 1.7.2]{kurose_networking} 
+  Mit der zunehmenden Verbreitung des Internets wurden Server in Unternehmen, 
+  Hochschulen und öffentlichen Institutionen zu zentralen Infrastrukturen.
+
+  Parallel dazu entwickelte sich der Bedarf an multimedialer Datenübertragung. 
+  Erste Streaming-Verfahren wie RealAudio (1995) ermöglichten die kontinuierliche Übertragung von Audioinhalten, 
+  ohne dass die Daten vollständig gespeichert werden mussten. 
+  Diese Technologie wurde später auf Video übertragen 
+  und in standardisierte Protokolle wie RTP/RTSP überführt.\footcite[Vgl.][Kapitel~2.3]{steinmetz_multimedia}
+
+  Seit den 2000er Jahren prägen Breitbandinternet und die Verbreitung mobiler Endgeräte die Nutzung multimedialer Inhalte. 
+  Parallel dazu entwickelten sich adaptive Streaming-Technologien wie MPEG-DASH (Standardisierung 2012)
+  und Apple HLS (2009), die eine effiziente und bandbreitenabhängige Übertragung von Audio- 
+  und Videoinhalten ermöglichen.\footcite[Vgl.][]{iso_mpegdash, apple_hls}
+  Medienserver sind in diesem Kontext zu zentralen Plattformen für die Speicherung und Bereitstellung digitaler Bestände geworden 
+  und finden heute sowohl im privaten Umfeld als auch in Institutionen wie Hochschulen und Bibliotheken Anwendung.
 
   \subsection{Anwenwendungsbereiche}
   Medienserver im privaten Umfeld, in Unternehmen und in öffentlichen Institutionen wie Bibliotheken.
@@ -377,14 +408,8 @@ sudo docker run hello-world
 \end{enumerate}
 \newpage
 
-% Beispiel für Zitation
-Wie in \textcite{kuster2005musikinformatik} beschrieben, ...
-Weitere Informationen finden sich bei Navidrome \parencite{navidrome2024}.
-
-% \chapter*{Literaturverzeichnis}
-% \addcontentsline{toc}{chapter}{Literaturverzeichnis}
-% \setcounter{section}{0}
-
-\printbibliography
+\chapter*{Literaturverzeichnis}
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\printbibliography[heading=none]
 
 \end{document}
