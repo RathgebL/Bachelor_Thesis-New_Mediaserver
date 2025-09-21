@@ -191,19 +191,78 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
   Langzeitverfügbarkeit digitalisierter Sammlungen unterstützen.\footcite[Vgl.][Kapitel~2.3.3]{steinmetz_multimedia}
 
 \section{Grundlagen der Serverarchitektur}
-Serverarchitekturen umfassen sowohl Hardware- als auch Softwareaspekte. Hier werden die technischen Grundlagen erläutert, die für den Betrieb eines Medienservers erforderlich sind.
+Serverarchitekturen umfassen sowohl Hardware- als auch Softwareaspekte. 
+Sie bilden die Grundlage für den Betrieb spezialisierter Systeme wie Medienserver, 
+die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher und Datenübertragung stellen.
 
   \subsection{Hardware- und Softwareaspekte}
-  Überblick über grundlegende Komponenten und Betriebssysteme.
+  Ein Server besteht aus zentralen Hardwarekomponenten wie Prozessor, Hauptspeicher, 
+  Netzwerk- und Massenspeicherhardware. Für den Dauerbetrieb sind Aspekte wie 
+  Zuverlässigkeit, Ausfallsicherheit, Energieeffizienz und Skalierbarkeit besonders wichtig. 
+  Anders als bei Arbeitsplatzrechnern kommen häufig redundante Netzteile, 
+  unterbrechungsfreie Stromversorgungen (USV) sowie spezielle Kühlungssysteme zum Einsatz, 
+  um eine kontinuierliche Verfügbarkeit zu gewährleisten. 
+
+  Auch die Netzwerkanbindung ist von zentraler Bedeutung: 
+  Mehrport-Netzwerkkarten, redundante Switch-Anbindungen oder Load-Balancing-Verfahren 
+  stellen sicher, dass ein Server auch bei steigender Last oder im Fehlerfall 
+  funktionsfähig bleibt.\footcite[Vgl.][Kapitel~1.5.1]{tanenbaum_computernetworks}
+
+  Auf der Softwareseite bilden Betriebssysteme die Grundlage für den Betrieb, 
+  wobei sich stabile, sichere und gut wartbare Plattformen durchgesetzt haben. 
+  Darüber hinaus sind Serverdienste (z.\,B. Web-, Datenbank- oder Streamingdienste) 
+  sowie Middleware-Komponenten erforderlich, die den Zugriff von Clients ermöglichen 
+  und die Kommunikation zwischen verschiedenen Anwendungen koordinieren. 
+  Gerade bei Medienservern sind zudem Softwarelösungen zur effizienten Verwaltung, 
+  Katalogisierung und Bereitstellung multimedialer Inhalte notwendig.\footcite[Vgl.][Kapitel~2.3.1 und 2.3.2]{steinmetz_multimedia}
 
   \subsection{Betriebssysteme für Server}
-  Vergleich verschiedener Systeme wie Linux-Distributionen, Windows Server oder FreeBSD.
+  Zu den gängigsten Server-Betriebssystemen zählen insbesondere 
+  Linux-Distributionen, Windows Server sowie UNIX-Derivate.\footcite[Vgl.][Kapitel~1.1]{nemeth_unixlinux} 
+  Linux gilt als besonders verbreitet im Bereich Web- und Medienserver, 
+  da es durch Stabilität, Sicherheit und Flexibilität überzeugt und 
+  vor allem als bevorzugte Plattform für Webserver wie Apache dient.\footcite[Vgl.][Kapitel~23]{nemeth_unixlinux} 
+  Windows Server findet häufig Anwendung in Unternehmensumgebungen, 
+  insbesondere durch die Integration mit Active Directory, 
+  das als zentrales Verzeichnis- und Authentifizierungssystem eine 
+  wichtige Rolle spielt.\footcite[Vgl.][Kapitel~30.9]{nemeth_unixlinux}
 
   \subsection{Virtualisierung und Containerisierung}
-  Techniken wie Virtual Machines, Docker und Kubernetes zur flexiblen Bereitstellung von Diensten.
+  Moderne Serverarchitekturen setzen zunehmend auf Virtualisierung und Containerisierung, 
+  um Hardware effizienter auszunutzen und Dienste flexibel bereitzustellen. 
 
-  \subsection{Dateisysteme und Speicherlösungen}
-  NAS, SAN, RAID und deren Rolle in der Datenhaltung.
+  Klassische Virtualisierungslösungen wie VMware oder KVM ermöglichen die parallele Ausführung mehrerer 
+  virtueller Maschinen auf einer physischen Hardware.\footcite[Vgl.][Kapitel~24]{nemeth_unixlinux} 
+
+  Containerisierungstechnologien wie Docker und Kubernetes gehen darüber hinaus einen Schritt weiter, 
+  indem sie Anwendungen in isolierten Umgebungen ausführen und dabei besonders ressourcenschonend sowie 
+  skalierbar gestalten. Wie im Beitrag von Mao et al. (2020) hervorgehoben wird, 
+  bildet „die container-basierte Virtualisierungstechnologie, 
+  wie Docker und Kubernetes, die Grundlage für cloud-native Anwendungen“.\footcite{mao2020containers}
+
+\subsection{Dateisysteme und Speicherlösungen}
+Für Medienserver spielt die Wahl der Speicherarchitektur eine zentrale Rolle. 
+Netzwerkspeicherlösungen wie Network Attached Storage (NAS) und Storage Area Networks (SAN) 
+ermöglichen die zentrale Bereitstellung großer Datenmengen. 
+NAS-Systeme stellen Speicher im Netzwerk auf Dateiebene bereit und zeichnen sich durch einfache Einrichtung, 
+schnellen Datenzugriff und unkomplizierte Administration aus.\footcite[Vgl.][S.~21857]{saravanamuthu2014study} 
+SANs hingegen arbeiten auf Blockebene und sind für besonders leistungsintensive Anwendungen optimiert; 
+sie bieten hohe Bandbreiten, niedrige Latenzen und ermöglichen die zentrale Verwaltung großer Speicherpools.\footcite[Vgl.][S.~21858f.]{saravanamuthu2014study}  
+
+Moderne Speicherlösungen sind darüber hinaus auf niedrige Latenz, hohe Bandbreite und Skalierbarkeit ausgelegt. 
+In experimentellen Vergleichen konnte gezeigt werden, dass SAN-Systeme bei großen Datenmengen und intensiven Workflows deutliche Leistungs- 
+und Latenzvorteile gegenüber NAS haben.\footcite[Vgl.][Abschnitt~IV; Ergebnisse]{jaikar2016performance}  
+NAS-Systeme dagegen bieten Dateizugriff über verbreitete Protokolle (z. B. NFS, SMB) 
+und sind häufig kostengünstiger in Anschaffung und Wartung.\footcite[Vgl.][S.~21857]{saravanamuthu2014study}
+
+
+Neben der Netzwerkanbindung ist Redundanz ein entscheidender Faktor: Mechanismen 
+wie RAID (Redundant Array of Independent Disks) schützen vor Datenverlust durch 
+Festplattenausfall, während Hot-Swapping und automatische Neusynchronisation 
+die Verfügbarkeit auch im Fehlerfall erhöhen. In der klassischen Untersuchung „RAID: 
+High-Performance, Reliable Secondary Storage“ wird herausgearbeitet, dass RAID-Systeme durch Striping über mehrere Festplatten 
+und durch Redundanz eine signifikante Verbesserung von Leistung und Zuverlässigkeit bieten, insbesondere bei großen Datenmengen 
+und paralleler Zugriffslast.\footcite[Vgl.][Kapitel 3.1 und 3.2]{chen2004raid}
 
 \section{Serveradministration}
 Die Administration eines Servers umfasst grundlegende Prozesse der Benutzerverwaltung, Wartung und Absicherung.
