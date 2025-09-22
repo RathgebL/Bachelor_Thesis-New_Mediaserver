@@ -132,7 +132,7 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
 
   Ein \emph{Medienserver} ist eine spezialisierte Form eines Servers, 
   die darauf ausgelegt ist, digitale Medieninhalte wie Audio, Video oder Bilder zu speichern, 
-  zu verwalten und über ein Netzwerk für Clients bereitzustellen.\footcite[Vgl.][S.~131 ff.]{steinmetz_multimedia}
+  zu verwalten und über ein Netzwerk für Clients bereitzustellen.\footcite[Vgl.][S.~131 ~ff.]{steinmetz_multimedia}
 
   Unter \emph{Streaming} versteht man die Übertragung von Audio- bzw. Videodaten von einem Server auf einen Client, 
   wobei die Wiedergabe umgehend erfolgt.\footcite{gabler_streaming}
@@ -147,20 +147,20 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
   Die Entwicklung von Servern und Netzwerken ist eng mit der allgemeinen Geschichte der Computerkommunikation verknüpft. 
   Erste Formen von Rechnernetzen entstanden bereits Ende der 1950er Jahre mit dem ARPANET, 
   das als Vorläufer des heutigen Internets gilt 
-  und den Grundstein für die paketorientierte Datenübertragung legte.\footcite[Vgl.][Kapitel~1.4.2]{tanenbaum_computernetworks}
+  und den Grundstein für die paketorientierte Datenübertragung legte.\footcite[Vgl.][S.~45~f.]{tanenbaum_computernetworks}
 
   In den frühen 1970er Jahren zeigte sich, dass die bestehenden Protokolle des ARPANET nicht ausreichten, 
   um heterogene Netzwerke wie Funk- oder Satellitennetze zu integrieren. 
   Vor diesem Hintergrund entwickelten Vinton Cerf und Robert Kahn 1974 das Transmission Control Protocol (TCP), 
   das später in die heute gebräuchliche Protokollfamilie TCP/IP aufgeteilt wurde. 
   TCP/IP ermöglichte die zuverlässige Kommunikation über unterschiedliche Netzwerke hinweg 
-  und bildete die Grundlage für die Interoperabilität moderner Netze.\footcite[Vgl.][Kapitel~1.5.1]{tanenbaum_computernetworks}
+  und bildete die Grundlage für die Interoperabilität moderner Netze.\footcite[Vgl.][S.~45]{tanenbaum_computernetworks}
   Im Jahr 1983 wurde TCP/IP im ARPANET als verbindlicher Standard eingeführt,
   was gemeinhin als Geburtsstunde des modernen Internets gilt.\footnote{Vgl. \cite[S.~2]{postel_rfc801}; \cite{britannica_tcpip}.}
 
   In den 1980er und 1990er Jahren etablierte sich das Client-Server-Modell als dominierendes Paradigma für den Datenaustausch. 
   Hierbei übernehmen Server die Rolle zentraler Dienstleister, 
-  während Clients auf deren Ressourcen zugreifen.\footcite[Vgl.][Kapitel~1.7.1 und 1.7.2]{kurose_networking} 
+  während Clients auf deren Ressourcen zugreifen.\footcite[Vgl.][S.~114]{kurose_networking} 
   Mit der zunehmenden Verbreitung des Internets wurden Server in Unternehmen, 
   Hochschulen und öffentlichen Institutionen zu zentralen Infrastrukturen.
 
@@ -168,12 +168,12 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
   Erste Streaming-Verfahren wie RealAudio (1995) ermöglichten die kontinuierliche Übertragung von Audioinhalten, 
   ohne dass die Daten vollständig gespeichert werden mussten. 
   Diese Technologie wurde später auf Video übertragen 
-  und in standardisierte Protokolle wie RTP/RTSP überführt.\footcite[Vgl.][Kapitel~2.3]{steinmetz_multimedia}
+  und in standardisierte Protokolle wie Real-time Transport Protocol (RTP) überführt.\footcite[Vgl.][S.~11~ff., S.~273~ff.]{steinmetz_multimedia}
 
   Seit den 2000er Jahren prägen Breitbandinternet und die Verbreitung mobiler Endgeräte die Nutzung multimedialer Inhalte. 
   Parallel dazu entwickelten sich adaptive Streaming-Technologien wie MPEG-DASH (Standardisierung 2012)
   und Apple HLS (2009), die eine effiziente und bandbreitenabhängige Übertragung von Audio- 
-  und Videoinhalten ermöglichen.\footcite[Vgl.][]{iso_mpegdash, apple_hls}
+  und Videoinhalten ermöglichen.\footcite[Vgl.]{iso_mpegdash, apple_hls}
   Medienserver sind in diesem Kontext zu zentralen Plattformen für die Speicherung und Bereitstellung digitaler Bestände geworden 
   und finden heute sowohl im privaten Umfeld als auch in Institutionen wie Hochschulen und Bibliotheken Anwendung.
 
@@ -188,7 +188,7 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
   in Unternehmen (z.\,B. interne Schulungsvideos oder Marketingmaterial),
   im Bildungsbereich (Vorlesungsaufzeichnungen, E-Learning-Plattformen) sowie
   in Kulturinstitutionen wie Archiven und Bibliotheken, wo sie die Nutzung und
-  Langzeitverfügbarkeit digitalisierter Sammlungen unterstützen.\footcite[Vgl.][Kapitel~2.3.3]{steinmetz_multimedia}
+  Langzeitverfügbarkeit digitalisierter Sammlungen unterstützen.\footcite[Vgl.][S.~131~ff.]{steinmetz_multimedia}
 
 \section{Grundlagen der Serverarchitektur}
 Serverarchitekturen umfassen sowohl Hardware- als auch Softwareaspekte. 
@@ -196,17 +196,16 @@ Sie bilden die Grundlage für den Betrieb spezialisierter Systeme wie Medienserv
 die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher und Datenübertragung stellen.
 
   \subsection{Hardware- und Softwareaspekte}
-  Ein Server besteht aus zentralen Hardwarekomponenten wie Prozessor, Hauptspeicher, 
-  Netzwerk- und Massenspeicherhardware. Für den Dauerbetrieb sind Aspekte wie 
-  Zuverlässigkeit, Ausfallsicherheit, Energieeffizienz und Skalierbarkeit besonders wichtig. 
-  Anders als bei Arbeitsplatzrechnern kommen häufig redundante Netzteile, 
-  unterbrechungsfreie Stromversorgungen (USV) sowie spezielle Kühlungssysteme zum Einsatz, 
-  um eine kontinuierliche Verfügbarkeit zu gewährleisten. 
+  Ein Server besteht aus zentralen Hardwarekomponenten wie Prozessor, Hauptspeicher, Netzwerk- und Massenspeicherhardware. 
+  Für den Dauerbetrieb sind Aspekte wie Zuverlässigkeit, Ausfallsicherheit, Energieeffizienz und Skalierbarkeit besonders wichtig. 
+  Anders als bei Arbeitsplatzrechnern kommen häufig redundante Netzteile, unterbrechungsfreie Stromversorgungen, 
+  spezielle Kühlungssysteme sowie redundante Netzwerkverbindungen zum Einsatz, 
+  um eine kontinuierliche Verfügbarkeit zu gewährleisten.\footcite[Vgl.][S.~152541]{ahmed2021energy} 
 
-  Auch die Netzwerkanbindung ist von zentraler Bedeutung: 
-  Mehrport-Netzwerkkarten, redundante Switch-Anbindungen oder Load-Balancing-Verfahren 
-  stellen sicher, dass ein Server auch bei steigender Last oder im Fehlerfall 
-  funktionsfähig bleibt.\footcite[Vgl.][Kapitel~1.5.1]{tanenbaum_computernetworks}
+  % Auch die Netzwerkanbindung ist von zentraler Bedeutung: 
+  % Mehrport-Netzwerkkarten, redundante Switch-Anbindungen oder Load-Balancing-Verfahren 
+  % stellen sicher, dass ein Server auch bei steigender Last oder im Fehlerfall 
+  % funktionsfähig bleibt.\footcite[Vgl.][?]{tanenbaum_computernetworks}
 
   Auf der Softwareseite bilden Betriebssysteme die Grundlage für den Betrieb, 
   wobei sich stabile, sichere und gut wartbare Plattformen durchgesetzt haben. 
@@ -214,25 +213,25 @@ die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher
   sowie Middleware-Komponenten erforderlich, die den Zugriff von Clients ermöglichen 
   und die Kommunikation zwischen verschiedenen Anwendungen koordinieren. 
   Gerade bei Medienservern sind zudem Softwarelösungen zur effizienten Verwaltung, 
-  Katalogisierung und Bereitstellung multimedialer Inhalte notwendig.\footcite[Vgl.][Kapitel~2.3.1 und 2.3.2]{steinmetz_multimedia}
+  Katalogisierung und Bereitstellung multimedialer Inhalte notwendig.
 
   \subsection{Betriebssysteme für Server}
   Zu den gängigsten Server-Betriebssystemen zählen insbesondere 
-  Linux-Distributionen, Windows Server sowie UNIX-Derivate.\footcite[Vgl.][Kapitel~1.1]{nemeth_unixlinux} 
+  Linux-Distributionen, Windows Server sowie UNIX-Derivate.
   Linux gilt als besonders verbreitet im Bereich Web- und Medienserver, 
   da es durch Stabilität, Sicherheit und Flexibilität überzeugt und 
-  vor allem als bevorzugte Plattform für Webserver wie Apache dient.\footcite[Vgl.][Kapitel~23]{nemeth_unixlinux} 
+  vor allem als bevorzugte Plattform für Webserver wie Apache dient.\footcite[Vgl.][S.~963~ff.]{nemeth_unixlinux} 
   Windows Server findet häufig Anwendung in Unternehmensumgebungen, 
   insbesondere durch die Integration mit Active Directory, 
   das als zentrales Verzeichnis- und Authentifizierungssystem eine 
-  wichtige Rolle spielt.\footcite[Vgl.][Kapitel~30.9]{nemeth_unixlinux}
+  wichtige Rolle spielt.\footcite[Vgl.][S.~1154~f.]{nemeth_unixlinux}
 
   \subsection{Virtualisierung und Containerisierung}
   Moderne Serverarchitekturen setzen zunehmend auf Virtualisierung und Containerisierung, 
   um Hardware effizienter auszunutzen und Dienste flexibel bereitzustellen. 
 
   Klassische Virtualisierungslösungen wie VMware oder KVM ermöglichen die parallele Ausführung mehrerer 
-  virtueller Maschinen auf einer physischen Hardware.\footcite[Vgl.][Kapitel~24]{nemeth_unixlinux} 
+  virtueller Maschinen auf einer physischen Hardware.\footcite[Vgl.][S.~1005, S.~995~f.]{nemeth_unixlinux} 
 
   Containerisierungstechnologien wie Docker und Kubernetes gehen darüber hinaus einen Schritt weiter, 
   indem sie Anwendungen in isolierten Umgebungen ausführen und dabei besonders ressourcenschonend sowie 
@@ -247,7 +246,7 @@ ermöglichen die zentrale Bereitstellung großer Datenmengen.
 NAS-Systeme stellen Speicher im Netzwerk auf Dateiebene bereit und zeichnen sich durch einfache Einrichtung, 
 schnellen Datenzugriff und unkomplizierte Administration aus.\footcite[Vgl.][S.~21857]{saravanamuthu2014study} 
 SANs hingegen arbeiten auf Blockebene und sind für besonders leistungsintensive Anwendungen optimiert; 
-sie bieten hohe Bandbreiten, niedrige Latenzen und ermöglichen die zentrale Verwaltung großer Speicherpools.\footcite[Vgl.][S.~21858f.]{saravanamuthu2014study}  
+sie bieten hohe Bandbreiten, niedrige Latenzen und ermöglichen die zentrale Verwaltung großer Speicherpools.\footcite[Vgl.][S.~21858~f.]{saravanamuthu2014study}  
 
 Moderne Speicherlösungen sind darüber hinaus auf niedrige Latenz, hohe Bandbreite und Skalierbarkeit ausgelegt. 
 In experimentellen Vergleichen konnte gezeigt werden, dass SAN-Systeme bei großen Datenmengen und intensiven Workflows deutliche Leistungs- 
@@ -262,7 +261,7 @@ Festplattenausfall, während Hot-Swapping und automatische Neusynchronisation
 die Verfügbarkeit auch im Fehlerfall erhöhen. In der klassischen Untersuchung „RAID: 
 High-Performance, Reliable Secondary Storage“ wird herausgearbeitet, dass RAID-Systeme durch Striping über mehrere Festplatten 
 und durch Redundanz eine signifikante Verbesserung von Leistung und Zuverlässigkeit bieten, insbesondere bei großen Datenmengen 
-und paralleler Zugriffslast.\footcite[Vgl.][Kapitel 3.1 und 3.2]{chen2004raid}
+und paralleler Zugriffslast.\footcite[Vgl.][151 ~ff.]{chen2004raid}
 
 \section{Serveradministration}
 Die Administration eines Servers umfasst grundlegende Prozesse der Benutzerverwaltung, Wartung und Absicherung. 
@@ -271,7 +270,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   \subsection{Benutzer- und Rechteverwaltung}
   Ein zentrales Element der Serveradministration ist die Verwaltung von Benutzern und deren Zugriffsrechten. 
   In UNIX- und Linux-Systemen erfolgt die Identifikation über eindeutige Benutzerkennungen (User IDs, UIDs) 
-  und Gruppenzugehörigkeiten (Group IDs, GIDs).\footcite[Vgl.][S.~176 ff]{nemeth_unixlinux}
+  und Gruppenzugehörigkeiten (Group IDs, GIDs).\footcite[Vgl.][S.~176~ff.]{nemeth_unixlinux}
   Das klassische UNIX-Berechtigungsmodell unterscheidet dabei drei grundlegende Kategorien: 
   \emph{user} (Besitzer), \emph{group} (Mitglieder der zugewiesenen Gruppe) und \emph{others} (alle übrigen Nutzer). 
   Für jede dieser Kategorien lassen sich Lese- (read, r), Schreib- (write, w) und Ausführungsrechte (execute, x) festlegen.\footcite[Vgl.]{wikipedia_dateisystemrechte}
@@ -279,10 +278,10 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   Zentral ist zudem die Trennung zwischen normalen Benutzerkonten und dem privilegierten \emph{Superuser} (\texttt{root}), 
   der uneingeschränkten Zugriff auf das gesamte System besitzt. 
   Viele moderne Distributionen nutzen anstelle direkter Root-Anmeldungen das \texttt{sudo}-Kommando, 
-  das einzelnen Benutzern temporär administrative Rechte verleiht und gleichzeitig Aktionen protokolliert.\footcite[Vgl.][S.~112 ff.]{nemeth_unixlinux}
+  das einzelnen Benutzern temporär administrative Rechte verleiht und gleichzeitig Aktionen protokolliert.\footcite[Vgl.][S.~112~ff.]{nemeth_unixlinux}
 
   Erweiterte Mechanismen wie \emph{Access Control Lists (ACLs)} ermöglichen eine feinere Abstufung der Berechtigungen, 
-  indem sie Zugriffsrechte für mehrere Benutzer und Gruppen individuell definieren.\footcite[Vgl.][S.~159 ff.]{nemeth_unixlinux} 
+  indem sie Zugriffsrechte für mehrere Benutzer und Gruppen individuell definieren.\footcite[Vgl.][S.~159~ff.]{nemeth_unixlinux} 
   In einigen Systemen wie Solaris findet darüber hinaus eine rollenbasierte Zugriffskontrolle (\emph{Role-Based Access Control, RBAC}) Anwendung. 
   Dieses Konzept weist Rechte nicht mehr einzelnen Benutzern, sondern Rollen zu, die wiederum von Benutzern übernommen werden können. 
   Dadurch lassen sich administrative Aufgaben gezielt delegieren, ohne umfassende Superuser-Rechte vergeben zu müssen.\footcite[Vgl.][S.~108]{nemeth_unixlinux}
@@ -295,7 +294,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
 
   Die Verwaltung dieser Dienste erfolgt über das \emph{init}-System, 
   das beim Bootvorgang automatisch Prozesse startet und kontrolliert. 
-  Dabei kommen distributionsspezifische Startskripte zum Einsatz.\footcite[Vgl.][S.~88 ff.]{nemeth_unixlinux}  
+  Dabei kommen distributionsspezifische Startskripte zum Einsatz.\footcite[Vgl.][S.~88~ff.]{nemeth_unixlinux}  
 
   In vielen modernen Linux-Distributionen hat sich \emph{systemd} etabliert, 
   das Dienste parallelisiert starten kann und erweiterte Funktionen wie Abhängigkeitsmanagement 
@@ -309,7 +308,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   Darüber hinaus ermöglichen sie Administratoren auch Eingriffe, 
   etwa durch das Senden von Signalen oder das Anpassen der Priorität von Prozessen.\footcite[Vgl.][S.~134]{nemeth_unixlinux}
 
-  Logging erfolgt primär über das \emph{Syslog}-Framework, das Ereignisse zentral erfasst und in Logdateien strukturiert speichert.\footcite[Vgl.][S.~344 ff.]{nemeth_unixlinux}  
+  Logging erfolgt primär über das \emph{Syslog}-Framework, das Ereignisse zentral erfasst und in Logdateien strukturiert speichert.\footcite[Vgl.][S.~344~ff.]{nemeth_unixlinux}  
   Eine strukturierte Protokollauswertung ist entscheidend, um Fehlerquellen und sicherheitsrelevante Vorfälle nachvollziehen zu können. 
   Moderne Systeme ermöglichen zudem die Weiterleitung von Logs an zentrale Server oder die Integration in Analyseplattformen, 
   um eine konsolidierte Überwachung zu gewährleisten.\footcite[Vgl.][S.~348]{nemeth_unixlinux}
@@ -320,7 +319,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   Gängige Verfahren sind \emph{inkrementelle} und \emph{differenzielle Backups}. 
   Bei inkrementellen Sicherungen werden jeweils nur die seit der letzten Sicherung 
   geänderten Daten gespeichert, während differenzielle Backups stets alle Änderungen 
-  seit der letzten Vollsicherung erfassen.\footcite[Vgl.][S.~305 f.]{nemeth_unixlinux}  
+  seit der letzten Vollsicherung erfassen.\footcite[Vgl.][S.~305~f.]{nemeth_unixlinux}  
   Diese Methoden reduzieren den Aufwand und Speicherbedarf gegenüber Vollsicherungen erheblich. 
 
   Für kritische Systeme werden zusätzlich \emph{Offsite-Backups} eingesetzt. 
@@ -339,20 +338,20 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   \textbf{Netzwerkschutz}:  
   Ein zentraler Bestandteil der Serversicherheit ist der Schutz der Netzwerkschnittstellen. 
   Hierzu werden Firewalls eingesetzt, um eingehenden und ausgehenden Datenverkehr anhand von Regeln zu kontrollieren. 
-  Klassische Paketfilter analysieren Header-Informationen wie Quell- und Zieladresse oder Ports und können so unerwünschte Verbindungen blockieren.\footcite[Vgl.][S.~932 ff.]{nemeth_unixlinux}  
+  Klassische Paketfilter analysieren Header-Informationen wie Quell- und Zieladresse oder Ports und können so unerwünschte Verbindungen blockieren.\footcite[Vgl.][S.~932~ff.]{nemeth_unixlinux}  
   \\
   \newline
   \textbf{Verschlüsselung}:  
   Um die Vertraulichkeit und Integrität der Kommunikation zu gewährleisten, werden Verschlüsselungstechniken eingesetzt. 
   Transport Layer Security (TLS/SSL) schützt Datenströme im Internet, Virtual Private Networks (VPNs) verschlüsseln den gesamten Datenverkehr zwischen Standorten, 
-  und Secure Shell (SSH) ermöglicht eine abgesicherte Fernadministration.\footcite[Vgl.][S.~801, S.~971, S.~926 ff., S.~942]{nemeth_unixlinux}  
+  und Secure Shell (SSH) ermöglicht eine abgesicherte Fernadministration.\footcite[Vgl.][S.~801, S.~971, S.~926~ff., S.~942]{nemeth_unixlinux}  
   \\
   \newline
   \textbf{Benutzer- und Rechteverwaltung}:  
   Ein konsequentes Berechtigungsmanagement stellt sicher, dass Benutzer nur Zugriff auf die Ressourcen haben, die sie tatsächlich benötigen. 
   Dazu gehören sichere Passwörter, Mechanismen wie \emph{Password Aging} (zeitliche Begrenzung der Passwortgültigkeit) 
   und die Vergabe von Rechten nach dem Prinzip des geringsten Privilegs. 
-  So wird verhindert, dass kompromittierte Accounts zu weitreichenden Sicherheitsproblemen führen.\footcite[Vgl.][S.~905 ff.]{nemeth_unixlinux}  
+  So wird verhindert, dass kompromittierte Accounts zu weitreichenden Sicherheitsproblemen führen.\footcite[Vgl.][S.~905~ff.]{nemeth_unixlinux}  
   \\
   \newline
   \textbf{Systemhärtung}:  
@@ -371,7 +370,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   Intrusion Detection Systeme (IDS) überwachen den Datenverkehr oder Host-Systeme auf verdächtige Aktivitäten. 
   Intrusion Prevention Systeme (IPS) gehen noch einen Schritt weiter und können erkannte Angriffe automatisch blockieren. 
   Beispiele sind Snort (Netzwerk-IDS) oder OSSEC (Host-basiertes IDS). 
-  In Kombination mit einer kontinuierlichen Log-Analyse ermöglichen diese Werkzeuge eine frühzeitige Erkennung von Angriffen.\footcite[Vgl.][S.~918 ff.]{nemeth_unixlinux} 
+  In Kombination mit einer kontinuierlichen Log-Analyse ermöglichen diese Werkzeuge eine frühzeitige Erkennung von Angriffen.\footcite[Vgl.][S.~918~ff.]{nemeth_unixlinux} 
   \\ 
   \newline
   \textbf{Backups und Recovery}:  
