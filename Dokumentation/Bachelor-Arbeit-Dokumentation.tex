@@ -265,22 +265,126 @@ und durch Redundanz eine signifikante Verbesserung von Leistung und Zuverlässig
 und paralleler Zugriffslast.\footcite[Vgl.][Kapitel 3.1 und 3.2]{chen2004raid}
 
 \section{Serveradministration}
-Die Administration eines Servers umfasst grundlegende Prozesse der Benutzerverwaltung, Wartung und Absicherung.
+Die Administration eines Servers umfasst grundlegende Prozesse der Benutzerverwaltung, Wartung und Absicherung. 
+Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in der Praxis oft ein kontinuierlicher Prozess. % \footcite[Vgl.][Kapitel~1.1]{nemeth_unixlinux}
 
   \subsection{Benutzer- und Rechteverwaltung}
-  Konzepte für Rollen und Zugriffsrechte.
+  Ein zentrales Element der Serveradministration ist die Verwaltung von Benutzern und deren Zugriffsrechten. 
+  In UNIX- und Linux-Systemen erfolgt die Identifikation über eindeutige Benutzerkennungen (User IDs, UIDs) 
+  und Gruppenzugehörigkeiten (Group IDs, GIDs).\footcite[Vgl.][S.~176 ff]{nemeth_unixlinux}
+  Das klassische UNIX-Berechtigungsmodell unterscheidet dabei drei grundlegende Kategorien: 
+  \emph{user} (Besitzer), \emph{group} (Mitglieder der zugewiesenen Gruppe) und \emph{others} (alle übrigen Nutzer). 
+  Für jede dieser Kategorien lassen sich Lese- (read, r), Schreib- (write, w) und Ausführungsrechte (execute, x) festlegen.\footcite[Vgl.]{wikipedia_dateisystemrechte}
+
+  Zentral ist zudem die Trennung zwischen normalen Benutzerkonten und dem privilegierten \emph{Superuser} (\texttt{root}), 
+  der uneingeschränkten Zugriff auf das gesamte System besitzt. 
+  Viele moderne Distributionen nutzen anstelle direkter Root-Anmeldungen das \texttt{sudo}-Kommando, 
+  das einzelnen Benutzern temporär administrative Rechte verleiht und gleichzeitig Aktionen protokolliert.\footcite[Vgl.][S.~112 ff.]{nemeth_unixlinux}
+
+  Erweiterte Mechanismen wie \emph{Access Control Lists (ACLs)} ermöglichen eine feinere Abstufung der Berechtigungen, 
+  indem sie Zugriffsrechte für mehrere Benutzer und Gruppen individuell definieren.\footcite[Vgl.][S.~159 ff.]{nemeth_unixlinux} 
+  In einigen Systemen wie Solaris findet darüber hinaus eine rollenbasierte Zugriffskontrolle (\emph{Role-Based Access Control, RBAC}) Anwendung. 
+  Dieses Konzept weist Rechte nicht mehr einzelnen Benutzern, sondern Rollen zu, die wiederum von Benutzern übernommen werden können. 
+  Dadurch lassen sich administrative Aufgaben gezielt delegieren, ohne umfassende Superuser-Rechte vergeben zu müssen.\footcite[Vgl.][S.~108]{nemeth_unixlinux}
 
   \subsection{Dienste und Prozesse}
-  Installation, Konfiguration und laufender Betrieb von Serverdiensten.
+  Die Funktionsfähigkeit eines Servers basiert wesentlich auf Prozessen und Diensten. 
+  Während Prozesse allgemein laufende Programme im Betriebssystem darstellen, 
+  sind Dienste spezielle Hintergrundprozesse, die in UNIX- und Linux-Systemen 
+  traditionell als \emph{daemons} bezeichnet werden.\footcite[Vgl.]{wikipedia_daemon}  
+
+  Die Verwaltung dieser Dienste erfolgt über das \emph{init}-System, 
+  das beim Bootvorgang automatisch Prozesse startet und kontrolliert. 
+  Dabei kommen distributionsspezifische Startskripte zum Einsatz.\footcite[Vgl.][S.~88 ff.]{nemeth_unixlinux}  
+
+  In vielen modernen Linux-Distributionen hat sich \emph{systemd} etabliert, 
+  das Dienste parallelisiert starten kann und erweiterte Funktionen wie Abhängigkeitsmanagement 
+  sowie integriertes Logging bietet.\footcite[Vgl.]{wikipedia_systemd}   
 
   \subsection{Monitoring und Logging}
-  Überwachung von Serverzuständen und Protokollierung von Ereignissen.
+  Für den Betrieb von Servern ist die kontinuierliche Überwachung essenziell. 
+  Monitoring umfasst sowohl die Ressourcennutzung (CPU, RAM, Festplatten, Netzwerk) als auch die Erreichbarkeit zentraler Dienste. 
+  Hierfür stehen je nach System Werkzeuge wie \texttt{top} (Linux), \texttt{topas} (AIX) oder \texttt{prstat} (Solaris) zur Verfügung, 
+  die eine regelmäßig aktualisierte Übersicht über aktive Prozesse und deren Ressourcennutzung bieten.\footcite[Vgl.][S.~133]{nemeth_unixlinux}
+  Darüber hinaus ermöglichen sie Administratoren auch Eingriffe, 
+  etwa durch das Senden von Signalen oder das Anpassen der Priorität von Prozessen.\footcite[Vgl.][S.~134]{nemeth_unixlinux}
+
+  Logging erfolgt primär über das \emph{Syslog}-Framework, das Ereignisse zentral erfasst und in Logdateien strukturiert speichert.\footcite[Vgl.][S.~344 ff.]{nemeth_unixlinux}  
+  Eine strukturierte Protokollauswertung ist entscheidend, um Fehlerquellen und sicherheitsrelevante Vorfälle nachvollziehen zu können. 
+  Moderne Systeme ermöglichen zudem die Weiterleitung von Logs an zentrale Server oder die Integration in Analyseplattformen, 
+  um eine konsolidierte Überwachung zu gewährleisten.\footcite[Vgl.][S.~348]{nemeth_unixlinux}
 
   \subsection{Backup- und Recovery-Strategien}
-  Methoden zur Datensicherung und Wiederherstellung.
+  Datenverluste durch Hardwareausfälle oder Benutzerfehler gehören zu den größten Risiken im Serverbetrieb. 
+  Daher sind regelmäßige Backups sowie erprobte Wiederherstellungsstrategien unverzichtbar. 
+  Gängige Verfahren sind \emph{inkrementelle} und \emph{differenzielle Backups}. 
+  Bei inkrementellen Sicherungen werden jeweils nur die seit der letzten Sicherung 
+  geänderten Daten gespeichert, während differenzielle Backups stets alle Änderungen 
+  seit der letzten Vollsicherung erfassen.\footcite[Vgl.][S.~305 f.]{nemeth_unixlinux}  
+  Diese Methoden reduzieren den Aufwand und Speicherbedarf gegenüber Vollsicherungen erheblich. 
+
+  Für kritische Systeme werden zusätzlich \emph{Offsite-Backups} eingesetzt. 
+  Das bedeutet, dass Kopien der Daten an einem geographisch getrennten Standort gespeichert werden, 
+  sei es durch das Versenden physischer Medien oder durch Übertragung an entfernte Speicher/Cloud-Dienste. 
+  Diese Maßnahme schützt vor lokalen Katastrophen wie Brand oder Naturereignissen 
+  und ermöglicht eine schnelle Wiederaufnahme des Betriebs, wenn die Hauptanlage nicht nutzbar ist.\footcite[Vgl.]{wikipedia_offsite_data_protection}  
 
   \subsection{Sicherheitsaspekte}
-  Firewalls, Verschlüsselung, Authentifizierung und Zugriffskontrolle.
+  Die Absicherung von Servern erfordert ein mehrschichtiges Konzept, 
+  das organisatorische, technische und prozessuale Maßnahmen umfasst.
+  Ein ganzheitliches Sicherheitskonzept, das möglichst viele der folgenden grundlegenden Aspekte enthält ist unverzichtbar, 
+  um Server vor Angriffen und Ausfällen zu schützen und die Verfügbarkeit kritischer Dienste sicherzustellen.
+  \\
+  \newline
+  \textbf{Netzwerkschutz}:  
+  Ein zentraler Bestandteil der Serversicherheit ist der Schutz der Netzwerkschnittstellen. 
+  Hierzu werden Firewalls eingesetzt, um eingehenden und ausgehenden Datenverkehr anhand von Regeln zu kontrollieren. 
+  Klassische Paketfilter analysieren Header-Informationen wie Quell- und Zieladresse oder Ports und können so unerwünschte Verbindungen blockieren.\footcite[Vgl.][S.~932 ff.]{nemeth_unixlinux}  
+  \\
+  \newline
+  \textbf{Verschlüsselung}:  
+  Um die Vertraulichkeit und Integrität der Kommunikation zu gewährleisten, werden Verschlüsselungstechniken eingesetzt. 
+  Transport Layer Security (TLS/SSL) schützt Datenströme im Internet, Virtual Private Networks (VPNs) verschlüsseln den gesamten Datenverkehr zwischen Standorten, 
+  und Secure Shell (SSH) ermöglicht eine abgesicherte Fernadministration.\footcite[Vgl.][S.~801, S.~971, S.~926 ff., S.~942]{nemeth_unixlinux}  
+  \\
+  \newline
+  \textbf{Benutzer- und Rechteverwaltung}:  
+  Ein konsequentes Berechtigungsmanagement stellt sicher, dass Benutzer nur Zugriff auf die Ressourcen haben, die sie tatsächlich benötigen. 
+  Dazu gehören sichere Passwörter, Mechanismen wie \emph{Password Aging} (zeitliche Begrenzung der Passwortgültigkeit) 
+  und die Vergabe von Rechten nach dem Prinzip des geringsten Privilegs. 
+  So wird verhindert, dass kompromittierte Accounts zu weitreichenden Sicherheitsproblemen führen.\footcite[Vgl.][S.~905 ff.]{nemeth_unixlinux}  
+  \\
+  \newline
+  \textbf{Systemhärtung}:  
+  Viele Systeme sind in der Standardkonfiguration mit unnötigen Diensten ausgestattet, die zusätzliche Angriffsflächen bieten. 
+  Systemhärtung bedeutet, diese Dienste konsequent zu deaktivieren und Konfigurationen sicherheitsorientiert vorzunehmen. 
+  Damit sinkt die Wahrscheinlichkeit, dass Angreifer über Fehlkonfigurationen oder selten genutzte Software ins System eindringen können.\footcite[Vgl.][S.~902]{nemeth_unixlinux}
+  \\  
+  \newline
+  \textbf{Updates und Patching}:  
+  Die meisten erfolgreichen Angriffe erfolgen über bekannte, aber nicht geschlossene Schwachstellen. 
+  Daher ist ein zeitnahes Einspielen von Patches für Betriebssystem und Anwendungssoftware unerlässlich. 
+  Ein strukturierter Patch-Management-Prozess reduziert das Risiko signifikant.\footcite[Vgl.][S.~901]{nemeth_unixlinux}  
+  \\
+  \newline
+  \textbf{Intrusion Detection und Monitoring}:  
+  Intrusion Detection Systeme (IDS) überwachen den Datenverkehr oder Host-Systeme auf verdächtige Aktivitäten. 
+  Intrusion Prevention Systeme (IPS) gehen noch einen Schritt weiter und können erkannte Angriffe automatisch blockieren. 
+  Beispiele sind Snort (Netzwerk-IDS) oder OSSEC (Host-basiertes IDS). 
+  In Kombination mit einer kontinuierlichen Log-Analyse ermöglichen diese Werkzeuge eine frühzeitige Erkennung von Angriffen.\footcite[Vgl.][S.~918 ff.]{nemeth_unixlinux} 
+  \\ 
+  \newline
+  \textbf{Backups und Recovery}:  
+  Auch wenn alle präventiven Maßnahmen ergriffen werden, lassen sich Vorfälle nicht vollständig verhindern. 
+  Regelmäßige Backups sind daher ein essenzielles Element der Sicherheit, da sie eine Wiederherstellung nach Angriffen oder Ausfällen ermöglichen. 
+  Besonders im Kontext von Ransomware oder Datenmanipulation sind getestete Recovery-Strategien unverzichtbar.\footcite[Vgl.][S.~903]{nemeth_unixlinux} 
+  \\ 
+  \newline
+  \textbf{Proaktives Sicherheitsmanagement}:  
+  Technische Maßnahmen reichen allein nicht aus. 
+  Ein umfassendes Sicherheitskonzept verlangt nach klar definierten Richtlinien, kontinuierlichen Audits und einem hohen Maß an Wachsamkeit. 
+  Administratoren sollten regelmäßig die Wirksamkeit der Maßnahmen prüfen und neue Bedrohungslagen aktiv in die Planung einbeziehen. 
+  So wird Sicherheit zu einem fortlaufenden Prozess und nicht zu einem einmaligen Projekt.\footcite[Vgl.][S.~901, S.~905]{nemeth_unixlinux}  
 
 \section{Netzwerktechnik für Medienserver}
 Netzwerke sind die Grundlage für den Zugriff auf Medienserver. Dieser Abschnitt behandelt die wichtigsten Konzepte und Protokolle.
