@@ -503,7 +503,7 @@ Medienserver unterscheiden sich durch Software, Formate und rechtliche Rahmenbed
     \item Metadatenstandards: ID3, Dublin Core (insbesondere im Bibliothekskontext)
 \end{itemize}
 
-  \subsection{Rechtefragen}
+  \subsection{Rechtsfragen}
     \begin{itemize}
         \item Lizenzen und Lizenzmodelle
         \item Urheberrechtliche Rahmenbedingungen
@@ -541,13 +541,117 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
   \subsection{Software}
   \subsection{Netzwerk}
   \subsection{Rechtliche Rahmenbedingungen}
-\section{Installation}
-  \subsection{Ubuntu Server}
-  \subsection{Docker}
-  \subsection{Navidrome}
-  \subsection{nginx}
-  \subsection{SSH}
-  \subsection{UFW}
+\section{Installation}  
+Die Installation der grundlegenden Software-Komponenten bildet die Basis für den Betrieb eines sicheren und performanten Medienservers.  
+Im Folgenden werden alle Werkzeuge und Dienste vorgestellt, die für den Aufbau des neuen Medienservers in der Bibliothek notwendig sind.
+
+  \subsection{Ubuntu Server}  
+  Ubuntu Server ist eine weit verbreitete Linux-Distribution, die durch ihre Stabilität, breite Community-Unterstützung und regelmäßige Sicherheitsupdates überzeugt.  
+  Das aktuelle Installations-ISO kann von der offiziellen Webseite heruntergeladen werden: \url{https://ubuntu.com/download/server}.  
+  Nach dem Download wird das Image auf einen USB-Stick geschrieben (z.\,B. mit \texttt{Rufus} oder \texttt{dd} unter Linux).  
+  Dabei ist zu beachten, dass der Stick keine wichtigen Daten enthält, da dieser vollständig überschrieben wird, und eine Mindestgröße von 5\,GB haben sollte.    
+  Um die Installation zu starten, wird der Stick angeschlossen und über das Boot-Menü (Taste \texttt{F12}, \texttt{Esc} oder \texttt{Del}, abhängig vom Hersteller) ausgewählt.  
+  Die textbasierte Installationsroutine führt anschließend durch Partitionierung, Netzwerkkonfiguration und die Einrichtung eines Administratorkontos.  
+  Weitere informationen sind in der offiziellen Dokumentation verfügbar: \url{https://ubuntu.com/server/docs/installation}.
+
+  \subsection{Docker}  
+  Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt.  
+  Die offizielle Installationsanleitung ist verfügbar unter: \url{https://docs.docker.com/engine/install/}.  
+
+  Unter Ubuntu kann Docker wie folgt installiert werden:  
+
+  \begin{enumerate}
+    \item Einrichten des Docker-Repositories:
+    \begin{minted}[breaklines, linenos]{bash}
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+    \end{minted} 
+
+    \item Installation der Docker Packete:
+    \begin{minted}[breaklines, linenos]{bash}
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    \end{minted}
+
+    \item Checks:
+    \begin{minted}[breaklines, linenos]{bash}
+# Verifiziere, dass Docker läuft
+sudo systemctl status docker
+
+# Testen der Installation mit dem Hello-World Container
+sudo docker run hello-world
+    \end{minted} 
+  \end{enumerate}
+
+  \subsection{nginx}  
+  \emph{nginx} ist ein moderner Webserver und Reverse Proxy, der sich durch hohe Performance auszeichnet.  
+  Die offizielle Website bietet Installationshinweise und Downloads: \url{https://nginx.org/en/download.html}.  
+  Unter Ubuntu kann nginx direkt über die Paketverwaltung installiert werden:  
+  \begin{verbatim}
+  sudo apt install nginx
+  sudo systemctl enable --now nginx
+  \end{verbatim}  
+  Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
+  Für Medienserver wird nginx oft als Reverse Proxy eingesetzt, z.\,B. um Navidrome über HTTPS erreichbar zu machen.\footcite[Vgl.][Kapitel~11, S.~365~ff.]{nemeth_unixlinux}  
+
+  \subsection{Navidrome}  
+  Navidrome ist ein leichtgewichtiger Musikserver, der als Docker-Container besonders einfach bereitgestellt werden kann.  
+  Die offizielle Projektseite mit Anleitungen und Docker-Images befindet sich unter: \url{https://www.navidrome.org/docs/}.  
+  Ein typisches \texttt{docker-compose.yml}-Beispiel für Navidrome sieht folgendermaßen aus:  
+  \begin{verbatim}
+  version: "3"
+  services:
+    navidrome:
+      image: deluan/navidrome:latest
+      restart: unless-stopped
+      ports:
+        - "4533:4533"
+      volumes:
+        - "./data:/data"
+        - "./music:/music:ro"
+  \end{verbatim}  
+  Nach dem Start mit \texttt{docker-compose up -d} ist Navidrome unter \url{http://<server-ip>:4533} erreichbar.  
+  Hier können ein Administratorkonto erstellt und das Musikverzeichnis eingebunden werden. 
+
+  \subsection{SSH}  
+  \emph{Secure Shell (SSH)} ist das zentrale Werkzeug für den sicheren Fernzugriff auf den Server.  
+  Der SSH-Server kann unter Ubuntu bereits bei der Installation aktiviert oder nachträglich installiert werden:  
+  \begin{verbatim}
+  sudo apt install openssh-server
+  sudo systemctl enable --now ssh
+  \end{verbatim}  
+  Der Zugriff erfolgt dann von einem Client aus über:  
+  \begin{verbatim}
+  ssh benutzername@server-ip
+  \end{verbatim}  
+  Die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
+  Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.\footcite[Vgl.][Kapitel~22, S.~926~ff.]{nemeth_unixlinux}  
+
+  \subsection{UFW}  
+  Die \emph{Uncomplicated Firewall (UFW)} dient zur einfachen Verwaltung der Firewall-Regeln.  
+  UFW ist in den Ubuntu-Repositories enthalten und kann wie folgt installiert und aktiviert werden:  
+  \begin{verbatim}
+  sudo apt install ufw
+  sudo ufw enable
+  \end{verbatim}  
+  Anschließend lassen sich Regeln hinzufügen, z.\,B. um SSH und HTTPS freizuschalten:  
+  \begin{verbatim}
+  sudo ufw allow 22/tcp
+  sudo ufw allow 443/tcp
+  \end{verbatim}  
+  Alle weiteren Ports bleiben standardmäßig blockiert.  
+  Offizielle Informationen sind in der Ubuntu-Dokumentation verfügbar: \url{https://help.ubuntu.com/community/UFW}.\footcite[Vgl.][Kapitel~22, S.~932~ff.]{nemeth_unixlinux}  
+
 \subsection{Konfiguration}
   \subsection{Ubuntu Server}
   \subsection{Docker}
