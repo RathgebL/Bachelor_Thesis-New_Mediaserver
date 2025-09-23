@@ -386,20 +386,110 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   So wird Sicherheit zu einem fortlaufenden Prozess und nicht zu einem einmaligen Projekt.\footcite[Vgl.][S.~901, S.~905]{nemeth_unixlinux}  
 
 \section{Netzwerktechnik für Medienserver}
-Netzwerke sind die Grundlage für den Zugriff auf Medienserver. Dieser Abschnitt behandelt die wichtigsten Konzepte und Protokolle.
+Netzwerke bilden die Grundlage für den Zugriff auf Medienserver. 
+Dieser Abschnitt erläutert zentrale Konzepte, Protokolle sowie Leistungs- und Sicherheitsaspekte, 
+die für den effizienten Betrieb relevant sind.  
 
-  \subsection{Grundlagen der Netzwerktechnik}
-  TCP/IP, Ports und DNS als Basis des Datenaustauschs.
+  \subsection{Grundlagen der Netzwerktechnik}  
+  Die Kommunikation in Netzwerken basiert auf dem \emph{TCP/IP}-Protokollstapel. 
+  \emph{IP} (\emph{Internet Protocol}) ist für die Adressierung und Weiterleitung von Paketen zuständig 
+  und bildet die Grundlage für die Kommunikation in paketvermittelten Netzwerken.\footcite[Vgl.][S.~438]{tanenbaum_computernetworks}  
+  Darüber hinaus sorgen \emph{TCP} (\emph{Transmission Control Protocol}) und \emph{UDP} (\emph{User Datagram Protocol}) 
+  auf der Transportschicht für den eigentlichen Datentransport. 
+  TCP stellt eine verbindungsorientierte, zuverlässige Übertragung mit Fehlerkorrektur und Flusskontrolle bereit, 
+  während UDP ein verbindungsloses, leichtgewichtiges Protokoll ist, 
+  das insbesondere für zeitkritische Anwendungen wie Audio- und Videostreaming eingesetzt wird.\footcite[Vgl.][S.~228]{kurose_networking}
+ 
+  Dienste werden über \emph{Ports} identifiziert, etwa Port~80 für HTTP oder Port~443 für HTTPS.\footcite[Vgl.][S.~554]{tanenbaum_computernetworks}  
+  Für die Namensauflösung sorgt das Domain Name System (DNS), 
+  das menschenlesbare Hostnamen in IP-Adressen übersetzt 
+  und somit die Grundlage für jede netzwerkbasierte Medienübertragung bildet.\footcite[Vgl.][S.~611~f.]{tanenbaum_computernetworks}  
 
-  \subsection{Streaming-Protokolle}
-  HTTP, RTSP, RTP, HLS und DASH für die Übertragung von Multimedia-Inhalten.
+  \subsection{Streaming-Protokolle} 
+  Zur Übertragung von Multimedia-Inhalten existieren verschiedene Protokolle. 
+  Die wichtigesten werden im Folgenden vorgestellt.  
+  \\
+  \newline
+  \textbf{HTTP (Hypertext Transfer Protocol):}
+  HTTP ist ein Anwendungsprotokoll auf der Anwendungsschicht und bildet das Herzstück des World Wide Web. 
+  Es wird in einem Client- und einem Server-Programm implementiert, die über den Austausch von HTTP-Nachrichten kommunizieren. 
+  Diese Nachrichten sind nach einem standardisierten Format (RFC 1945, RFC 2616) definiert und regeln die Interaktion zwischen Webbrowser und Webserver.\footcite[Vgl.][S.~126]{kurose_networking} 
+  HTTP ist dabei ein \emph{zustandsloses} Protokoll, was bedeutet, dass der Server keine Informationen über vorherige Anfragen speichert. 
+  Jede Anfrage wird unabhängig behandelt, wodurch HTTP besonders einfach und skalierbar ist.\footcite[Vgl.][S.~128]{kurose_networking}   
+  \\
+  \newline
+  \textbf{RTP (Real-Time Transport Protocol):}  
+  RTP transportiert Audio- und Videodaten meist über \emph{UDP (User Datagram Protocol)}. 
+  Es ist speziell für Echtzeitanwendungen optimiert und unterstützt Mechanismen zur 
+  Synchronisation verschiedener Medienstöme (z.\,B. Audio und Video) 
+  sowie zur Kompensation von Jitter, der durch schwankende Paketlaufzeiten entsteht.\footcite[Vgl.][S.~546~ff.]{tanenbaum_computernetworks}   
+  \\
+  \newline
+  \textbf{RTSP (Real-Time Streaming Protocol):}  
+  RTSP ist ein Steuerungsprotokoll, das Befehle wie \emph{Play}, \emph{Pause} oder \emph{Seek} ermöglicht. 
+  Es wird häufig zusammen mit dem \textbf{RTP (Real-Time Transport Protocol)} verwendet, 
+  das die eigentliche Datenübertragung übernimmt.\footcite[Vgl.][S.~638~f.]{kurose_networking}  
+  \\
+  \newline
+  \textbf{HLS (HTTP Live Streaming):}
+  HLS ist ein von Apple entwickeltes Streaming-Protokoll, das in \emph{RFC 8216} standardisiert ist.
+  Es basiert auf der Idee, Medieninhalte in kleine Segmente (Chunks) zu zerlegen, die sequenziell über HTTP übertragen werden.
+  Ein Manifest (Playlist) beschreibt die Abfolge dieser Segmente, wodurch auch unterschiedliche Qualitätsstufen bereitgestellt werden können.
+  Dies ermöglicht \emph{adaptives Streaming}, bei dem der Client dynamisch zwischen verschiedenen Bitraten und Auflösungen wechseln kann,
+  um Schwankungen in der Netzwerkbandbreite auszugleichen.\footcite[Vgl.][siehe HTTP Live Streaming Overview]{rfc8216}
+  Dank der Nutzung von HTTP ist HLS besonders kompatibel mit bestehenden Infrastrukturen wie Caches und Content Delivery Networks (CDNs).\footcite[Vgl.][]{stockhammer2011dash}
+  \\
+  \newline
+  \textbf{MPEG-DASH (Dynamic Adaptive Streaming over HTTP):}
+  MPEG-DASH ist ein von der MPEG-Gruppe entwickelter Standard für adaptives Multimedia-Streaming über HTTP.
+  Das Grundprinzip besteht darin, dass Multimedia-Inhalte in kleine Segmente zerlegt werden, die über herkömmliche HTTP-Server bereitgestellt werden.
+  Der Client entscheidet dynamisch, welche Segmente er anfordert, um sich an schwankende Netzwerkbedingungen und Geräteeigenschaften anzupassen.\footcite[Vgl.][S.~1~ f.]{stockhammer2011dash}
+  Dadurch kombiniert DASH die weite Verbreitung von HTTP-Infrastrukturen mit der Möglichkeit eines qualitativ stabilen Medienkonsums auch unter variablen Bandbreitenbedingungen.
+    
+  \subsection{Leistungsanforderungen}  
+  Streaming-Anwendungen stellen hohe Anforderungen an die Netzwerkinfrastruktur. 
+  Neben ausreichender \textbf{Bandbreite} ist vor allem geringe \textbf{Latenz} entscheidend, 
+  insbesondere bei Live-Übertragungen oder interaktiven Anwendungen. 
+  Eine wesentliche Rolle spielt außerdem die \textbf{Pufferung}, 
+  die Jitter (Schwankungen in der Paketlaufzeit) ausgleichen soll. 
+  Typische Verfahren sind Pre-Buffering und adaptive Puffergrößen.\footcite[Vgl.][S.~697~ff.]{tanenbaum_computernetworks}  
 
-  \subsection{Leistungsanforderungen}
-  Bandbreite, Latenz und Pufferung im Streaming-Betrieb.
-
-  \subsection{Qualität und Sicherheit}
-  Quality of Service (QoS) sowie Netzwerksicherheit mit TLS/SSL und VPN.
-
+  \subsection{Qualität und Sicherheit}  
+  Die Sicherstellung einer konstanten Übertragungsqualität erfordert \textbf{Quality of Service (QoS)}-Mechanismen.  
+  QoS bezeichnet Techniken, die Netzwerkressourcen gezielt steuern, um die Anforderungen von Multimedia-Anwendungen zu erfüllen.\footcite[Vgl.][S.~9~ff.]{steinmetz_multimedia}  
+  Im Folgenden werden einige gängige QoS-Mechanismen vorgestellt: 
+  \\
+  \newline
+  \textbf{Traffic Shaping:}  
+  Verfahren wie \emph{Token Bucket} oder \emph{Leaky Bucket} regulieren die Burstartigkeit von Datenströmen, indem sie den Datenfluss glätten und Spitzenlasten abfangen.  
+  Dadurch wird ein gleichmäßigerer Durchsatz erreicht, der insbesondere für kontinuierliche Audio- und Videoübertragungen wichtig ist.\footcite[Vgl.][S.~61~f.]{steinmetz_multimedia}  
+  \\
+  \newline
+  \textbf{Rate Control und Scheduling:}  
+  Kontrollmechanismen wie \emph{Fair Queueing}, \emph{Virtual Clock} oder \emph{Delay Earliest-Due-Date} sorgen dafür, 
+  dass Bandbreiten fair aufgeteilt und Verzögerungen minimiert werden.  
+  Zugleich helfen sie, Jitter auszugleichen und zeitkritische Datenströme zu priorisieren.\footcite[Vgl.][S.~62~f.]{steinmetz_multimedia}  
+  \\
+  \newline
+  \textbf{Resource Reservation:}  
+  Um Paketverluste und Verzögerungen zu vermeiden, können Bandbreiten, Puffer und andere Ressourcen im Voraus reserviert werden.  
+  Dies kann pessimistisch (Worst-Case) oder optimistisch (Durchschnittswert) erfolgen und garantiert so Mindestqualitäten für Multimediadienste.\footcite[Vgl.][S.~52~f.]{steinmetz_multimedia}  
+  \\
+  \newline
+  \textbf{Admission Control:}  
+  Bevor eine neue Verbindung zugelassen wird, prüft das Netzwerk, ob genügend Ressourcen vorhanden sind.  
+  Fehlen diese, wird die Anfrage abgelehnt, um eine Überlastung zu verhindern und die Qualität bestehender Verbindungen nicht zu beeinträchtigen.\footcite[Vgl.][S.~50~f.]{steinmetz_multimedia}  
+  \\
+  \newline
+  \textbf{Error Control:}  
+  Fehlererkennungs- und Fehlerkorrekturverfahren (z.\,B. FEC - Forward Error Correction) sind essenziell, 
+  um trotz Paketverlusten eine akzeptable Qualität sicherzustellen.  
+  Dabei können Redundanzdaten eingesetzt werden, die eine Rekonstruktion verlorener Informationen ermöglichen.\footcite[Vgl.][S.~68]{steinmetz_multimedia}  
+  \\
+  \newline  
+  Aspekte der Sicherheit, die beim Betrieb eines Medienservers berücksichtigt werden müssen,
+  wurden im Abschnitt „Serveradministration“ unter „Sicherheitsaspekte“ bereits beschrieben. 
+    
 \section{Spezifisches zu Medienservern}
 Medienserver unterscheiden sich durch Software, Formate und rechtliche Rahmenbedingungen. Dieser Abschnitt stellt relevante Systeme und Standards vor.
 
