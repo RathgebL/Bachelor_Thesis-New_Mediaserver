@@ -542,8 +542,9 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
   \subsection{Netzwerk}
   \subsection{Rechtliche Rahmenbedingungen}
 \section{Installation und Konfiguration}  
-Die Installation der grundlegenden Software-Komponenten bildet die Basis für den Betrieb eines sicheren und performanten Medienservers.  
-Im Folgenden werden alle Werkzeuge und Dienste vorgestellt, die für den Aufbau des neuen Medienservers in der Bibliothek notwendig sind.
+Die Installation und Konfiguration der zentralen Softwarekomponenten stellt die Grundlage für den zuverlässigen und sicheren Betrieb des Medienservers dar.
+Nun werden die benötigten Werkzeuge und Dienste vorgestellt und ihre Einrichtung anhand einer praxisorientierten Schritt-für-Schritt-Anleitung beschrieben.
+Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und reproduzierbar gemacht werden.
 
   \subsection{Ubuntu Server}  
   Ubuntu Server ist eine weit verbreitete Linux-Distribution, die durch ihre Stabilität, breite Community-Unterstützung und regelmäßige Sicherheitsupdates überzeugt.  
@@ -557,8 +558,9 @@ Im Folgenden werden alle Werkzeuge und Dienste vorgestellt, die für den Aufbau 
   \subsection{Docker}  
   Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt.  
   Die offizielle Installationsanleitung ist verfügbar unter: \url{https://docs.docker.com/engine/install/}.  
-  Unter Ubuntu kann Docker wie folgt installiert werden:  
-
+  Unter Ubuntu kann Docker wie folgt installiert werden.  
+  (Vor der Ausführung des Codes sollte dieser stehts geprüft werden. 
+  Die aktuellen Befehle sind in der offiziellen Dokumentation unter der zuvor genannter URL verfügbar.)
   \begin{enumerate}
     \item Einrichten des Docker-Repositories:
     \begin{minted}[breaklines, linenos]{bash}
@@ -590,6 +592,30 @@ sudo systemctl status docker
 # Testen der Installation mit dem Hello-World Container
 sudo docker run hello-world
     \end{minted} 
+  
+    \item Nutzung:
+    Nach der Installation kann Docker Compose für die Verwaltung von Containern genutzt werden.  
+    Dafür ist es sehr nützlich folgende Befehle, die im Verzeichnis ausgeführt werden, 
+    in dem sich die \texttt{docker-compose.yml}-Datei befindet, zu kennen:
+
+    \begin{minted}[breaklines, linenos]{bash}
+# Container erstellen und im Hintergrund starten
+sudo docker compose up -d
+
+# Container starten und stoppen
+sudo docker compose start
+sudo docker compose stop
+
+# Änderungen übernehmen (z.B. nach Anpassung der Compose-Datei)
+sudo docker compose up -d --build
+
+# Container-Status überprüfen
+sudo docker compose ps
+sudo docker ps
+
+# Container beenden und entfernen
+sudo docker compose down
+    \end{minted}
   \end{enumerate}
 
   \subsection{nginx}  
