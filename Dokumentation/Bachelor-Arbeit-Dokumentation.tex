@@ -558,17 +558,58 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
 
   \subsection{SSH}  
   \emph{Secure Shell (SSH)} ist das zentrale Werkzeug für den sicheren Fernzugriff auf den Server.  
-  Der SSH-Server kann unter Ubuntu bereits bei der Installation aktiviert oder nachträglich installiert werden:  
-  \begin{verbatim}
-  sudo apt install openssh-server
-  sudo systemctl enable --now ssh
-  \end{verbatim}  
+  Der SSH-Server kann unter Ubuntu bereits bei der Installation aktiviert werden. 
+  Ist dies nicht der Fall, läuft die nachträgliche Installation und Aktivierung wie folgt:  
+
+  \begin{minted}[breaklines, linenos]{bash}
+sudo apt update
+sudo apt install openssh-server
+sudo systemctl enable --now ssh
+  \end{minted}  
+
   Der Zugriff erfolgt dann von einem Client aus über:  
-  \begin{verbatim}
-  ssh benutzername@server-ip
-  \end{verbatim}  
+
+  \begin{minted}[breaklines, linenos]{bash}
+ssh benutzername@server-ip
+  \end{minted}  
+
   Die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
-  Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.\footcite[Vgl.][Kapitel~22, S.~926~ff.]{nemeth_unixlinux}  
+  Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.  
+
+  \subsubsection*{Wichtige Befehle}  
+
+  \textbf{Service steuern:}  
+  \begin{minted}[breaklines, linenos]{bash}
+sudo systemctl start ssh
+sudo systemctl stop ssh
+sudo systemctl restart ssh
+systemctl status ssh
+  \end{minted}  
+
+  \textbf{IP-Adresse des Servers ermitteln:}  
+  \begin{minted}[breaklines, linenos]{bash}
+ip a
+  \end{minted}  
+
+  \textbf{SSH-Keys erstellen und übertragen (empfohlen):}  
+  \begin{minted}[breaklines, linenos]{bash}
+ssh-keygen -t ed25519
+ssh-copy-id benutzername@server-ip
+  \end{minted}  
+
+  \textbf{Dateien übertragen (scp):}  
+  \begin{minted}[breaklines, linenos]{bash}
+# Datei von Client auf Server kopieren
+scp /pfad/zur/datei benutzername@server-ip:/ziel/pfad/
+
+# Datei vom Server auf Client kopieren
+scp benutzername@server-ip:/pfad/auf/server/datei /lokaler/pfad/
+  \end{minted}  
+
+  \textbf{Verzeichnisse synchronisieren (rsync):}  
+  \begin{minted}[breaklines, linenos]{bash}
+rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
+  \end{minted}  
 
   \subsection{UFW}  
   Die \emph{Uncomplicated Firewall (UFW)} dient zur einfachen Verwaltung der Firewall-Regeln.  
