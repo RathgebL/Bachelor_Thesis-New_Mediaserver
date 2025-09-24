@@ -541,7 +541,7 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
   \subsection{Software}
   \subsection{Netzwerk}
   \subsection{Rechtliche Rahmenbedingungen}
-\section{Installation}  
+\section{Installation und Konfiguration}  
 Die Installation der grundlegenden Software-Komponenten bildet die Basis für den Betrieb eines sicheren und performanten Medienservers.  
 Im Folgenden werden alle Werkzeuge und Dienste vorgestellt, die für den Aufbau des neuen Medienservers in der Bibliothek notwendig sind.
 
@@ -614,6 +614,9 @@ sudo systemctl status nginx
 curl http://localhost
   \end{minted}  
 
+  Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
+  die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden. 
+
   \subsection{Navidrome}  
   Navidrome ist ein leichtgewichtiger Musikserver, der als Docker-Container besonders einfach bereitgestellt werden kann.  
   Die offizielle Projektseite mit Anleitungen und Docker-Images befindet sich unter: \url{https://www.navidrome.org/docs/}.  
@@ -660,17 +663,10 @@ curl http://localhost
   Alle weiteren Ports bleiben standardmäßig blockiert.  
   Offizielle Informationen sind in der Ubuntu-Dokumentation verfügbar: \url{https://help.ubuntu.com/community/UFW}.\footcite[Vgl.][Kapitel~22, S.~932~ff.]{nemeth_unixlinux}  
 
-\subsection{Konfiguration}
-  \subsection{Ubuntu Server}
-  \subsection{Docker}
-  \subsection{Navidrome}
-  \subsection{nginx}
-  Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
-  die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden. 
-  \subsection{SSH}
-  \subsection{UFW}
-\subsection{Datenbank}
-  \subsubsection{Datenstruktur}
+\section{Integration in die bestehende IT-Infrastruktur}
+  \subsection{Netzwerk-Anbindung}  
+  \subsection{Datenbank anbinden}
+    \subsubsection{Datenstruktur}
     Benennungskonvention
   \subsubsection{Dateiformate}
   \subsubsection{Metadaten}
@@ -688,9 +684,6 @@ curl http://localhost
     Skript zur Metadatenanreicherung
     Externe Quellen
   \subsubsection{Datenimport}
-\section{Integration in die bestehende IT-Infrastruktur}
-  \subsection{Netzwerk-Anbindung}  
-  \subsection{Datenbank anbinden}
 \section{Benutzerverwaltung und Zugriffsrechte}
   \subsection{Nutzergruppen definieren}
 \section{Testen und Fehlerbehebung}
