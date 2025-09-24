@@ -1,0 +1,52 @@
+# -----------------------------
+# Pfade
+# -----------------------------
+MusicFolder = "/music"
+DataFolder = "/data"
+
+# -----------------------------
+# Oberfläche
+# -----------------------------
+DefaultLanguage = "de"
+EnableUserEditing = false             # Nutzer können ihre eigenen Daten nicht ändern
+# EnableDownloads = false               # verhindert, dass Nutzer Musik-Dateien herunterladen
+# UILoginBackground = "/data/bg.jpg"  # optional eigenes Hintergrundbild fürs Login
+# UICustomCss = "/data/custom.css"    # eigenes CSS für UI-Anpassungen
+
+# -----------------------------
+# Streaming-Einstellungen
+# -----------------------------
+MaxUserSessions = 1                   # verhindert, dass ein Konto gleichzeitig mehrfach genutzt wird
+TranscodingCacheSize = "500MB"        # Zwischenspeicher für Transkodierung
+PreCacheTranscoding = true            # fängt schon an zu transkodieren, bevor der Nutzer Play drückt
+ScannerParallelism = 4                # wie viele Threads der Scanner nutzt (abhängig von CPU)
+
+# -----------------------------
+# Sicherheit
+# -----------------------------
+LogLevel = "info"                     # mögliche Werte: debug, info, warn, error
+EnableExternalServices = false        # verhindert, dass externe Dienste wie Last.fm/Spotify genutzt werden
+BaseURL = "/navidrome"                # Basis-URL für Links
+
+# -----------------------------
+# Tags / Metadaten
+# -----------------------------
+[Tags]
+# eigenes Feld für Booklet-URL
+[Tags.BookletURL]
+Aliases = ["bookleturl", "booklet_url"]
+Type = "string"
+Album = false
+MaxLength = 512
+
+# eigenes Feld für Dirigent
+#[Tags.Conductor]
+#Aliases = ["conductor", "dirigent"]
+#Type = "string"
+#Album = false
+
+# -----------------------------
+# Benutzer
+# -----------------------------
+SessionTimeout = 1800                 # nach wie vielen Sekunden Sessions auslaufen
+PasswordStrength = "weak"             # simple Passwörter ausreichen

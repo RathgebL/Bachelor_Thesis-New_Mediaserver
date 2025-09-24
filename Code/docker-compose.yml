@@ -1,0 +1,16 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    restart: unless-stopped
+    ports:
+      - "4533:4533"
+    environment:
+      # nur das Nötigste als ENV
+      ND_LOGLEVEL: "info"
+      ND_SCANSCHEDULE: "1h"
+      ND_ENABLEDOWNLOADS: "false"   # erzwingt: keine Downloads
+    volumes:
+      - /home/navidrome/data:/data
+      - /media/user/Expansion/music:/music:ro
+      - ./navidrome.toml:/navidrome.toml:ro
