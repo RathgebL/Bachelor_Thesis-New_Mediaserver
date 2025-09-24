@@ -490,25 +490,104 @@ die für den effizienten Betrieb relevant sind.
   Aspekte der Sicherheit, die beim Betrieb eines Medienservers berücksichtigt werden müssen,
   wurden im Abschnitt „Serveradministration“ unter „Sicherheitsaspekte“ bereits beschrieben. 
     
-\section{Spezifisches zu Medienservern}
-Medienserver unterscheiden sich durch Software, Formate und rechtliche Rahmenbedingungen. Dieser Abschnitt stellt relevante Systeme und Standards vor.
+\section{Spezifisches zu Medienservern}  
+Medienserver unterscheiden sich von klassischen Servern vor allem durch ihre Spezialisierung auf die Verwaltung, Transkodierung und Auslieferung multimedialer Inhalte.  
+Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und müssen dabei sowohl technische als auch rechtliche Anforderungen berücksichtigen.  
+  
+  \subsection{Typische Medienserver-Software}  
+  Es existiert eine Vielzahl an Softwarelösungen, die sich im Funktionsumfang, in der Lizenzierung und in den Einsatzszenarien unterscheiden:  
+  \\
+  \newline 
+  \textbf{Plex:}
+  Plex zählt zu den bekanntesten Medienservern und wird vor allem im privaten Umfeld sowie in kleineren Organisationen genutzt, 
+  um Audio-, Video- und Bilddateien zentral zu verwalten und auf verschiedensten Endgeräten bereitzustellen. 
+  Typische Anwendungsfelder sind Heimnetzwerke, in denen Plex als Medienzentrale für Smart-TVs, Streaming-Boxen, Tablets und Smartphones dient. 
+  Ein zentrales Merkmal ist die Echtzeit-Transkodierung, durch die Inhalte unabhängig von Format oder Endgerät konsumierbar werden. 
+  Ergänzend bietet Plex mobile Clients, Webinterfaces und Zusatzfunktionen wie Offline-Synchronisation oder Live-TV, 
+  die teilweise nur im kostenpflichtigen Abonnement „Plex Pass“ verfügbar sind.\footcite[Vgl.][Abschnitt „Plex Media Server“]{wikipedia_plex}\footcite[Vgl.][]{plex_docs}
+  \\
+  \newline
+  \textbf{Emby:}
+  Emby ist eine proprietäre Medienserver-Software, die Endgeräte wie Smart-TVs, Mobilgeräte und Webbrowser unterstützt. 
+  In der Grundversion kostenlos nutzbar, erfordert der Zugriff auf erweiterte Funktionen wie mobile Synchronisation, 
+  DVR oder Premium-Apps ein kostenpflichtiges Abonnement (\emph{Emby Premiere}). 
+  Ursprünglich als Open-Source-Projekt gestartet, wechselte Emby später in eine proprietäre Lizenz. 
+  Damit ist die Lösung für Privatanwender attraktiv, während sie im institutionellen Umfeld aufgrund der Kosten- 
+  und Lizenzstruktur weniger flexibel erscheint.\footcite[Vgl.][]{wikipedia_emby}\footcite[Vgl.][]{emby_docs}
+  \\
+  \newline
+  \textbf{Jellyfin:}
+  Jellyfin ist eine vollständig freie und quelloffene Medienserver-Software, die als Community-getragene Alternative zu Plex und Emby entwickelt wird. 
+  Sie eignet sich besonders für Szenarien, in denen Transparenz, Datenschutz 
+  und Unabhängigkeit von kommerziellen Modellen eine Rolle spielen, wie etwa in Hochschulen oder öffentlichen Bibliotheken. 
+  Jellyfin unterstützt die Verwaltung und das Streaming von Audio-, Video- und Bilddateien und bietet Clients für Webbrowser, Mobilgeräte und Smart-TVs. 
+  Alle Funktionen, einschließlich Transkodierung und Multiuser-Verwaltung, 
+  sind ohne Einschränkung verfügbar.\footcite[Vgl.][]{wikipedia_jellyfin}\footcite[Vgl.][]{jellyfin_docs}
+  \\
+  \newline  
+  \textbf{VLC-Streaming:}
+  Der \emph{VLC Media Player} ist eine weit verbreitete, freie und quelloffene Software der \emph{VideoLAN}-Organisation. 
+  Neben der Wiedergabe nahezu aller gängigen Audio- und Videoformate umfasst VLC auch leistungsfähige Streaming-Funktionen. 
+  Inhalte können beispielsweise über HTTP, RTP oder RTSP verteilt werden, was den VLC für den Aufbau kleiner Streaming-Server, 
+  Testumgebungen oder den schnellen Medientransfer prädestiniert. 
+  Dank seiner Flexibilität und Plattformunabhängigkeit findet VLC Anwendung in Bildungseinrichtungen ebenso wie im privaten Bereich.\footcite[Vgl.][]{wikipedia_vlc}\footcite[Vgl.][]{vlc_docs}  
+  \\
+  \newline
+  \textbf{Icecast:}
+  \emph{Icecast}, entwickelt von der \emph{Xiph.org Foundation}, ist eine freie Open-Source-Software zur Einrichtung von Streaming-Servern. 
+  Hauptsächlich im Audiobereich (z. B. Internetradios) eingesetzt, unterstützt Icecast auch Videostreams. 
+  Neben offenen Formaten wie Ogg Vorbis, Opus und Theora können auch verbreitete Standards wie MP3 oder AAC genutzt werden. 
+  Durch seine Stabilität und Skalierbarkeit eignet sich Icecast besonders für Webradios, nichtkommerzielle Sender sowie für Bildungs- und Forschungseinrichtungen, 
+  in denen offene Standards von zentraler Bedeutung sind.\footcite[Vgl.][]{wikipedia_icecast}\footcite[Vgl.][]{icecast_docs}  
+  \\
+  \newline
+  \textbf{DLNA-basierte Systeme:}
+  \emph{DLNA} (Digital Living Network Alliance) ist ein Industriestandard, der die Interoperabilität zwischen Geräten im Heimnetzwerk sicherstellt. 
+  DLNA-konforme Server stellen Inhalte wie Musik, Videos und Bilder bereit, die von kompatiblen Clients 
+  (Smart-TVs, Spielkonsolen, Streaming-Boxen oder mobilen Geräten) abgerufen werden können. 
+  Typische Implementierungen sind \emph{MiniDLNA/ReadyMedia} oder in NAS-Systeme integrierte Medienserver. 
+  Während DLNA im privaten Bereich nach wie vor verbreitet ist, verliert es im professionellen Umfeld zunehmend an Relevanz, da moderne, HTTP-basierte Verfahren wie HLS oder DASH flexiblere Möglichkeiten bieten.\footcite[Vgl.][]{wikipedia_dlna}\footcite[Vgl.][]{dlna_specs} 
 
-  \subsection{Typische Medienserver-Software}
-  Plex, Jellyfin, Emby, Kodi, VLC-Streaming, Icecast und DLNA-basierte Systeme.
+\subsection{Datenformate und Standards}  
+Für den Betrieb eines Medienservers ist die Unterstützung gängiger Datenformate entscheidend, 
+da diese maßgeblich die Kompatibilität mit Endgeräten sowie die Qualität und Effizienz der Speicherung und Übertragung bestimmen.  
 
-  \subsection{Datenformate und Standards}
-\begin{itemize}
-    \item Audioformate: MP3, FLAC, AAC, WAV
-    \item Containerformate: MKV, MP4
-    \item Metadatenstandards: ID3, Dublin Core (insbesondere im Bibliothekskontext)
-\end{itemize}
+\textbf{Audioformate:}  
+Im Audiobereich haben sich unterschiedliche Standards etabliert, die sich hinsichtlich Qualität, Kompression und Einsatzgebiet unterscheiden.  
+Das MP3-Format (\emph{MPEG-1/2 Audio Layer III}) ist verlustbehaftet komprimiert und gilt als de facto Standard im Musikbereich, 
+insbesondere wegen seiner geringen Dateigrößen und breiten Unterstützung durch Endgeräte.\footcite[Vgl.][Kapitel~7.4, S.~699~ff.]{tanenbaum_computernetworks}  
+Für verlustfreie Archivierung wird häufig FLAC (\emph{Free Lossless Audio Codec}) genutzt, 
+das bei identischer Klangqualität wie das Original eine deutliche Speicherreduktion ermöglicht.  
+AAC (\emph{Advanced Audio Coding}), ebenfalls verlustbehaftet und von der MPEG-Gruppe spezifiziert, 
+wird heute von vielen Streamingdiensten und Plattformen (z.\,B. YouTube, iTunes, Spotify) als Standard eingesetzt.  
+WAV (\emph{Waveform Audio File Format}) speichert Audiodaten unkomprimiert, was höchste Qualität gewährleistet, jedoch mit hohem Speicherbedarf einhergeht.
+Dieses Format findet daher primär in professionellen Produktionsumgebungen oder für kurzfristige Verarbeitungsschritte Anwendung.  
 
-  \subsection{Rechtsfragen}
-    \begin{itemize}
-        \item Lizenzen und Lizenzmodelle
-        \item Urheberrechtliche Rahmenbedingungen
-        \item Bibliotheksrecht im Hochschulkontext
-    \end{itemize}
+\textbf{Containerformate:}  
+Neben reinen Audioformaten sind Containerformate für die Organisation komplexerer Inhalte entscheidend.  
+Das Matroska-Format (MKV) ist ein freier, erweiterbarer Standard, der neben Audio- und Videoströmen auch Untertitel, 
+Kapitelinformationen und mehrere Tonspuren in einer Datei vereinen kann.  
+MP4, ein ISO-Standard auf Basis von \emph{MPEG-4 Part 14}, ist weltweit eines der am weitesten verbreiteten Containerformate 
+und bildet insbesondere die Grundlage für Video-Streaming über HTTP. 
+Es überzeugt durch hohe Kompatibilität mit Abspielgeräten und Streaming-Plattformen.\footcite[Vgl.][Kapitel~6.3, S.~274~ff.]{kurose_networking}  
+
+\textbf{Metadatenstandards:}  
+Für die effiziente Organisation und Suche von Medieninhalten sind Metadaten unverzichtbar.  
+Bei Musikdateien sind ID3-Tags weit verbreitet, die Attribute wie Titel, Interpret, Album, Genre oder Coverbilder standardisiert in MP3-Dateien einbetten.  
+Darüber hinaus existieren generische Standards wie der Dublin Core Metadata Standard, der insbesondere in Bibliotheks- und Archivkontexten eingesetzt wird, 
+um digitale Ressourcen konsistent zu beschreiben und interoperabel zugänglich zu machen.\footcite[Vgl.][Kapitel~4.2]{steinmetz_multimedia}  
+ 
+\subsection{Rechtsfragen}  
+Neben technischen Aspekten spielen rechtliche Rahmenbedingungen eine zentrale Rolle:  
+
+\textbf{Lizenzen und Lizenzmodelle:}  
+Freie Software wie Jellyfin unterliegt meist der GPL, während kommerzielle Systeme wie Plex proprietäre Lizenzen verwenden. Auch bei verwendeten Codecs können Lizenzkosten anfallen (z.\,B. AAC, H.264).\footcite[Vgl.][S.~943]{nemeth_unixlinux}  
+
+\textbf{Urheberrechtliche Rahmenbedingungen:}  
+Die Bereitstellung von Medieninhalten unterliegt dem Urheberrecht. Privatkopien dürfen in vielen Rechtsordnungen nur im engen Rahmen erfolgen, eine öffentliche Zugänglichmachung (z.\,B. Streaming in einem Bibliotheksnetzwerk) setzt in der Regel entsprechende Nutzungsrechte voraus.\footcite[Vgl.][S.~946]{nemeth_unixlinux}  
+
+\textbf{Bibliotheksrecht im Hochschulkontext:}  
+Für Hochschulbibliotheken gelten besondere Ausnahmeregelungen im Urheberrechtsgesetz (UrhG), insbesondere im Rahmen von § 60a UrhG (Nutzungen für Unterricht und Lehre). Dennoch müssen Lizenzen und Verträge mit Rechteinhabern geprüft werden, bevor digitale Inhalte über einen Medienserver zugänglich gemacht werden.\footcite[Vgl.][S.~947]{nemeth_unixlinux}  
 
 \section{Medienserver im Bibliothekskontext}
 Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugriff auf digitalisierte Bestände, stellt jedoch auch besondere Anforderungen an Recht, Technik und Nachhaltigkeit.
