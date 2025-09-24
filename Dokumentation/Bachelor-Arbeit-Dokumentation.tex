@@ -556,6 +556,35 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   Dabei können SSH und Docker bereits mitinstalliert werden. Der USB-Stick kann danach entfernt und der Server neu gestartet werden.
   Nähere Informationen zu diesem Vorgang sind in der offiziellen Dokumentation verfügbar: \url{https://ubuntu.com/server/docs/installation}.
 
+  \subsection{SSH}  
+  \emph{Secure Shell (SSH)} ist das zentrale Werkzeug für den sicheren Fernzugriff auf den Server.  
+  Der SSH-Server kann unter Ubuntu bereits bei der Installation aktiviert oder nachträglich installiert werden:  
+  \begin{verbatim}
+  sudo apt install openssh-server
+  sudo systemctl enable --now ssh
+  \end{verbatim}  
+  Der Zugriff erfolgt dann von einem Client aus über:  
+  \begin{verbatim}
+  ssh benutzername@server-ip
+  \end{verbatim}  
+  Die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
+  Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.\footcite[Vgl.][Kapitel~22, S.~926~ff.]{nemeth_unixlinux}  
+
+  \subsection{UFW}  
+  Die \emph{Uncomplicated Firewall (UFW)} dient zur einfachen Verwaltung der Firewall-Regeln.  
+  UFW ist in den Ubuntu-Repositories enthalten und kann wie folgt installiert und aktiviert werden:  
+  \begin{verbatim}
+  sudo apt install ufw
+  sudo ufw enable
+  \end{verbatim}  
+  Anschließend lassen sich Regeln hinzufügen, z.\,B. um SSH und HTTPS freizuschalten:  
+  \begin{verbatim}
+  sudo ufw allow 22/tcp
+  sudo ufw allow 443/tcp
+  \end{verbatim}  
+  Alle weiteren Ports bleiben standardmäßig blockiert.  
+  Offizielle Informationen sind in der Ubuntu-Dokumentation verfügbar: \url{https://help.ubuntu.com/community/UFW}.\footcite[Vgl.][Kapitel~22, S.~932~ff.]{nemeth_unixlinux}
+
   \subsection{Docker}  
   Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt. 
   Falls Docker nicht bei der Ubuntu-Installation mitinstalliert wurde, kann die Installation komfortabel über ein vorbereitetes Skript erfolgen. 
@@ -732,36 +761,7 @@ tail -f /var/log/nginx/error.log
       volumes:
         - "./data:/data"
         - "./music:/music:ro"
-  \end{verbatim} 
-
-  \subsection{SSH}  
-  \emph{Secure Shell (SSH)} ist das zentrale Werkzeug für den sicheren Fernzugriff auf den Server.  
-  Der SSH-Server kann unter Ubuntu bereits bei der Installation aktiviert oder nachträglich installiert werden:  
-  \begin{verbatim}
-  sudo apt install openssh-server
-  sudo systemctl enable --now ssh
-  \end{verbatim}  
-  Der Zugriff erfolgt dann von einem Client aus über:  
-  \begin{verbatim}
-  ssh benutzername@server-ip
-  \end{verbatim}  
-  Die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
-  Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.\footcite[Vgl.][Kapitel~22, S.~926~ff.]{nemeth_unixlinux}  
-
-  \subsection{UFW}  
-  Die \emph{Uncomplicated Firewall (UFW)} dient zur einfachen Verwaltung der Firewall-Regeln.  
-  UFW ist in den Ubuntu-Repositories enthalten und kann wie folgt installiert und aktiviert werden:  
-  \begin{verbatim}
-  sudo apt install ufw
-  sudo ufw enable
-  \end{verbatim}  
-  Anschließend lassen sich Regeln hinzufügen, z.\,B. um SSH und HTTPS freizuschalten:  
-  \begin{verbatim}
-  sudo ufw allow 22/tcp
-  sudo ufw allow 443/tcp
-  \end{verbatim}  
-  Alle weiteren Ports bleiben standardmäßig blockiert.  
-  Offizielle Informationen sind in der Ubuntu-Dokumentation verfügbar: \url{https://help.ubuntu.com/community/UFW}.\footcite[Vgl.][Kapitel~22, S.~932~ff.]{nemeth_unixlinux}  
+  \end{verbatim}   
 
 \section{Integration in die bestehende IT-Infrastruktur}
   \subsection{Netzwerk-Anbindung}  
