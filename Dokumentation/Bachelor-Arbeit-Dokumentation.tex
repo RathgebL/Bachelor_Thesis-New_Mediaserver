@@ -557,42 +557,52 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   Nähere Informationen zu diesem Vorgang sind in der offiziellen Dokumentation verfügbar: \url{https://ubuntu.com/server/docs/installation}.
 
   \subsection{Docker}  
-  Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt.  
+  Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt. 
+  Falls Docker nicht bei der Ubuntu-Installation mitinstalliert wurde, kann die Installation komfortabel über ein vorbereitetes Skript erfolgen. 
   Die offizielle Installationsanleitung ist verfügbar unter: \url{https://docs.docker.com/engine/install/}.  
-  Unter Ubuntu kann Docker wie folgt installiert werden.  
-  (Vor der Ausführung des Codes sollte dieser stehts geprüft werden. 
-  Die aktuellen Befehle sind in der offiziellen Dokumentation unter der zuvor genannter URL verfügbar.)
+  Dort findet sich auch der Inhalt des Skriptes \texttt{install-docker.sh}. Dieser sollte vor der Installation auf die neueste Version überprüft werden. 
+  Ein Beispielskript (Stand 24. September 2025) findet sich im GitHub-Repository: \url{https://github.com/RathgebL/Bachelor_Thesis-New_Mediaserver}.
+  Dieses enthält alle notwendigen Befehle zum Einrichten des Docker-Repositories und zur Installation der Docker-Pakete.
+  Der Installationsvorgang gliedert sich nun in folgende Schritte:  
+
   \begin{enumerate}
-    \item Einrichten des Docker-Repositories:
+    \item Datenträger mit Skript verfügbar machen:
     \begin{minted}[breaklines, linenos]{bash}
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+# Stick anschließen und Gerät ermitteln (z.B. sdb1)
+lsblk
 
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-    \end{minted} 
+# Output könnte z.B. so aussehen:
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0 238.5G  0 disk
+  sda1   8:1    0   512M  0 part /boot/efi
+  sda2   8:2    0   238G  0 part /
+sdb      8:16   1  14.9G  0 disk
+  sdb1   8:17   1  14.9G  0 part
 
-    \item Installation der Docker Packete:
-    \begin{minted}[breaklines, linenos]{bash}
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+# Mountpoint erstellen (falls noch nicht vorhanden)
+sudo mkdir -p /mnt/usb
+
+# USB-Stick einhängen (Beispiel: sdb1)
+sudo mount /dev/sdb1 /mnt/usb
+
+# In das Verzeichnis des USB-Sticks wechseln
+cd /mnt/usb
     \end{minted}
 
-    \item Checks:
+    \item Skript ausführbar machen und starten:
     \begin{minted}[breaklines, linenos]{bash}
-# Verifiziere, dass Docker läuft
+chmod +x install-docker.sh
+./install-docker.sh
+    \end{minted}
+
+    \item Überprüfen der Installation:
+    \begin{minted}[breaklines, linenos]{bash}
+# Verifiziere, dass der Docker-Dienst läuft
 sudo systemctl status docker
 
-# Testen der Installation mit dem Hello-World Container
+# Testen der Installation mit dem Hello-World-Container
 sudo docker run hello-world
-    \end{minted} 
+    \end{minted}
   
     \item Nutzung:
     Nach der Installation kann Docker Compose für die Verwaltung von Containern genutzt werden.  
@@ -643,7 +653,7 @@ curl http://localhost
 
   Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
   die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
-  Für den Medienserver empfiehlt sich eine Konfiguration wie im folgenden Beispiel:  
+  Für den Medienserver empfiehlt sich eine Konfiguration wie im folgenden Beispiel (als txt-Datei auch im GitHub-Repository verfügbar):  
 
   \begin{minted}[breaklines, linenos]{nginx}
 server {
@@ -683,6 +693,7 @@ sudo nginx -t
 sudo systemctl reload nginx
   \end{minted}  
 
+  Es folgen einige nützliche Befehle zur Verwaltung von nginx:
   \textbf{Service steuern}  
   \begin{minted}[breaklines, linenos]{bash}
 sudo nginx -t                  # Konfiguration testen
