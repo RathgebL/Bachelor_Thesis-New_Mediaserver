@@ -557,7 +557,6 @@ Im Folgenden werden alle Werkzeuge und Dienste vorgestellt, die für den Aufbau 
   \subsection{Docker}  
   Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt.  
   Die offizielle Installationsanleitung ist verfügbar unter: \url{https://docs.docker.com/engine/install/}.  
-
   Unter Ubuntu kann Docker wie folgt installiert werden:  
 
   \begin{enumerate}
@@ -596,13 +595,24 @@ sudo docker run hello-world
   \subsection{nginx}  
   \emph{nginx} ist ein moderner Webserver und Reverse Proxy, der sich durch hohe Performance auszeichnet.  
   Die offizielle Website bietet Installationshinweise und Downloads: \url{https://nginx.org/en/download.html}.  
-  Unter Ubuntu kann nginx direkt über die Paketverwaltung installiert werden:  
-  \begin{verbatim}
-  sudo apt install nginx
-  sudo systemctl enable --now nginx
-  \end{verbatim}  
-  Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
-  Für Medienserver wird nginx oft als Reverse Proxy eingesetzt, z.\,B. um Navidrome über HTTPS erreichbar zu machen.\footcite[Vgl.][Kapitel~11, S.~365~ff.]{nemeth_unixlinux}  
+  Unter Ubuntu kann nginx direkt über die Paketverwaltung installiert werden:
+
+    \begin{minted}[breaklines, linenos]{bash}
+# Paketliste aktualisieren
+sudo apt update
+
+# nginx installieren
+sudo apt install nginx -y
+
+# nginx starten und beim Systemstart aktivieren
+sudo systemctl enable --now nginx
+
+# Status überprüfen
+sudo systemctl status nginx
+
+# Test im Browser oder mit curl (sollte "Welcome to nginx!" zurückgeben)
+curl http://localhost
+  \end{minted}  
 
   \subsection{Navidrome}  
   Navidrome ist ein leichtgewichtiger Musikserver, der als Docker-Container besonders einfach bereitgestellt werden kann.  
@@ -619,9 +629,7 @@ sudo docker run hello-world
       volumes:
         - "./data:/data"
         - "./music:/music:ro"
-  \end{verbatim}  
-  Nach dem Start mit \texttt{docker-compose up -d} ist Navidrome unter \url{http://<server-ip>:4533} erreichbar.  
-  Hier können ein Administratorkonto erstellt und das Musikverzeichnis eingebunden werden. 
+  \end{verbatim} 
 
   \subsection{SSH}  
   \emph{Secure Shell (SSH)} ist das zentrale Werkzeug für den sicheren Fernzugriff auf den Server.  
@@ -657,6 +665,8 @@ sudo docker run hello-world
   \subsection{Docker}
   \subsection{Navidrome}
   \subsection{nginx}
+  Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
+  die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden. 
   \subsection{SSH}
   \subsection{UFW}
 \subsection{Datenbank}
