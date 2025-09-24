@@ -578,16 +578,28 @@ Darüber hinaus existieren generische Standards wie der Dublin Core Metadata Sta
 um digitale Ressourcen konsistent zu beschreiben und interoperabel zugänglich zu machen.\footcite[Vgl.][Kapitel~4.2]{steinmetz_multimedia}  
  
 \subsection{Rechtsfragen}  
-Neben technischen Aspekten spielen rechtliche Rahmenbedingungen eine zentrale Rolle:  
+Neben technischen Aspekten spielen rechtliche Rahmenbedingungen eine zentrale Rolle beim Betrieb von Medienservern.  
 
 \textbf{Lizenzen und Lizenzmodelle:}  
-Freie Software wie Jellyfin unterliegt meist der GPL, während kommerzielle Systeme wie Plex proprietäre Lizenzen verwenden. Auch bei verwendeten Codecs können Lizenzkosten anfallen (z.\,B. AAC, H.264).\footcite[Vgl.][S.~943]{nemeth_unixlinux}  
+Die Wahl der eingesetzten Software und Codecs ist auch aus lizenzrechtlicher Sicht relevant.  
+Freie Software wie Jellyfin unterliegt in der Regel der \emph{GNU General Public License (GPL)}, die die Nutzung, Modifikation und Weitergabe des Quellcodes gestattet, 
+solange abgeleitete Werke unter denselben Bedingungen veröffentlicht werden.\footcite[Vgl.][GNU General Public License, Version~3, 2007]{gnu_gplv3}  
+Kommerzielle Systeme wie Plex oder Emby hingegen stehen unter proprietären Lizenzen, die Nutzung, Verbreitung und Anpassung einschränken.  
+Darüber hinaus können auch bei der Verwendung von Codecs Lizenzgebühren anfallen: So ist AAC (\emph{Advanced Audio Coding}) durch MPEG-LA patentiert 
+und unterliegt Lizenzkosten bei bestimmter kommerzieller Nutzung, ebenso H.264/AVC.\footcite[Vgl.][MPEG Licensing Authority, 2025]{mpeg_la}  
 
 \textbf{Urheberrechtliche Rahmenbedingungen:}  
-Die Bereitstellung von Medieninhalten unterliegt dem Urheberrecht. Privatkopien dürfen in vielen Rechtsordnungen nur im engen Rahmen erfolgen, eine öffentliche Zugänglichmachung (z.\,B. Streaming in einem Bibliotheksnetzwerk) setzt in der Regel entsprechende Nutzungsrechte voraus.\footcite[Vgl.][S.~946]{nemeth_unixlinux}  
+Die Bereitstellung von Medieninhalten wird maßgeblich durch das Urheberrechtsgesetz (UrhG) geregelt.  
+Nach §~53 UrhG sind Privatkopien zwar grundsätzlich erlaubt, jedoch nur im engen persönlichen Umfeld.  
+Eine öffentliche Zugänglichmachung nach §~19a UrhG - wie sie bei einem Medienserver innerhalb einer Organisation oder Bibliothek vorliegt -
+setzt hingegen entsprechende Nutzungsrechte oder Lizenzen der Rechteinhaber voraus.\footcite[Vgl.][§§~53, 19a UrhG]{urhg2025}  
 
 \textbf{Bibliotheksrecht im Hochschulkontext:}  
-Für Hochschulbibliotheken gelten besondere Ausnahmeregelungen im Urheberrechtsgesetz (UrhG), insbesondere im Rahmen von § 60a UrhG (Nutzungen für Unterricht und Lehre). Dennoch müssen Lizenzen und Verträge mit Rechteinhabern geprüft werden, bevor digitale Inhalte über einen Medienserver zugänglich gemacht werden.\footcite[Vgl.][S.~947]{nemeth_unixlinux}  
+Für Hochschulbibliotheken gelten Sonderregelungen.  
+§~60a UrhG erlaubt die Nutzung urheberrechtlich geschützter Werke für Unterricht und Lehre, etwa in Kursen oder in einer Lernplattform.  
+§~60e UrhG regelt darüber hinaus Nutzungen durch Bibliotheken, beispielsweise die Bereitstellung von Werken in elektronischer Form für Forschungs- und Unterrichtszwecke.  
+Dennoch müssen in der Praxis bestehende Lizenzverträge und Verlagsbedingungen beachtet werden, 
+da gesetzliche Schrankenregelungen nicht alle Nutzungsformen abdecken.\footcite[Vgl.][§§~60a, 60e UrhG]{urhg2025}  
 
 \section{Medienserver im Bibliothekskontext}
 Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugriff auf digitalisierte Bestände, stellt jedoch auch besondere Anforderungen an Recht, Technik und Nachhaltigkeit.
