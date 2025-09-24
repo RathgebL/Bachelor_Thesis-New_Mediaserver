@@ -552,8 +552,9 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   Nach dem Download wird das Image auf einen USB-Stick geschrieben (z.\,B. mit \texttt{Rufus} oder \texttt{dd} unter Linux).  
   Dabei ist zu beachten, dass der Stick keine wichtigen Daten enthält, da dieser vollständig überschrieben wird, und eine Mindestgröße von 5\,GB haben sollte.    
   Um die Installation zu starten, wird der Stick angeschlossen und über das Boot-Menü (Taste \texttt{F12}, \texttt{Esc} oder \texttt{Del}, abhängig vom Hersteller) ausgewählt.  
-  Die textbasierte Installationsroutine führt anschließend durch Partitionierung, Netzwerkkonfiguration und die Einrichtung eines Administratorkontos.  
-  Weitere informationen sind in der offiziellen Dokumentation verfügbar: \url{https://ubuntu.com/server/docs/installation}.
+  Die textbasierte Installationsroutine führt anschließend durch Partitionierung, Netzwerkkonfiguration und die Einrichtung eines Administratorkontos. 
+  Dabei können SSH und Docker bereits mitinstalliert werden. Der USB-Stick kann danach entfernt und der Server neu gestartet werden.
+  Nähere Informationen zu diesem Vorgang sind in der offiziellen Dokumentation verfügbar: \url{https://ubuntu.com/server/docs/installation}.
 
   \subsection{Docker}  
   Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt.  
