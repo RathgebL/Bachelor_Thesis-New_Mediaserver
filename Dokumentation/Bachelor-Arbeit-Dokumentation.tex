@@ -555,27 +555,35 @@ da diese maßgeblich die Kompatibilität mit Endgeräten sowie die Qualität und
 \textbf{Audioformate:}  
 Im Audiobereich haben sich unterschiedliche Standards etabliert, die sich hinsichtlich Qualität, Kompression und Einsatzgebiet unterscheiden.  
 Das MP3-Format (\emph{MPEG-1/2 Audio Layer III}) ist verlustbehaftet komprimiert und gilt als de facto Standard im Musikbereich, 
-insbesondere wegen seiner geringen Dateigrößen und breiten Unterstützung durch Endgeräte.\footcite[Vgl.][Kapitel~7.4, S.~699~ff.]{tanenbaum_computernetworks}  
+insbesondere wegen seiner geringen Dateigrößen und breiten Unterstützung durch Endgeräte.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}  
 Für verlustfreie Archivierung wird häufig FLAC (\emph{Free Lossless Audio Codec}) genutzt, 
 das bei identischer Klangqualität wie das Original eine deutliche Speicherreduktion ermöglicht.  
 AAC (\emph{Advanced Audio Coding}), ebenfalls verlustbehaftet und von der MPEG-Gruppe spezifiziert, 
-wird heute von vielen Streamingdiensten und Plattformen (z.\,B. YouTube, iTunes, Spotify) als Standard eingesetzt.  
+wird heute von vielen Streamingdiensten und Plattformen (z.\,B. YouTube, iTunes, Spotify) als Standard eingesetzt.\footcite[Vgl.][]{openlearn_aac} 
 WAV (\emph{Waveform Audio File Format}) speichert Audiodaten unkomprimiert, was höchste Qualität gewährleistet, jedoch mit hohem Speicherbedarf einhergeht.
-Dieses Format findet daher primär in professionellen Produktionsumgebungen oder für kurzfristige Verarbeitungsschritte Anwendung.  
+Dieses Format findet daher primär in professionellen Produktionsumgebungen oder für kurzfristige Verarbeitungsschritte Anwendung.\footcite[Vgl.][]{wikipedia_wav}  
 
 \textbf{Containerformate:}  
 Neben reinen Audioformaten sind Containerformate für die Organisation komplexerer Inhalte entscheidend.  
 Das Matroska-Format (MKV) ist ein freier, erweiterbarer Standard, der neben Audio- und Videoströmen auch Untertitel, 
-Kapitelinformationen und mehrere Tonspuren in einer Datei vereinen kann.  
+Kapitelinformationen und mehrere Tonspuren in einer Datei vereinen kann.\footcite[Vgl.][siehe 1. Introduction]{rfc9559}  
 MP4, ein ISO-Standard auf Basis von \emph{MPEG-4 Part 14}, ist weltweit eines der am weitesten verbreiteten Containerformate 
 und bildet insbesondere die Grundlage für Video-Streaming über HTTP. 
-Es überzeugt durch hohe Kompatibilität mit Abspielgeräten und Streaming-Plattformen.\footcite[Vgl.][Kapitel~6.3, S.~274~ff.]{kurose_networking}  
+Es überzeugt durch hohe Kompatibilität mit Abspielgeräten und Streaming-Plattformen.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}
 
-\textbf{Metadatenstandards:}  
-Für die effiziente Organisation und Suche von Medieninhalten sind Metadaten unverzichtbar.  
-Bei Musikdateien sind ID3-Tags weit verbreitet, die Attribute wie Titel, Interpret, Album, Genre oder Coverbilder standardisiert in MP3-Dateien einbetten.  
-Darüber hinaus existieren generische Standards wie der Dublin Core Metadata Standard, der insbesondere in Bibliotheks- und Archivkontexten eingesetzt wird, 
-um digitale Ressourcen konsistent zu beschreiben und interoperabel zugänglich zu machen.\footcite[Vgl.][Kapitel~4.2]{steinmetz_multimedia}  
+\textbf{Metadatenstandards:}
+Metadaten („Daten über Daten“) beschreiben Eigenschaften von Mediendateien und ermöglichen deren effiziente Suche, Auffindbarkeit und Verwaltung. 
+Ein weit verbreiteter Standard in MP3-Dateien sind ID3-Tags. 
+Diese Container erlauben das Einbetten von Informationen wie Titel, Interpret, Album, Genre oder Coverbilder direkt in die Datei.\footcite[Vgl.][siehe 4. Declared ID3v2 frames]{id3org_spec}
+
+Ein generischer, interdisziplinärer Standard ist Dublin Core. Dieser umfasst eine Menge von Kernfeldern (z. B. Title, Creator, Subject, Date, Format, Rights), 
+die zur Beschreibung digitaler Ressourcen genutzt werden können\footcite[Vgl.][siehe The Elements]{dublincore_set}. 
+Seine Stärke liegt in der Interoperabilität: Dublin Core wird von vielen Bibliotheks-, Museums- und Archivsystemen unterstützt.\footcite[Vgl.][siehe 1.1. What is Metadata?]{dublincore_using}
+
+Daneben gibt es weitere Metadatenstandards, die speziellere Anforderungen adressieren. 
+Beispiele sind METS (Metadata Encoding and Transmission Standard), MODS (Metadata Object Description Schema) 
+oder MARCXML, die in Bibliotheks- und Archivumgebungen zusätzlich verwendet werden, 
+insbesondere wenn detailliertere bibliografische Informationen benötigt werden.\footcite[Vgl.][]{loc_mets} \footcite[Vgl.][]{loc_mods}  
  
 \subsection{Rechtsfragen}  
 Neben technischen Aspekten spielen rechtliche Rahmenbedingungen eine zentrale Rolle beim Betrieb von Medienservern.  
@@ -601,20 +609,79 @@ Für Hochschulbibliotheken gelten Sonderregelungen.
 Dennoch müssen in der Praxis bestehende Lizenzverträge und Verlagsbedingungen beachtet werden, 
 da gesetzliche Schrankenregelungen nicht alle Nutzungsformen abdecken.\footcite[Vgl.][§§~60a, 60e UrhG]{urhg2025}  
 
-\section{Medienserver im Bibliothekskontext}
-Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugriff auf digitalisierte Bestände, stellt jedoch auch besondere Anforderungen an Recht, Technik und Nachhaltigkeit.
+\section{Medienserver im Bibliothekskontext}  
+Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugang zu digitalen Sammlungen, bringt aber auch besondere Anforderungen mit sich - technisch, rechtlich und hinsichtlich Langzeitverfügbarkeit.
 
-  \subsection{Digitalisierung von Beständen}
-  Beispiel: Umwandlung und Speicherung von Audio-CDs in digitale Formate.
+  \subsection{Digitalisierung von Beständen}  
+  Bibliotheken besitzen oft analoge oder hybride Bestände - etwa Audio- und Videomedien, Filmarchive oder Tonträger -, die durch Digitalisierung langfristig gesichert und zugänglich gemacht werden sollen. Der Prozess gliedert sich idealerweise in vier Phasen:
 
-  \subsection{Zugriff und Rechteverwaltung}
-  Einschränkungen des Zugriffs, etwa nur im Hochschulnetz oder über VPN.
+  \begin{itemize}
+    \item \textbf{Auswahl und Priorisierung:}  
+      Nicht alle Bestände können sofort digitalisiert werden. Kriterien für eine sinnvolle Auswahl sind u. a. der Erhaltungszustand, die Nutzungshäufigkeit, die rechtliche Situation sowie historische oder kulturelle Bedeutung. Institutionelle Richtlinien oder internationale Leitlinien wie UNESCO/PERSIST geben dazu Orientierung.:contentReference[oaicite:3]{index=3}  
+      Auch Bibliotheken wie die University of Cincinnati verwenden solche Kriterien in ihren Digitization-Selection-Guidelines.:contentReference[oaicite:4]{index=4}  
 
-  \subsection{Nachhaltigkeit und Langzeitarchivierung}
-  Strategien zur dauerhaften Sicherung digitaler Medien.
+    \item \textbf{Erfassung und Digitalisierung:}  
+      Die Objekte werden mit geeigneten Geräten gescannt oder digital abgewickelt (z. B. Scanner, Filmabtaster oder spezielle Audiogeräte). Wichtig ist, dass die digitalen Dateien eine hohe Qualität (z. B. Auflösung, Farbtiefe, Samplingrate) erreichen, sodass sie als Masterversionen für spätere Ableitungen dienen können.  
+      Die Smithsonian Institution nennt als Standardformat z. B. das Broadcast-Wave-Format (BWF) bei Audio mit 24 Bit / 96 kHz für Archivqualität.:contentReference[oaicite:5]{index=5}  
+      Für Bild-/Foto-Digitalisate gelten die FADGI-Technischen Richtlinien als international anerkannter Referenzrahmen, insbesondere hinsichtlich Bildqualität, Metadaten und Workflow-Controlling.:contentReference[oaicite:6]{index=6}  
 
-  \subsection{Lokale vs.\ Cloud-basierte Lösungen}
-  Vergleich der Vor- und Nachteile unterschiedlicher Implementierungsansätze.
+    \item \textbf{Nachbearbeitung und Metadatenanreicherung:}  
+      Nach der Erfassung werden die Rohdaten optimiert (z. B. Rauschfilter, Farbkorrektur) und in normative Formate überführt. Parallel dazu werden Metadaten eingepflegt — technisch, beschreibend und strukturell —, um Auffindbarkeit, Verwaltung und Langzeitnutzung zu ermöglichen.
+
+    \item \textbf{Ableitung von Zugriffsvarianten:}  
+      Für den täglichen Zugriff werden üblicherweise abgeleitete Versionen (z. B. mit kleinerer Auflösung oder effizienteren Codecs) erzeugt, während die Masterdateien sicher archiviert bleiben.
+  \end{itemize}
+
+  Diese digitalen Prozesse orientieren sich an international anerkannten Standards, wie den FADGI-Richtlinien oder Metamorfoze, und an Best Practices in der digitalen Archivierung und Bibliothekenarbeit.:contentReference[oaicite:7]{index=7}  
+
+\subsection{Zugriff und Rechteverwaltung}  
+Im Bibliothekskontext bestehen oft restriktive Anforderungen an den Zugriff auf Medien:
+
+\begin{itemize}
+  \item \textbf{Eingeschränkter Zugang:} Der Zugang zu digitalisierten Medien erfolgt häufig nur innerhalb des Hochschulnetzes oder über VPN-Verbindungen, um urheberrechtliche Beschränkungen und Lizenzvereinbarungen zu wahren.  
+  \item \textbf{Authentifizierung und Autorisierung:} Bibliotheken nutzen bestehende Identity-Management-Systeme (z. B. Shibboleth, LDAP, OpenID Connect), um sicherzustellen, dass nur berechtigte Nutzer (Studenten, Mitarbeitende) Zugriff haben.  
+  \item \textbf{Digitale Rechteverwaltung (DRM) / Lizenzsteuerung:} In manchen Fällen sind Inhalte lizenzpflichtig und müssen mit DRM-Technologien geschützt werden oder der Zugriff auf bestimmte Zeitfenster begrenzt sein.  
+  \item \textbf{Auditierung und Protokollierung:} Jede Nutzung (z. B. Streamabruf, Download) sollte protokolliert werden, um Vertragsbedingungen zu überwachen, Missbrauch zu erkennen und Nutzungsstatistiken zu führen.  
+\end{itemize}
+
+Diese Aspekte machen Bibliotheks-Medienserver anspruchsvoller als einfache Streaming-Installationen für private Nutzer.
+
+\subsection{Nachhaltigkeit und Langzeitarchivierung}  
+Die Sicherung digitaler Medien über Jahrzehnte hinweg erfordert robuste Strategien:
+
+\begin{itemize}
+  \item \textbf{Redundanz und Verteilung (3-2-1 Regel):} Mindestens drei Kopien, auf zwei unterschiedlichen Speichermedien und eine Kopie an einem externen Standort. \footcite[Vgl.][„3-2-1 Rule“]{turn0search7}  
+  \item \textbf{Migration und Formatpflege:} Dateiformate und Speichermedien verändern sich. Archivbestände müssen regelmäßig überprüft und falls nötig in aktuelle, verlustfreie Formate migriert werden.  
+  \item \textbf{Integritätsprüfung und Fixity-Checks:} Regelmäßige Checksummenprüfungen und Monitoring, um bitweise Konsistenz und Unversehrtheit der Daten sicherzustellen.  
+  \item \textbf{Cloud- vs. On-Premises-Lösungen:} Bibliotheken wägen zwischen eigener Infrastruktur und Cloud-Diensten ab. Cloud erlaubt Skalierbarkeit und Redundanz, bringt aber Aspekte wie Datenhoheit, Kosten und Anbieterabhängigkeit mit sich. \footcite[Vgl.][„Cloud Services in Digital Preservation“]{turn0search1}\footcite[Vgl.][S. ?]{turn0search9}  
+  \item \textbf{Netzwerk der Kooperationen:} Verbünde, Konsortien und Netzwerke (z. B. MetaArchive Cooperative) ermöglichen verteilte Replikation, Format-Migration im Verbund und Schutz gegenüber Singularitätsrisiken. \footcite[Vgl.][]{turn0search21}  
+\end{itemize}
+
+\subsection{Lokale vs.\ Cloud-basierte Lösungen}  
+Beim Vergleich zwischen lokalen und cloudbasierten Medienservern im Bibliothekskontext ergeben sich folgende Vor- und Nachteile:
+
+\textbf{Lokale Lösungen}  
+
+\begin{itemize}
+  \item volle Kontrolle über Hardware, Daten und Sicherheit  
+  \item keine laufenden Speicher- oder Transferkosten an Drittanbieter  
+  \item abhängig von eigener Infrastruktur und personellen Ressourcen  
+  \item Risiko von Hardwarealterung, Ausfällen oder Standortschäden  
+\end{itemize}
+
+\textbf{Cloud-basierte Ansätze}  
+
+\begin{itemize}
+  \item hohe Skalierbarkeit, Redundanz und geografische Verteilung  
+  \item Backups und Disaster Recovery als Dienstleistung  
+  \item laufende Kosten, mögliche Datenübertragungs- und Auslagerungskosten  
+  \item Datenschutz- und Rechtsaspekte (Datenhoheit, Standort der Server) \footcite[Vgl.][„Digital Preservation and the Cloud“]{turn0search3}  
+  \item Abhängigkeit vom Anbieter, potenzieller Lock-in  
+\end{itemize}
+
+\textbf{Besonderer bibliothekarischer Kontext:}  
+Für Bibliotheken kann Hybridbetrieb (Teile lokal, Teile in der Cloud) sinnvoll sein: z. B. Masterarchive lokal, weniger kritische Katalogversionen in der Cloud. Ebenso kann ein gestaffelter Zugriff sinnvoll sein: interne Zugriffe lokal, externe Benutzer über Cloud-Endpunkte.
+
 
 % ------ Praktische Umsetzung ------
 \chapter*{Praktische Umsetzung}
