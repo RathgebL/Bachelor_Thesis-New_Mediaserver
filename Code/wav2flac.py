@@ -31,7 +31,7 @@ def ask_terminal_mode() -> bool: # Abfrage, ob im Terminal oder mit GUI
             return False
         print("Bitte 'y' oder 'n' eingeben.")
 
-def choose_directory(prompt: str, terminal: bool = False) -> Path: # GUI-Dialog zur Verzeichnisauswahl
+def choose_directory(prompt: str, terminal: bool = False) -> Path:
     if terminal:
         while True:
             path = input(f"{prompt}: ").strip()
@@ -46,7 +46,10 @@ def choose_directory(prompt: str, terminal: bool = False) -> Path: # GUI-Dialog 
     else:
         root = tk.Tk()
         root.withdraw()  # Kein Hauptfenster
-        path = filedialog.askdirectory(title=prompt)
+        root.attributes("-topmost", True)  # Fenster immer im Vordergrund
+        path = filedialog.askdirectory(title=prompt, parent=root)
+        root.destroy()  # Tk-Fenster wieder schließen
+
         if not path:
             print(f"Abbruch: Kein Verzeichnis gewählt für {prompt}")
             sys.exit(1)
