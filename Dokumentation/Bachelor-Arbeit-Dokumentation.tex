@@ -815,33 +815,70 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   \subsection{SSH}  
   \emph{Secure Shell (SSH)} ist das zentrale Werkzeug für den sicheren Fernzugriff auf den Server.  
   Der SSH-Server kann unter Ubuntu bereits bei der Installation aktiviert werden. 
-  Ist dies nicht der Fall, läuft die nachträgliche Installation und Aktivierung wie folgt:  
+  Ist dies nicht der Fall, können nun folgende Schritte durchgeführt werden:  
 
-  \begin{minted}[breaklines, linenos]{bash}
-sudo apt update
+  \begin{enumerate}
+    \item{Installation:}
+    
+    \begin{minted}[breaklines, linenos]{bash}
+# System aktualisieren
+sudo apt update && sudo apt upgrade
+
+# OpenSSH-Server installieren
 sudo apt install openssh-server
+
+# SSH-Dienst starten und aktivieren
 sudo systemctl enable --now ssh
-  \end{minted}  
 
-  Der Zugriff erfolgt dann von einem Client aus über:  
+# Status überprüfen
+sudo systemctl status ssh
+    \end{minted}  
 
-  \begin{minted}[breaklines, linenos]{bash}
+    \item{Loggin:}
+    der Zugriff erfolgt dann von einem Client aus über:  
+    
+    \begin{minted}[breaklines, linenos]{bash}
+# Zunächst IP-Adresse des Servers ermitteln (siehe unter enp0... inet z. B. 100.123.1.2)
+ip a
+
+# Dann Verbindung auf dem Client herstellen
 ssh benutzername@server-ip
-  \end{minted}  
 
-  Die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
-  Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.  
+# Server mit exit verlassen
+exit
+    \end{minted}  
 
-  \subsubsection*{Wichtige Befehle}    
+    \item{SSH-Schlüssel statt Passwort nutzen:}
+    die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
+    Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.
+    Dafür sind folgende Schritte notwendig:
+  
+    \begin{minted}[breaklines, linenos]{bash}
+# Auf dem Client SSH-Schlüssel generieren (falls noch nicht vorhanden)
+ssh-keygen -t ed25519 -C "user@client"
+
+# Loggin testen
+ssh benutzername@server-ip
+
+# Wenn das geklappte, kann der SSH-Dienst auf dem Server angepasst werden
+sudo nano /etc/ssh/sshd_config
+# Folgende Zeilen anpassen oder hinzufügen:
+PasswordAuthentication no
+PubkeyAuthentication yes
+# Datei speichern und Editor verlassen (Strg+O, Enter, Strg+X)
+
+# Nun den SSH-Dienst neu starten
+sudo systemctl restart ssh
+    \end{minted}
+
+  \item{Wichtige Befehle:} 
+  für die Nutzung von SSH lohnt es sich folgende Befehle zu kennen:   
   \begin{minted}[breaklines, linenos]{bash}
 # Service steuern
 sudo systemctl start ssh
 sudo systemctl stop ssh
 sudo systemctl restart ssh
 systemctl status ssh
-
-# IP-Adresse ermitteln
-ip a
 
 # SSH-Schlüssel generieren und auf den Server kopieren (empfohlen)
 ssh-keygen -t ed25519
@@ -856,6 +893,7 @@ scp benutzername@server-ip:/pfad/auf/server/datei /lokaler/pfad/
 # Verzeichnisse synchronisieren
 rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
   \end{minted}  
+\end{enumerate}
 
   \subsection{UFW}  
   Die \emph{Uncomplicated Firewall (UFW)} dient zur einfachen Verwaltung der Firewall-Regeln.  
@@ -920,7 +958,7 @@ sudo docker run hello-world
     \end{minted}
   
     \item Nutzung:
-    Nach der Installation kann Docker Compose für die Verwaltung von Containern genutzt werden.  
+    nach der Installation kann Docker Compose für die Verwaltung von Containern genutzt werden.  
     Dafür ist es sehr nützlich folgende Befehle, die im Verzeichnis ausgeführt werden, 
     in dem sich die \texttt{docker-compose.yml}-Datei befindet, zu kennen:
 
