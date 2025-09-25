@@ -1053,23 +1053,169 @@ tail -f /var/log/nginx/error.log
     \end{minted}
   \end{enumerate}
  
-  \subsection{Navidrome}  
-  Navidrome ist ein leichtgewichtiger Musikserver, der als Docker-Container besonders einfach bereitgestellt werden kann.  
-  Die offizielle Projektseite mit Anleitungen und Docker-Images befindet sich unter: \url{https://www.navidrome.org/docs/}.  
-  Ein typisches \texttt{docker-compose.yml}-Beispiel für Navidrome sieht folgendermaßen aus:  
-  \begin{verbatim}
-  version: "3"
-  services:
-    navidrome:
-      image: deluan/navidrome:latest
-      restart: unless-stopped
-      ports:
-        - "4533:4533"
-      volumes:
-        - "./data:/data"
-        - "./music:/music:ro"
-  \end{verbatim}
+  \subsection{Navidrome}
+  \emph{Navidrome} ist ein leichtgewichtiger Musikserver, der über eine Weboberfläche sowie Subsonic-kompatible Clients genutzt werden kann. 
+  Für den Einsatz als Medienserver in der Bibliothek der HfM Karlsruhe eignet sich Navidrome besonders gut, 
+  da es ressourcenschonend, einfach zu administrieren und flexibel erweiterbar ist. 
+  Durch die Nutzung als Docker-Container ist die Installation schnell durchführbar, Updates lassen sich unkompliziert einspielen, 
+  und die Trennung von System und Anwendungsdaten ist klar gewährleistet.
+  Im folgenden wird eine Schritt-für-Schritt-Anleitung geliefert, um Navidrome in einem Docker-Container zu installieren, zu konfigurieren und zu Nutzen.
+
+  \begin{enumerate}
+    \item Vorbereitungen:
+    zunächst wird ein Arbeitsverzeichnis für den Container erstellt, in dem sich sowohl die Mediendateien als auch die Konfigurations- und Datenbankordner befinden:
+
+    \begin{minted}[breaklines, linenos]{bash}
+sudo mkdir -p /srv/navidrome
+sudo mkdir -p /srv/navidrome/data
+    \end{minted}
+
+    Außerdem muss die Festplatte mit den Musikdateien (z.\,B. eine externe USB-Festplatte) eingebunden werden.
+    
+    \begin{minted}[breaklines, linenos]{bash}
+# Platte anschließen und Gerät ermitteln (z.B. sdb1)
+lsblk
+
+# Output könnte z.B. so aussehen:
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0 238.5G  0 disk
+  sda1   8:1    0   512M  0 part /boot/efi
+  sda2   8:2    0   238G  0 part /
+sdb      8:16   1  14.9G  0 disk
+  sdb1   8:17   1  14.9G  0 part
+
+# Mountpoint erstellen (falls noch nicht vorhanden)
+sudo mkdir -p /mnt/media
+sudo mount /dev/sdb1 /mnt/media
+      \end{minted}
+
+    Im Anschluss wird eine \texttt{docker-compose.yml}-Datei mit den notwendigen Einstellungen angelegt. 
+    Dazu muss folgender Befehl ausgeführt werden:
+
+    \begin{minted}[breaklines, linenos]{bash}
+cd /srv/navidrome
+sudo nano docker-compose.yml
+    \end{minted}
+
+    Die Datei sollte folgenden Inhalt haben (Beispiel-Datei auch im GitHub-Repository verfügbar):
+    
+    \begin{minted}[breaklines, linenos]{yaml}
+version: "3" # gegebenfalls anpassen oder weglassen
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    restart: unless-stopped # Container automatisch neustarten
+    ports:
+      - "4533:4533"
+    environment:
+      # nur das Nötigste als ENV
+      ND_LOGLEVEL: "info"
+      ND_SCANSCHEDULE: "1h"
+      ND_ENABLEDOWNLOADS: "false" # erzwingt: keine Downloads
+    volumes:
+    # gegebenfalls anpassen
+      - /home/navidrome/data:/data
+      - /mnt/media/music:/music:ro
+      - ./navidrome.toml:/navidrome.toml:ro
+    \end{minted}
+
+    \item Konfiguration:
+    die Konfiguration von Navidrome erfolgt in der Datei \texttt{navidrome.toml} und auf der Weboberfläche.
+    Der Inhalt der Datei sollte wie folgt sein (Beispielkonfigurationsdatei ist ebenfalls im GitHub-Repository verfügbar):
   
+    \begin{minted}[breaklines, linenos]{toml}
+# -----------------------------
+# Pfade
+# -----------------------------
+MusicFolder = "/music"
+DataFolder = "/data"
+
+# -----------------------------
+# Oberfläche
+# -----------------------------
+DefaultLanguage = "de"
+EnableUserEditing = false             # Nutzer können ihre eigenen Daten nicht ändern
+# EnableDownloads = false             # verhindert, dass Nutzer Musik-Dateien herunterladen
+# UILoginBackground = "/data/bg.jpg"  # optional eigenes Hintergrundbild fürs Login
+# UICustomCss = "/data/custom.css"    # eigenes CSS für UI-Anpassungen
+
+# -----------------------------
+# Streaming-Einstellungen
+# -----------------------------
+MaxUserSessions = 1                   # verhindert, dass ein Konto gleichzeitig mehrfach genutzt wird
+TranscodingCacheSize = "500MB"        # Zwischenspeicher für Transkodierung
+PreCacheTranscoding = true            # fängt schon an zu transkodieren, bevor der Nutzer Play drückt
+ScannerParallelism = 4                # wie viele Threads der Scanner nutzt (abhängig von CPU)
+
+# -----------------------------
+# Sicherheit
+# -----------------------------
+LogLevel = "info"                     # mögliche Werte: debug, info, warn, error
+EnableExternalServices = false        # verhindert, dass externe Dienste wie Last.fm/Spotify genutzt werden
+BaseURL = "/navidrome"                # Basis-URL für Links
+
+# -----------------------------
+# Tags / Metadaten
+# -----------------------------
+[Tags]
+# eigenes Feld für Booklet-URL
+[Tags.BookletURL]
+Aliases = ["bookleturl", "booklet_url"]
+Type = "string"
+Album = false
+MaxLength = 512
+
+# eigenes Feld für Dirigent
+#[Tags.Conductor]
+#Aliases = ["conductor", "dirigent"]
+#Type = "string"
+#Album = false
+
+# -----------------------------
+# Benutzer
+# -----------------------------
+SessionTimeout = 1800                 # nach wie vielen Sekunden Sessions auslaufen
+PasswordStrength = "weak"             # simple Passwörter reichen aus
+    \end{minted}
+
+    Nähere Informationen zu den Konfigurationsmöglichkeiten sind in der offiziellen Dokumentation verfügbar: \url{https://www.navidrome.org/docs/configuration/}.
+    
+    Beim ersten Start wird man aufgefordert, ein Administrationskonto anzulegen.
+    Über dieses Konto können weitere Nutzer angelegt und Rechte vergeben werden.
+
+    \item Container starten:
+    \begin{minted}[breaklines, linenos]{bash}
+sudo docker-compose up -d
+
+# Status prüfen
+sudo docker-compose ps
+
+# Start nach änderungen der Compose-Datei
+sudo docker-compose up -d --build
+
+# Weitere nützliche Befehle siehe Docker-Abschnitt
+    \end{minted}
+
+    \item Zugriff und Nutzung:
+    Nach dem Start des Containers kann die Weboberfläche von Navidrome im Browser über die Adresse \url{http://<SERVER-IP>:4533} aufgerufen werden.   
+    Navidrome durchsucht den angegeben Ordner für Musik automatisch nach passenden dateien.  
+  
+    Alle Benutzerdaten, Playlisten und Metainformationen werden im Ordner \texttt{/srv/navidrome/data} gespeichert 
+    und bleiben somit auch nach einem Update des Containers  erhalten.
+
+    \item Updates:
+    Ein Update des Containers erfolgt in zwei Schritten:
+
+    \begin{minted}[breaklines, linenos]{bash}
+cd /srv/navidrome
+sudo docker-compose pull
+sudo docker-compose up -d
+    \end{minted}
+
+    Damit wird die aktuelle Version des Navidrome-Images heruntergeladen und der Container neu gestartet.
+  \end{enumerate}
+
   \subsection{UFW}
   Zu guter letzt brauchen wir noch eine Firewall. 
   Die \emph{Uncomplicated Firewall} (UFW) ist eine benutzerfreundliche Schnittstelle und damit optimal für dieses Projekt. 
@@ -1078,7 +1224,7 @@ tail -f /var/log/nginx/error.log
    
   \begin{itemize}
     \item \textbf{SSH (22/tcp)} für die sichere Fernwartung,
-    \item \textbf{4533/tcp} für den spezifischen Mediendienst,
+    \item \textbf{4533/tcp} für Navidrome,
     \item \textbf{HTTP (80/tcp)} für den Webzugriff,
     \item \textbf{mDNS (5353/udp)} für die automatische Erkennung im lokalen Netzwerk.
   \end{itemize}
@@ -1132,8 +1278,6 @@ sudo ufw default allow outgoing   # alle ausgehenden Verbindungen erlauben
 
 # Regeln hinzufügen:
 sudo ufw allow ssh                # SSH (Port 22)
-sudo ufw allow 4533/tcp           # Beispiel: Mediendienst
-sudo ufw allow 80/tcp             # HTTP
 sudo ufw allow 443/tcp            # HTTPS
 sudo ufw allow from 192.168.1.0/24  # nur lokales Netz
 sudo ufw allow 5353/udp           # Avahi/Multicast (.local)

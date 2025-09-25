@@ -9,7 +9,7 @@ DataFolder = "/data"
 # -----------------------------
 DefaultLanguage = "de"
 EnableUserEditing = false             # Nutzer können ihre eigenen Daten nicht ändern
-# EnableDownloads = false               # verhindert, dass Nutzer Musik-Dateien herunterladen
+# EnableDownloads = false             # verhindert, dass Nutzer Musik-Dateien herunterladen
 # UILoginBackground = "/data/bg.jpg"  # optional eigenes Hintergrundbild fürs Login
 # UICustomCss = "/data/custom.css"    # eigenes CSS für UI-Anpassungen
 
@@ -49,4 +49,4 @@ MaxLength = 512
 # Benutzer
 # -----------------------------
 SessionTimeout = 1800                 # nach wie vielen Sekunden Sessions auslaufen
-PasswordStrength = "weak"             # simple Passwörter ausreichen
+PasswordStrength = "weak"             # simple Passwörter reichen aus
