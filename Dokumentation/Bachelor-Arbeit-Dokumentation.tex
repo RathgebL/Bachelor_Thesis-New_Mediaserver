@@ -1339,9 +1339,56 @@ sudo ufw reset                    # Achtung: setzt UFW komplett zurück und entf
   \subsection{Nutzergruppen definieren}
 \section{Testen und Fehlerbehebung}
   \subsection{Funktionstests}
-  \subsection{Problemlösung}   
+  \subsection{Problemlösung}
+  Bei der Konfiguration des Reverse Proxys mit Nginx kann es vorkommen, dass der Server zwar über die IP-Adresse erreichbar ist, 
+  nicht jedoch über den gewünschten Hostnamen (\texttt{mediaserver.local}).  
+  Dieses Verhalten liegt nicht an Nginx, sondern an der Namensauflösung: Der Client kennt die Adresse für \texttt{mediaserver.local} nicht.  
+  Es gibt zwei mögliche Lösungswege.
 
+  \subsubsection*{Variante 1: Eintrag in der \texttt{/etc/hosts}-Datei des Clients}
+  Durch einen manuellen Eintrag in die \texttt{/etc/hosts}-Datei des Clients (z.\,B. macOS) wird der Hostname einer festen IP-Adresse zugeordnet.  
+  Dazu wird die Datei mit Root-Rechten geöffnet:
 
+  \begin{minted}[breaklines, linenos]{bash}
+  sudo nano /etc/hosts
+  \end{minted}
+
+  Am Ende der Datei wird folgender Eintrag ergänzt (IP-Adresse anpassen):
+
+  \begin{minted}[breaklines, linenos]{bash}
+  100.123.42.40   mediaserver.local
+  \end{minted}
+
+  Nach dem Speichern und Schließen der Datei kann der Name per \texttt{ping} überprüft werden:
+
+  \begin{minted}[breaklines, linenos]{bash}
+  ping mediaserver.local # ctrl+c zum Abbrechen
+  \end{minted}
+
+  Erfolgt eine Antwort, ist der Server nun auch unter \texttt{http://mediaserver.local} im Browser erreichbar.  
+  Diese Methode gilt allerdings nur für den jeweiligen Client und muss auf allen Endgeräten einzeln wiederholt werden.
+
+  \subsubsection*{Variante 2: Multicast-DNS (mDNS) mit Avahi auf dem Server}
+  Eine elegantere Lösung für lokale Netzwerke ist die Nutzung von Multicast-DNS (mDNS).  
+  Dadurch kündigt der Server seinen Hostnamen automatisch im Netzwerk an, sodass alle Clients diesen ohne manuelle Anpassungen auflösen können.
+
+  Dazu wird auf dem Server das Paket \texttt{avahi-daemon} installiert:
+
+  \begin{minted}[breaklines, linenos]{bash}
+  sudo apt install avahi-daemon -y
+  sudo systemctl enable avahi-daemon
+  sudo systemctl start avahi-daemon
+  \end{minted}
+
+  Anschließend kann der Hostname (z.\,B. \texttt{mediaserver.local}) direkt im Browser oder per \texttt{ping} genutzt werden:
+
+  \begin{minted}[breaklines, linenos]{bash}
+  ping mediaserver.local
+  \end{minted}
+
+  Vorteil dieser Methode ist, dass alle Geräte im lokalen Netzwerk sofort Zugriff erhalten, ohne dass die \texttt{/etc/hosts}-Datei auf jedem Client angepasst werden muss.
+   
+% ------ Fazit ------
 \chapter*{Fazit}
 \addcontentsline{toc}{chapter}{Fazit}
 \setcounter{section}{0}
