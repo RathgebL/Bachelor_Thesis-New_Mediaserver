@@ -53,42 +53,65 @@
 % ------ Abkürzungsverzeichnis ------
 \chapter*{Abkürzungsverzeichnis}
 \begin{acronym}[WWW] % längste Abkürzung für Einrückung
+  \acro{AAC}{Advanced Audio Coding}
+  \acro{ACL}{Access Control List}
   \acro{API}{Application Programming Interface}
   \acro{ARPANET}{Advanced Research Projects Agency Network}
-  \acro{TCP}{Transmission Control Protocol}
-  \acro{IP}{Internet Protocol}
-  \acro{TCPIP}{Transmission Control Protocol / Internet Protocol}
-  \acro{RTP}{Real-time Transport Protocol}
-  \acro{MPEG-DASH}{Dynamic Adaptive Streaming over HTTP (MPEG-DASH)}
-  \acro{HLS}{HTTP Live Streaming}
-  \acro{IT}{Informationstechnologie}
-  \acro{UNIX}{Uniplexed Information and Computing System}
-  \acro{KVM}{Kernel-based Virtual Machine}
-  \acro{NAS}{Network Attached Storage}
-  \acro{SAN}{Storage Area Network}
-  \acro{NFS}{Network File System}
-  \acro{SMB}{Server Message Block}
-  \acro{RAID}{Redundant Array of Independent Disks}
-  \acro{UID}{User ID}
-  \acro{GID}{Group ID}
-  \acro{ACL}{Access Control List}
-  \acro{RBAC}{Role-Based Access Control}
+  \acro{AVC}{Advanced Video Coding}
+  \acro{CD}{Compact Disc}
+  \acro{CDN}{Content Delivery Network}
   \acro{CPU}{Central Processing Unit}
-  \acro{RAM}{Random Access Memory}
-  \acro{TLS}{Transport Layer Security}
-  \acro{SSL}{Secure Sockets Layer}
-  \acro{VPN}{Virtual Private Network}
-  \acro{SSH}{Secure Shell}
-  \acro{IDS}{Intrusion Detection System}
-  \acro{IPS}{Intrusion Prevention System}
-  \acro{UDP}{User Datagram Protocol}
+  \acro{DLNA}{Digital Living Network Alliance}
   \acro{DNS}{Domain Name System}
+  \acro{DRM}{Digital Rights Management}
+  \acro{FEC}{Forward Error Correction}
+  \acro{FLAC}{Free Lossless Audio Codec}
+  \acro{GID}{Group ID}
+  \acro{GPL}{GNU General Public License}
+  \acro{HfM}{Hochschule für Musik}
+  \acro{HLS}{HTTP Live Streaming}
   \acro{HTTP}{Hypertext Transfer Protocol}
   \acro{HTTPS}{Hypertext Transfer Protocol Secure}
-  \acro{RTSP}{Real-Time Streaming Protocol}
-  \acro{CDN}{Content Delivery Network}
+  \acro{ID3}{ID3 metadata container format for MP3 files}
+  \acro{IDS}{Intrusion Detection System}
+  \acro{IP}{Internet Protocol}
+  \acro{IPS}{Intrusion Prevention System}
+  \acro{IT}{Informationstechnologie}
+  \acro{KVM}{Kernel-based Virtual Machine}
+  \acro{MARCXML}{Machine-Readable Cataloging in XML}
+  \acro{MD5}{Message Digest Algorithm 5}
+  \acro{METS}{Metadata Encoding and Transmission Standard}
+  \acro{MKV}{Matroska Multimedia Container Format}
+  \acro{MODS}{Metadata Object Description Schema}
+  \acro{MP3}{MPEG-1/2 Audio Layer III}
+  \acro{MP4}{MPEG-4 Part 14}
+  \acro{MPEG-DASH}{Dynamic Adaptive Streaming over HTTP}
+  \acro{NAS}{Network Attached Storage}
+  \acro{NDSA}{National Digital Stewardship Alliance}
+  \acro{NFS}{Network File System}
+  \acro{PDF}{Portable Document Format}
+  \acro{PERSIST}{Platform to Enhance the Sustainability of the Information Society Transglobally}
   \acro{QoS}{Quality of Service}
-  \acro{FEC}{Forward Error Correction}
+  \acro{RAID}{Redundant Array of Independent Disks}
+  \acro{RAM}{Random Access Memory}
+  \acro{RBAC}{Role-Based Access Control}
+  \acro{RTP}{Real-time Transport Protocol}
+  \acro{RTSP}{Real-Time Streaming Protocol}
+  \acro{SAN}{Storage Area Network}
+  \acro{SHA-256}{Secure Hash Algorithm 256}
+  \acro{SMB}{Server Message Block}
+  \acro{SSH}{Secure Shell}
+  \acro{SSL}{Secure Sockets Layer}
+  \acro{SWB}{Südwestdeutscher Bibliotheksverbund}
+  \acro{TCP}{Transmission Control Protocol}
+  \acro{TLS}{Transport Layer Security}
+  \acro{UDP}{User Datagram Protocol}
+  \acro{UNESCO}{United Nations Educational, Scientific and Cultural Organization}
+  \acro{UNIX}{Uniplexed Information and Computing System}
+  \acro{UID}{User ID}
+  \acro{UrhG}{Urheberrechtsgesetz}
+  \acro{VPN}{Virtual Private Network}
+  \acro{WAV}{Waveform Audio File Format}
 \end{acronym}
 
 % ------ Einleitung ------
@@ -194,10 +217,10 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
   In den frühen 1970er Jahren zeigte sich, dass die bestehenden Protokolle des \ac{ARPANET} nicht ausreichten, 
   um heterogene Netzwerke wie Funk- oder Satellitennetze zu integrieren. 
   Vor diesem Hintergrund entwickelten Vinton Cerf und Robert Kahn 1974 das \ac{TCP}, 
-  das später in die heute gebräuchliche Protokollfamilie \ac{TCPIP} aufgeteilt wurde. 
-  \ac{TCPIP} ermöglichte die zuverlässige Kommunikation über unterschiedliche Netzwerke hinweg 
+  das später in die heute gebräuchliche Protokollfamilie \ac{TCP}/\ac{IP} aufgeteilt wurde. 
+  \ac{TCP}/\ac{IP} ermöglichte die zuverlässige Kommunikation über unterschiedliche Netzwerke hinweg 
   und bildete die Grundlage für die Interoperabilität moderner Netze.\footcite[Vgl.][S.~45]{tanenbaum_computernetworks}
-  Im Jahr 1983 wurde \ac{TCPIP} im \ac{ARPANET} als verbindlicher Standard eingeführt,
+  Im Jahr 1983 wurde \ac{TCP}/\ac{IP} im \ac{ARPANET} als verbindlicher Standard eingeführt,
   was gemeinhin als Geburtsstunde des modernen Internets gilt.\footnote{Vgl. \cite[S.~2]{postel_rfc801}; \cite{britannica_tcpip}.}
 
   In den 1980er und 1990er Jahren etablierte sich das Client-Server-Modell als dominierendes Paradigma für den Datenaustausch. 
@@ -427,7 +450,7 @@ Dieser Abschnitt erläutert zentrale Konzepte, Protokolle sowie Leistungs- und S
 die für den effizienten Betrieb relevant sind.  
 
   \subsection{Grundlagen der Netzwerktechnik}  
-  Die Kommunikation in Netzwerken basiert auf dem \ac{TCPIP}-Protokollstapel. 
+  Die Kommunikation in Netzwerken basiert auf dem \ac{TCP}/\ac{IP}-Protokollstapel. 
   \ac{IP} ist für die Adressierung und Weiterleitung von Paketen zuständig 
   und bildet die Grundlage für die Kommunikation in paketvermittelten Netzwerken.\footcite[Vgl.][S.~438]{tanenbaum_computernetworks}  
   Darüber hinaus sorgen \ac{TCP} und \ac{UDP} 
@@ -564,8 +587,8 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   \textbf{Navidrome:}
   Navidrome ist ein moderner, leichtgewichtiger Musikserver, der vollständig quelloffen entwickelt wird und vor allem für den Zugriff auf private Musiksammlungen konzipiert ist.
   Im Gegensatz zu umfassenden Multimedia-Lösungen wie Plex oder Emby konzentriert sich Navidrome ausschließlich auf Audioinhalte.
-  Es unterstützt eine Vielzahl gängiger Audioformate (z. B. MP3, FLAC, AAC) und bietet eine browserbasierte Benutzeroberfläche 
-  sowie Clients für mobile Endgeräte über das Subsonic-API.
+  Es unterstützt eine Vielzahl gängiger Audioformate (z. B. \ac{MP3}, \ac{FLAC}, \ac{AAC}) und bietet eine browserbasierte Benutzeroberfläche 
+  sowie Clients für mobile Endgeräte über das Subsonic-\ac{API}.
   Navidrome zeichnet sich durch geringe Systemanforderungen, einfache Installation und eine aktive Community aus, 
   wodurch es auch auf ressourcenschwachen Servern oder in Bibliotheksumgebungen mit begrenzter Hardware problemlos betrieben werden kann.
   Ein weiterer Vorteil ist die konsequente Ausrichtung auf offene Standards 
@@ -575,7 +598,7 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   \textbf{VLC-Streaming:}
   Der \emph{VLC Media Player} ist eine weit verbreitete, freie und quelloffene Software der \emph{VideoLAN}-Organisation. 
   Neben der Wiedergabe nahezu aller gängigen Audio- und Videoformate umfasst VLC auch leistungsfähige Streaming-Funktionen. 
-  Inhalte können beispielsweise über HTTP, RTP oder RTSP verteilt werden, was den VLC für den Aufbau kleiner Streaming-Server, 
+  Inhalte können beispielsweise über \ac{HTTP}, \ac{RTP} oder \ac{RTSP} verteilt werden, was den VLC für den Aufbau kleiner Streaming-Server, 
   Testumgebungen oder den schnellen Medientransfer prädestiniert. 
   Dank seiner Flexibilität und Plattformunabhängigkeit findet VLC Anwendung in Bildungseinrichtungen ebenso wie im privaten Bereich.\footcite[Vgl.][]{wikipedia_vlc}\footcite[Vgl.][]{vlc_docs}  
   \\
@@ -583,17 +606,17 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   \textbf{Icecast:}
   \emph{Icecast}, entwickelt von der \emph{Xiph.org Foundation}, ist eine freie Open-Source-Software zur Einrichtung von Streaming-Servern. 
   Hauptsächlich im Audiobereich (z. B. Internetradios) eingesetzt, unterstützt Icecast auch Videostreams. 
-  Neben offenen Formaten wie Ogg Vorbis, Opus und Theora können auch verbreitete Standards wie MP3 oder AAC genutzt werden. 
+  Neben offenen Formaten wie Ogg Vorbis, Opus und Theora können auch verbreitete Standards wie \ac{MP3} oder \ac{AAC} genutzt werden. 
   Durch seine Stabilität und Skalierbarkeit eignet sich Icecast besonders für Webradios, nichtkommerzielle Sender sowie für Bildungs- und Forschungseinrichtungen, 
   in denen offene Standards von zentraler Bedeutung sind.\footcite[Vgl.][]{wikipedia_icecast}\footcite[Vgl.][]{icecast_docs}  
   \\
   \newline
   \textbf{DLNA-basierte Systeme:}
-  \emph{DLNA} (Digital Living Network Alliance) ist ein Industriestandard, der die Interoperabilität zwischen Geräten im Heimnetzwerk sicherstellt. 
-  DLNA-konforme Server stellen Inhalte wie Musik, Videos und Bilder bereit, die von kompatiblen Clients 
+  \ac{DLNA} ist ein Industriestandard, der die Interoperabilität zwischen Geräten im Heimnetzwerk sicherstellt. 
+  \ac{DLNA}-konforme Server stellen Inhalte wie Musik, Videos und Bilder bereit, die von kompatiblen Clients 
   (Smart-TVs, Spielkonsolen, Streaming-Boxen oder mobilen Geräten) abgerufen werden können. 
-  Typische Implementierungen sind \emph{MiniDLNA/ReadyMedia} oder in NAS-Systeme integrierte Medienserver. 
-  Während DLNA im privaten Bereich nach wie vor verbreitet ist, verliert es im professionellen Umfeld zunehmend an Relevanz, da moderne, HTTP-basierte Verfahren wie HLS oder DASH flexiblere Möglichkeiten bieten.\footcite[Vgl.][]{wikipedia_dlna}\footcite[Vgl.][]{dlna_specs} 
+  Typische Implementierungen sind \emph{MiniDLNA/ReadyMedia} oder in \ac{NAS}-Systeme integrierte Medienserver. 
+  Während \ac{DLNA} im privaten Bereich nach wie vor verbreitet ist, verliert es im professionellen Umfeld zunehmend an Relevanz, da moderne, \ac{HTTP}-basierte Verfahren wie \ac{HLS} oder \ac{MPEG-DASH} flexiblere Möglichkeiten bieten.\footcite[Vgl.][]{wikipedia_dlna}\footcite[Vgl.][]{dlna_specs}
 
   \subsection{Datenformate und Standards}  
   Für den Betrieb eines Medienservers ist die Unterstützung gängiger Datenformate entscheidend, 
@@ -602,28 +625,28 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   \newline
   \textbf{Audioformate:}  
   Im Audiobereich haben sich unterschiedliche Standards etabliert, die sich hinsichtlich Qualität, Kompression und Einsatzgebiet unterscheiden.  
-  Das MP3-Format (\emph{MPEG-1/2 Audio Layer III}) ist verlustbehaftet komprimiert und gilt als de facto Standard im Musikbereich, 
+  Das \ac{MP3}-Format (\emph{MPEG-1/2 Audio Layer III}) ist verlustbehaftet komprimiert und gilt als de facto Standard im Musikbereich, 
   insbesondere wegen seiner geringen Dateigrößen und breiten Unterstützung durch Endgeräte.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}  
-  Für verlustfreie Archivierung wird häufig FLAC (\emph{Free Lossless Audio Codec}) genutzt, 
+  Für verlustfreie Archivierung wird häufig \ac{FLAC} (\emph{Free Lossless Audio Codec}) genutzt, 
   das bei identischer Klangqualität wie das Original eine deutliche Speicherreduktion ermöglicht.  
-  AAC (\emph{Advanced Audio Coding}), ebenfalls verlustbehaftet und von der MPEG-Gruppe spezifiziert, 
+  \ac{AAC} (\emph{Advanced Audio Coding}), ebenfalls verlustbehaftet und von der MPEG-Gruppe spezifiziert, 
   wird heute von vielen Streamingdiensten und Plattformen (z.\,B. YouTube, iTunes, Spotify) als Standard eingesetzt.\footcite[Vgl.][]{openlearn_aac} 
-  WAV (\emph{Waveform Audio File Format}) speichert Audiodaten unkomprimiert, was höchste Qualität gewährleistet, jedoch mit hohem Speicherbedarf einhergeht.
+  \ac{WAV} (\emph{Waveform Audio File Format}) speichert Audiodaten unkomprimiert, was höchste Qualität gewährleistet, jedoch mit hohem Speicherbedarf einhergeht.
   Dieses Format findet daher primär in professionellen Produktionsumgebungen oder für kurzfristige Verarbeitungsschritte Anwendung.\footcite[Vgl.][]{wikipedia_wav}  
   \\
   \newline
   \textbf{Containerformate:}  
   Neben reinen Audioformaten sind Containerformate für die Organisation komplexerer Inhalte entscheidend.  
-  Das Matroska-Format (MKV) ist ein freier, erweiterbarer Standard, der neben Audio- und Videoströmen auch Untertitel, 
+  Das Matroska-Format (\ac{MKV}) ist ein freier, erweiterbarer Standard, der neben Audio- und Videoströmen auch Untertitel, 
   Kapitelinformationen und mehrere Tonspuren in einer Datei vereinen kann.\footcite[Vgl.][siehe 1. Introduction]{rfc9559}  
-  MP4, ein ISO-Standard auf Basis von \emph{MPEG-4 Part 14}, ist weltweit eines der am weitesten verbreiteten Containerformate 
-  und bildet insbesondere die Grundlage für Video-Streaming über HTTP. 
+  \ac{MP4}, ein ISO-Standard auf Basis von \emph{MPEG-4 Part 14}, ist weltweit eines der am weitesten verbreiteten Containerformate 
+  und bildet insbesondere die Grundlage für Video-Streaming über \ac{HTTP}. 
   Es überzeugt durch hohe Kompatibilität mit Abspielgeräten und Streaming-Plattformen.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}
   \\
   \newline
   \textbf{Metadatenstandards:}
   Metadaten („Daten über Daten“) beschreiben Eigenschaften von Mediendateien und ermöglichen deren effiziente Suche, Auffindbarkeit und Verwaltung. 
-  Ein weit verbreiteter Standard in MP3-Dateien sind ID3-Tags. 
+  Ein weit verbreiteter Standard in \ac{MP3}-Dateien sind \ac{ID3}-Tags. 
   Diese Container erlauben das Einbetten von Informationen wie Titel, Interpret, Album, Genre oder Coverbilder direkt in die Datei.\footcite[Vgl.][siehe 4. Declared ID3v2 frames]{id3org_spec}
 
   Ein generischer, interdisziplinärer Standard ist Dublin Core. Dieser umfasst eine Menge von Kernfeldern (z. B. Title, Creator, Subject, Date, Format, Rights), 
@@ -631,10 +654,10 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   Seine Stärke liegt in der Interoperabilität: Dublin Core wird von vielen Bibliotheks-, Museums- und Archivsystemen unterstützt.\footcite[Vgl.][siehe 1.1. What is Metadata?]{dublincore_using}
 
   Daneben gibt es weitere Metadatenstandards, die speziellere Anforderungen adressieren. 
-  Beispiele sind METS (Metadata Encoding and Transmission Standard), MODS (Metadata Object Description Schema) 
-  oder MARCXML, die in Bibliotheks- und Archivumgebungen zusätzlich verwendet werden, 
+  Beispiele sind \ac{METS} (Metadata Encoding and Transmission Standard), \ac{MODS} (Metadata Object Description Schema) 
+  oder \ac{MARCXML}, die in Bibliotheks- und Archivumgebungen zusätzlich verwendet werden, 
   insbesondere wenn detailliertere bibliografische Informationen benötigt werden.\footcite[Vgl.][]{loc_mets} \footcite[Vgl.][]{loc_mods}  
-  
+
   \subsection{Rechtsfragen}  
   Neben technischen Aspekten spielen rechtliche Rahmenbedingungen eine zentrale Rolle beim Betrieb von Medienservern.
   Im folgenden werden wesentliche Punkte skizziert, die insbesondere im Kontext von Bibliotheken und Bildungseinrichtungen relevant sind. 
@@ -642,44 +665,44 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   \newline
   \textbf{Lizenzen und Lizenzmodelle:}  
   Die Wahl der eingesetzten Software und Codecs ist auch aus lizenzrechtlicher Sicht relevant.  
-  Freie Software wie Jellyfin unterliegt in der Regel der \emph{GNU General Public License (GPL)}, die die Nutzung, Modifikation und Weitergabe des Quellcodes gestattet, 
+  Freie Software wie Jellyfin unterliegt in der Regel der \ac{GPL}, die die Nutzung, Modifikation und Weitergabe des Quellcodes gestattet, 
   solange abgeleitete Werke unter denselben Bedingungen veröffentlicht werden.\footcite[Vgl.][]{gnu_gplv3}  
   Kommerzielle Systeme wie Plex oder Emby hingegen stehen unter proprietären Lizenzen, die Nutzung, Verbreitung und Anpassung einschränken.  
-  Darüber hinaus können auch bei der Verwendung von Codecs Lizenzgebühren anfallen: So ist AAC (\emph{Advanced Audio Coding}) durch MPEG-LA patentiert 
-  und unterliegt Lizenzkosten bei bestimmter kommerzieller Nutzung, ebenso H.264/AVC.\footcite[Vgl.][]{wikipedia_mpegla}  
+  Darüber hinaus können auch bei der Verwendung von Codecs Lizenzgebühren anfallen: So ist \ac{AAC} durch MPEG-LA patentiert 
+  und unterliegt Lizenzkosten bei bestimmter kommerzieller Nutzung, ebenso H.264/\ac{AVC}.\footcite[Vgl.][]{wikipedia_mpegla}  
   \\
   \newline
   \textbf{Urheberrechtliche Rahmenbedingungen:}  
-  Die Bereitstellung von Medieninhalten wird maßgeblich durch das Urheberrechtsgesetz (UrhG) geregelt.  
-  Nach §~53 UrhG sind Privatkopien zwar grundsätzlich erlaubt, jedoch nur im engen persönlichen Umfeld.  
-  Eine öffentliche Zugänglichmachung nach §~19a UrhG - wie sie bei einem Medienserver innerhalb einer Organisation oder Bibliothek vorliegt -
+  Die Bereitstellung von Medieninhalten wird maßgeblich durch das \ac{UrhG} geregelt.  
+  Nach §~53 \ac{UrhG} sind Privatkopien zwar grundsätzlich erlaubt, jedoch nur im engen persönlichen Umfeld.  
+  Eine öffentliche Zugänglichmachung nach §~19a \ac{UrhG} – wie sie bei einem Medienserver innerhalb einer Organisation oder Bibliothek vorliegt –
   setzt hingegen entsprechende Nutzungsrechte oder Lizenzen der Rechteinhaber voraus.\footcite[Vgl.][§§~53, 19a UrhG]{urhg2025}  
   \\
   \newline
   \textbf{Bibliotheksrecht im Hochschulkontext:}  
   Für Hochschulbibliotheken gelten Sonderregelungen.  
-  §~60a UrhG erlaubt die Nutzung urheberrechtlich geschützter Werke für Unterricht und Lehre, etwa in Kursen oder in einer Lernplattform.  
-  §~60e UrhG regelt darüber hinaus Nutzungen durch Bibliotheken, beispielsweise die Bereitstellung von Werken in elektronischer Form für Forschungs- und Unterrichtszwecke.  
+  §~60a \ac{UrhG} erlaubt die Nutzung urheberrechtlich geschützter Werke für Unterricht und Lehre, etwa in Kursen oder in einer Lernplattform.  
+  §~60e \ac{UrhG} regelt darüber hinaus Nutzungen durch Bibliotheken, beispielsweise die Bereitstellung von Werken in elektronischer Form für Forschungs- und Unterrichtszwecke.  
   Dennoch müssen in der Praxis bestehende Lizenzverträge und Verlagsbedingungen beachtet werden, 
   da gesetzliche Schrankenregelungen nicht alle Nutzungsformen abdecken.\footcite[Vgl.][§§~60a, 60e UrhG]{urhg2025}  
 
 \section{Medienserver im Bibliothekskontext}  
-Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugang zu digitalen Sammlungen, bringt aber auch besondere Anforderungen mit sich - technisch, rechtlich und hinsichtlich Langzeitverfügbarkeit.
+Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugang zu digitalen Sammlungen, bringt aber auch besondere Anforderungen mit sich – technisch, rechtlich und hinsichtlich Langzeitverfügbarkeit.
 
   \subsection{Digitalisierung von Beständen}  
-  Bibliotheken besitzen oft analoge oder hybride Bestände - etwa Audio- und Videomedien, Filmarchive oder Tonträger -, die durch Digitalisierung langfristig gesichert und zugänglich gemacht werden sollen. Der Prozess gliedert sich idealerweise in folgende Phasen:
+  Bibliotheken besitzen oft analoge oder hybride Bestände – etwa Audio- und Videomedien, Filmarchive oder Tonträger –, die durch Digitalisierung langfristig gesichert und zugänglich gemacht werden sollen. Der Prozess gliedert sich idealerweise in folgende Phasen:
 
   \begin{enumerate}
     \item \textbf{Auswahl und Priorisierung:}  
       Nicht alle Bestände können sofort digitalisiert werden. 
-      Kriterien für eine sinnvolle Auswahl sind u. a. der Erhaltungszustand, die Nutzungshäufigkeit, die rechtliche Situation sowie historische oder kulturelle Bedeutung. Institutionelle Richtlinien oder internationale Leitlinien wie UNESCO/PERSIST geben dazu Orientierung.\footcite[Vgl.][]{unesco_persist_guidelines}  
+      Kriterien für eine sinnvolle Auswahl sind u. a. der Erhaltungszustand, die Nutzungshäufigkeit, die rechtliche Situation sowie historische oder kulturelle Bedeutung. Institutionelle Richtlinien oder internationale Leitlinien wie \ac{UNESCO}/\ac{PERSIST} geben dazu Orientierung.\footcite[Vgl.][]{unesco_persist_guidelines}  
 
     \item \textbf{Erfassung und Digitalisierung:}  
       Die Objekte werden mit geeigneten Geräten gescannt und digitalisiert (z. B. Scanner, Filmabtaster oder spezielle Audiogeräte). 
       Wichtig ist, dass die digitalen Dateien eine hohe Qualität (z. B. Auflösung, Farbtiefe, Samplingrate) aufweisen, 
       sodass sie als Masterversionen für spätere Ableitungen dienen können.  
-      In der Bibliothek der HfM Karlsruhe werden beispielsweise WAV-Dateien in CD-Qualität (44,1 kHz, 16 Bit) für Audio sowie JPEG-Scans mit 300 dpi für Booklets erstellt.  
-      Für die Bereitstellung auf dem neuen Medienserver werden die Audiodateien in das verlustfreie FLAC-Format transkodiert und die JPEG-Dateien zu PDFs zusammengefasst.  
+      In der Bibliothek der \ac{HfM} Karlsruhe werden beispielsweise \ac{WAV}-Dateien in \ac{CD}-Qualität (44,1 kHz, 16 Bit) für Audio sowie JPEG-Scans mit 300 dpi für Booklets erstellt.  
+      Für die Bereitstellung auf dem neuen Medienserver werden die Audiodateien in das verlustfreie \ac{FLAC}-Format transkodiert und die JPEG-Dateien zu \acp{PDF} zusammengefasst.  
       Weitere Details hierzu finden sich im Kapitel „Praktische Umsetzung“.  
     
     \item \textbf{Speicherung und Sicherung:}
@@ -691,80 +714,80 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
     \item \textbf{Nachbearbeitung und Metadatenanreicherung:}  
       Nach der Erfassung werden die Rohdaten optimiert (z. B. Rauschfilter, Farbkorrektur) und in normative Formate überführt. 
       Parallel dazu werden Metadaten eingepflegt — technisch, beschreibend und strukturell —, um Auffindbarkeit, Verwaltung und Langzeitnutzung zu ermöglichen.
-      Dieser Prozess wir im Rahmen dieser Arbeit verbessert werden, indem Metadaten bei der Konvertierung ins FLAC-Format anhand der Datei-Benennung eingebettet werden.
+      Dieser Prozess wir im Rahmen dieser Arbeit verbessert werden, indem Metadaten bei der Konvertierung ins \ac{FLAC}-Format anhand der Datei-Benennung eingebettet werden.
       Mehr dazu ebenfalls im Kapitel „Praktische Umsetzung“.
 
     \item \textbf{Ableitung von Zugriffsvarianten:}  
       Für den täglichen Zugriff werden üblicherweise abgeleitete Versionen (z. B. mit kleinerer Auflösung oder effizienteren Codecs) erzeugt,
       während die Masterdateien sicher archiviert bleiben.
       Die Auflösung für das Streaming kann üblicherweise bei der zuvor vorgestellten Software für Medienserver eingestellt und dynamisch angepasst werden.
-  \end{enumerate} 
+  \end{enumerate}  
 
-\subsection{Zugriff und Rechteverwaltung}  
-Im Bibliothekskontext bestehen oft restriktive Anforderungen an den Zugriff auf Medien:
-\\
-\newline
-\textbf{Eingeschränkter Zugang:} Der Zugang zu digitalisierten Medien erfolgt häufig nur innerhalb des Hochschulnetzes, 
-um urheberrechtliche Beschränkungen und Lizenzvereinbarungen zu wahren.  
-\\
-\newline
-\textbf{Authentifizierung und Autorisierung:} Bibliotheken nutzen bestehende Identity-Management-Systeme (z. B. Shibboleth, LDAP, OpenID Connect), 
-um sicherzustellen, dass nur berechtigte Nutzer (Studenten, Mitarbeitende) Zugriff haben.  
-\\
-\newline
-\textbf{Digitale Rechteverwaltung (DRM) / Lizenzsteuerung:} In manchen Fällen sind Inhalte lizenzpflichtig und müssen mit DRM-Technologien geschützt werden 
-oder der Zugriff auf bestimmte Zeitfenster begrenzt sein.  
-\\
-\newline
-\textbf{Auditierung und Protokollierung:} Jede Nutzung (z. B. Streamabruf, Download) sollte protokolliert werden, 
-um Vertragsbedingungen zu überwachen, Missbrauch zu erkennen und Nutzungsstatistiken zu führen.  
+  \subsection{Zugriff und Rechteverwaltung}  
+  Im Bibliothekskontext bestehen oft restriktive Anforderungen an den Zugriff auf Medien:
+  \\
+  \newline
+  \textbf{Eingeschränkter Zugang:} Der Zugang zu digitalisierten Medien erfolgt häufig nur innerhalb des Hochschulnetzes, 
+  um urheberrechtliche Beschränkungen und Lizenzvereinbarungen zu wahren.  
+  \\
+  \newline
+  \textbf{Authentifizierung und Autorisierung:} Bibliotheken nutzen bestehende Identity-Management-Systeme (z. B. Shibboleth, LDAP, OpenID Connect), 
+  um sicherzustellen, dass nur berechtigte Nutzer (Studenten, Mitarbeitende) Zugriff haben.  
+  \\
+  \newline
+  \textbf{Digitale Rechteverwaltung (\ac{DRM}) / Lizenzsteuerung:} In manchen Fällen sind Inhalte lizenzpflichtig und müssen mit \ac{DRM}-Technologien geschützt werden 
+  oder der Zugriff auf bestimmte Zeitfenster begrenzt sein.  
+  \\
+  \newline
+  \textbf{Auditierung und Protokollierung:} Jede Nutzung (z. B. Streamabruf, Download) sollte protokolliert werden, 
+  um Vertragsbedingungen zu überwachen, Missbrauch zu erkennen und Nutzungsstatistiken zu führen.  
 
-\subsection{Nachhaltigkeit und Langzeitarchivierung}  
-Die Sicherung digitaler Medien über Jahrzehnte hinweg erfordert robuste Strategien:
-\\
-\newline
-\textbf{Redundanz und Verteilung (3-2-1 Regel):}  
-Mindestens drei Kopien, auf zwei unterschiedlichen Speichermedien und eine Kopie an einem externen Standort. 
-Die Regel reduziert das Risiko von Datenverlust erheblich, da sie nicht nur Hardwaredefekte abdeckt, sondern auch Gefahren wie Softwarefehler, versehentliches Löschen oder Schadsoftware (z.\,B. Ransomware).
-Durch die räumliche Trennung einer Kopie („offsite“) ist zudem gewährleistet, dass selbst Katastrophenfälle wie Brand, Überschwemmung oder Diebstahl nicht alle Daten gleichzeitig gefährden.\footcite[Vgl.][siehe Backupstrategien]{wikipedia_datensicherung}
-In Bibliotheks- und Archivkontexten wird diese Strategie häufig als Mindeststandard angesehen, da sie eine langfristige Verfügbarkeit und Integrität der Bestände sicherstellt.  
-\\
-\newline
-\textbf{Migration und Formatpflege:}  
-Dateiformate und Speichermedien verändern sich im Laufe der Zeit, wodurch die Gefahr entsteht, dass Daten in veralteten oder nicht mehr unterstützten Umgebungen unzugänglich werden.  
-Um die langfristige Nutzbarkeit zu gewährleisten, müssen Archivbestände daher regelmäßig überprüft und gegebenenfalls in aktuelle, verlustfreie Formate migriert werden.  
-Dieser Prozess umfasst sowohl die technische Konvertierung (z.\,B. von proprietären in offene Formate) als auch die Übertragung auf moderne Speichersysteme.  
-Die \emph{Library of Congress} weist in ihren Leitlinien ausdrücklich darauf hin, dass Formatmigration und Medienaktualisierung essenzielle Strategien der digitalen Langzeitarchivierung sind.\footcite[Vgl.][siehe Sustainability Factors]{loc_formats}  
-\\
-\newline
-\textbf{Integritätsprüfung und Fixity-Checks:}  
-Digitale Bestände können im Laufe der Zeit durch Speicherfehler, Hardwaredefekte oder Übertragungsprobleme unbemerkt beschädigt werden.  
-Um die Unversehrtheit der Daten zu gewährleisten, werden regelmäßig \emph{Fixity-Checks} durchgeführt.  
-Dabei werden Prüfsummen (z.\,B. MD5, SHA-256) berechnet und mit früher gespeicherten Werten verglichen, um bitweise Veränderungen zu erkennen.  
-Ein kontinuierliches Monitoring dieser Integrität ist eine zentrale Maßnahme der digitalen Langzeitarchivierung 
-und wird in internationalen Empfehlungen wie den Richtlinien der NDSA (\emph{National Digital Stewardship Alliance}) ausdrücklich empfohlen.\footcite[Vgl.][siehe Levels of Digital Preservation V2.0 Matrix und Curatorial Guidance]{ndsa_fixity}
-\\
-\newline
-\textbf{Cloud- vs. On-Premises-Lösungen:}  
-Bibliotheken stehen bei der Bereitstellung von Medienservern vor der Wahl zwischen einer lokalen Infrastruktur (\emph{On-Premises}) und der Nutzung von Cloud-Diensten.  
-Cloud-Lösungen bieten Vorteile wie einfache Skalierbarkeit, hohe Redundanz und oftmals geringere Einstiegskosten, gehen jedoch mit Risiken wie eingeschränkter Datenhoheit, fortlaufenden Betriebskosten und einer Abhängigkeit vom jeweiligen Anbieter einher.\footcite[Vgl.][S.~1]{paletta2015cloud}  
-On-Premises-Installationen ermöglichen dagegen die vollständige Kontrolle über Hardware, Software und Daten, erfordern jedoch Investitionen in Infrastruktur, Fachpersonal und Wartung.  
-Die Entscheidung hängt daher maßgeblich von den institutionellen Rahmenbedingungen, rechtlichen Vorgaben und langfristigen Strategien ab.
-\\
-\newline
-\textbf{Netzwerk der Kooperationen:}  
-Bibliotheken und Gedächtnisinstitutionen schließen sich zunehmend zu Verbünden und Konsortien zusammen, 
-um die Herausforderungen der digitalen Langzeitarchivierung und digitalen Dienste gemeinsam zu bewältigen.  
-Ein Beispiel ist \emph{Goportis}, der Verbund der drei zentralen Fachbibliotheken in Deutschland 
-(Technische Informationsbibliothek, ZB MED - Informationszentrum Lebenswissenschaften und ZBW - Leibniz-Informationszentrum Wirtschaft). 
-Goportis koordiniert unter anderem Strategien zur digitalen Langzeitarchivierung, 
-bietet gemeinsame Infrastrukturen und setzt auf arbeitsteilige Services im Bereich Forschung und Datenmanagement.\footcite[Vgl.][]{wikipedia_goportis}  
-Ein weiteres Beispiel ist der \emph{Südwestdeutsche Bibliotheksverbund (SWB)}, dem zahlreiche wissenschaftliche Bibliotheken in Baden-Württemberg 
-und angrenzenden Regionen angehören. Unter anderem ist die Bibliothek der HfM hier Mitglied. 
-Der SWB betreibt eine zentrale Datenbank für Metadaten und digitale Ressourcen und stellt seinen Mitgliedsbibliotheken Werkzeuge zur Verfügung, 
-um Ressourcen zu erschließen, zu archivieren und kooperativ zugänglich zu machen.\footcite[Vgl.][]{swb}  
-Solche Netzwerke bieten organisatorische Vorteile wie abgestimmte Policies, gemeinsame Workflows zur Metadatenpflege 
-und Format-Migration sowie eine geteilte Infrastruktur für Monitoring, Austausch und Weiterentwicklung.
+  \subsection{Nachhaltigkeit und Langzeitarchivierung}  
+  Die Sicherung digitaler Medien über Jahrzehnte hinweg erfordert robuste Strategien:
+  \\
+  \newline
+  \textbf{Redundanz und Verteilung (3-2-1 Regel):}  
+  Mindestens drei Kopien, auf zwei unterschiedlichen Speichermedien und eine Kopie an einem externen Standort. 
+  Die Regel reduziert das Risiko von Datenverlust erheblich, da sie nicht nur Hardwaredefekte abdeckt, sondern auch Gefahren wie Softwarefehler, versehentliches Löschen oder Schadsoftware (z.\,B. Ransomware).
+  Durch die räumliche Trennung einer Kopie („offsite“) ist zudem gewährleistet, dass selbst Katastrophenfälle wie Brand, Überschwemmung oder Diebstahl nicht alle Daten gleichzeitig gefährden.\footcite[Vgl.][siehe Backupstrategien]{wikipedia_datensicherung}
+  In Bibliotheks- und Archivkontexten wird diese Strategie häufig als Mindeststandard angesehen, da sie eine langfristige Verfügbarkeit und Integrität der Bestände sicherstellt.  
+  \\
+  \newline
+  \textbf{Migration und Formatpflege:}  
+  Dateiformate und Speichermedien verändern sich im Laufe der Zeit, wodurch die Gefahr entsteht, dass Daten in veralteten oder nicht mehr unterstützten Umgebungen unzugänglich werden.  
+  Um die langfristige Nutzbarkeit zu gewährleisten, müssen Archivbestände daher regelmäßig überprüft und gegebenenfalls in aktuelle, verlustfreie Formate migriert werden.  
+  Dieser Prozess umfasst sowohl die technische Konvertierung (z.\,B. von proprietären in offene Formate) als auch die Übertragung auf moderne Speichersysteme.  
+  Die \emph{Library of Congress} weist in ihren Leitlinien ausdrücklich darauf hin, dass Formatmigration und Medienaktualisierung essenzielle Strategien der digitalen Langzeitarchivierung sind.\footcite[Vgl.][siehe Sustainability Factors]{loc_formats}  
+  \\
+  \newline
+  \textbf{Integritätsprüfung und Fixity-Checks:}  
+  Digitale Bestände können im Laufe der Zeit durch Speicherfehler, Hardwaredefekte oder Übertragungsprobleme unbemerkt beschädigt werden.  
+  Um die Unversehrtheit der Daten zu gewährleisten, werden regelmäßig \emph{Fixity-Checks} durchgeführt.  
+  Dabei werden Prüfsummen (z.\,B. \ac{MD5}, \ac{SHA-256}) berechnet und mit früher gespeicherten Werten verglichen, um bitweise Veränderungen zu erkennen.  
+  Ein kontinuierliches Monitoring dieser Integrität ist eine zentrale Maßnahme der digitalen Langzeitarchivierung 
+  und wird in internationalen Empfehlungen wie den Richtlinien der \ac{NDSA} ausdrücklich empfohlen.\footcite[Vgl.][siehe Levels of Digital Preservation V2.0 Matrix und Curatorial Guidance]{ndsa_fixity}
+  \\
+  \newline
+  \textbf{Cloud- vs. On-Premises-Lösungen:}  
+  Bibliotheken stehen bei der Bereitstellung von Medienservern vor der Wahl zwischen einer lokalen Infrastruktur (\emph{On-Premises}) und der Nutzung von Cloud-Diensten.  
+  Cloud-Lösungen bieten Vorteile wie einfache Skalierbarkeit, hohe Redundanz und oftmals geringere Einstiegskosten, gehen jedoch mit Risiken wie eingeschränkter Datenhoheit, fortlaufenden Betriebskosten und einer Abhängigkeit vom jeweiligen Anbieter einher.\footcite[Vgl.][S.~1]{paletta2015cloud}  
+  On-Premises-Installationen ermöglichen dagegen die vollständige Kontrolle über Hardware, Software und Daten, erfordern jedoch Investitionen in Infrastruktur, Fachpersonal und Wartung.  
+  Die Entscheidung hängt daher maßgeblich von den institutionellen Rahmenbedingungen, rechtlichen Vorgaben und langfristigen Strategien ab.
+  \\
+  \newline
+  \textbf{Netzwerk der Kooperationen:}  
+  Bibliotheken und Gedächtnisinstitutionen schließen sich zunehmend zu Verbünden und Konsortien zusammen, 
+  um die Herausforderungen der digitalen Langzeitarchivierung und digitalen Dienste gemeinsam zu bewältigen.  
+  Ein Beispiel ist \emph{Goportis}, der Verbund der drei zentralen Fachbibliotheken in Deutschland 
+  (Technische Informationsbibliothek, ZB MED - Informationszentrum Lebenswissenschaften und ZBW - Leibniz-Informationszentrum Wirtschaft). 
+  Goportis koordiniert unter anderem Strategien zur digitalen Langzeitarchivierung, 
+  bietet gemeinsame Infrastrukturen und setzt auf arbeitsteilige Services im Bereich Forschung und Datenmanagement.\footcite[Vgl.][]{wikipedia_goportis}  
+  Ein weiteres Beispiel ist der \emph{Südwestdeutsche Bibliotheksverbund (\ac{SWB})}, dem zahlreiche wissenschaftliche Bibliotheken in Baden-Württemberg 
+  und angrenzenden Regionen angehören. Unter anderem ist die Bibliothek der HfM hier Mitglied. 
+  Der \ac{SWB} betreibt eine zentrale Datenbank für Metadaten und digitale Ressourcen und stellt seinen Mitgliedsbibliotheken Werkzeuge zur Verfügung, 
+  um Ressourcen zu erschließen, zu archivieren und kooperativ zugänglich zu machen.\footcite[Vgl.][]{swb}  
+  Solche Netzwerke bieten organisatorische Vorteile wie abgestimmte Policies, gemeinsame Workflows zur Metadatenpflege 
+  und Format-Migration sowie eine geteilte Infrastruktur für Monitoring, Austausch und Weiterentwicklung.
 
 
 % ------ Praktische Umsetzung ------
