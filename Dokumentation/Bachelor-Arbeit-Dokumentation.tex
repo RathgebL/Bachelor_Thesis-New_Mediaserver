@@ -1340,53 +1340,101 @@ sudo ufw reset                    # Achtung: setzt UFW komplett zurück und entf
 \section{Testen und Fehlerbehebung}
   \subsection{Funktionstests}
   \subsection{Problemlösung}
-  Bei der Konfiguration des Reverse Proxys mit Nginx kann es vorkommen, dass der Server zwar über die IP-Adresse erreichbar ist, 
-  nicht jedoch über den gewünschten Hostnamen (\texttt{mediaserver.local}).  
-  Dieses Verhalten liegt nicht an Nginx, sondern an der Namensauflösung: Der Client kennt die Adresse für \texttt{mediaserver.local} nicht.  
-  Es gibt zwei mögliche Lösungswege.
+    \subsubsection*{Probleme mit nginx}
+    Wenn es zu Problemen beim Aufruf des Servers kommt, sollte zunächst geprüft werden, ob der nginx-Dienst richtig läuft.
+    Beim aufbau des Medienservers sind folgende Probleme aufgetreten:
+    
+    \begin{enumerate}
+      \item Berechtigungen:
+      Falls Nginx beim Zugriff auf Dateien mit \texttt{403 Forbidden} antwortet, liegt dies meist an fehlenden Berechtigungen für den Prozessbenutzer \texttt{www-data}.  
+      Dieser benötigt Lesezugriff auf die Dateien und Ausführungsrechte auf allen übergeordneten Verzeichnissen.
 
-  \subsubsection*{Variante 1: Eintrag in der \texttt{/etc/hosts}-Datei des Clients}
-  Durch einen manuellen Eintrag in die \texttt{/etc/hosts}-Datei des Clients (z.\,B. macOS) wird der Hostname einer festen IP-Adresse zugeordnet.  
-  Dazu wird die Datei mit Root-Rechten geöffnet:
+      \begin{minted}[breaklines, linenos]{bash}
+# Test: kann www-data den Ordner sehen?
+sudo -u www-data ls /mnt/media/booklets
+      \end{minted}
 
-  \begin{minted}[breaklines, linenos]{bash}
-  sudo nano /etc/hosts
-  \end{minted}
+      Falls dabei \texttt{Permission denied} ausgegeben wird, müssen die Rechte angepasst werden:
 
-  Am Ende der Datei wird folgender Eintrag ergänzt (IP-Adresse anpassen):
+      \begin{minted}[breaklines, linenos]{bash}
+# Ausführungsrechte für /mnt und /mnt/media hinzufügen
+sudo chmod o+x /mnt /mnt/media
 
-  \begin{minted}[breaklines, linenos]{bash}
-  100.123.42.40   mediaserver.local
-  \end{minted}
+# Leserechte auf alle Dateien im Booklet-Ordner setzen
+sudo chmod -R o+r /mnt/media/booklets
+      \end{minted}
 
-  Nach dem Speichern und Schließen der Datei kann der Name per \texttt{ping} überprüft werden:
+      \item Daten nicht erreichbar:
+      Falls der Server zwar antwortet, aber die Inhalte nicht erreichbar sind (z.\,B. \texttt{404 Not Found}), 
+      sollte überprüft werden, ob die Pfade in der nginx-Konfiguration korrekt sind.  
+      Dabei ist besonders auf den Unterschied zwischen \texttt{alias} und \texttt{root} zu achten.  
+      \texttt{alias} ersetzt den kompletten Pfad, während \texttt{root} den angegebenen Pfad an den URI anhängt.  
+      In unserem Beispiel wird \texttt{alias} verwendet, da der URI \texttt{/booklets/} direkt auf den Ordner \texttt{/mnt/media/booklets/}
+      abgebildet werden soll. Sollte ein anderer Pfad genutzt werden, muss dieser entsprechend angepasst werden.
+      Nach jeder Anpassung einer nginx-Konfigurationsdatei muss überprüft und anschließend ein Reload durchgeführt werden.  
+      Andernfalls verwendet nginx weiterhin die alte Konfiguration.
 
-  \begin{minted}[breaklines, linenos]{bash}
-  ping mediaserver.local # ctrl+c zum Abbrechen
-  \end{minted}
+      \begin{minted}[breaklines, linenos]{bash}
+# Syntax der Konfiguration prüfen
+sudo nginx -t
 
-  Erfolgt eine Antwort, ist der Server nun auch unter \texttt{http://mediaserver.local} im Browser erreichbar.  
-  Diese Methode gilt allerdings nur für den jeweiligen Client und muss auf allen Endgeräten einzeln wiederholt werden.
+# Konfiguration neu laden (ohne Dienstunterbrechung)
+sudo systemctl reload nginx
+      \end{minted}
 
-  \subsubsection*{Variante 2: Multicast-DNS (mDNS) mit Avahi auf dem Server}
-  Eine elegantere Lösung für lokale Netzwerke ist die Nutzung von Multicast-DNS (mDNS).  
-  Dadurch kündigt der Server seinen Hostnamen automatisch im Netzwerk an, sodass alle Clients diesen ohne manuelle Anpassungen auflösen können.
+      Erst danach sind die Änderungen aktiv.
 
-  Dazu wird auf dem Server das Paket \texttt{avahi-daemon} installiert:
+      \item Hostname nicht auflösbar:
+      Bei der Konfiguration des Reverse Proxys mit Nginx kann es vorkommen, dass der Server zwar über die IP-Adresse erreichbar ist, 
+      nicht jedoch über den gewünschten Hostnamen (\texttt{mediaserver.local}).  
+      Dieses Verhalten liegt nicht an Nginx, sondern an der Namensauflösung: Der Client kennt die Adresse für \texttt{mediaserver.local} nicht.  
+      Es gibt zwei mögliche Lösungswege.
+      \\
+      \newline
+      \texttt{Variante 1: Eintrag in der \texttt{/etc/hosts}-Datei des Clients}
+      Durch einen manuellen Eintrag in die \texttt{/etc/hosts}-Datei des Clients (z.\,B. macOS) wird der Hostname einer festen IP-Adresse zugeordnet.  
+      Dazu wird die Datei mit Root-Rechten geöffnet:
 
-  \begin{minted}[breaklines, linenos]{bash}
-  sudo apt install avahi-daemon -y
-  sudo systemctl enable avahi-daemon
-  sudo systemctl start avahi-daemon
-  \end{minted}
+      \begin{minted}[breaklines, linenos]{bash}
+sudo nano /etc/hosts
+      \end{minted}
 
-  Anschließend kann der Hostname (z.\,B. \texttt{mediaserver.local}) direkt im Browser oder per \texttt{ping} genutzt werden:
+      Am Ende der Datei wird folgender Eintrag ergänzt (IP-Adresse anpassen):
 
-  \begin{minted}[breaklines, linenos]{bash}
-  ping mediaserver.local
-  \end{minted}
+      \begin{minted}[breaklines, linenos]{bash}
+100.123.42.40   mediaserver.local # IP-Adresse des Servers anpassen
+      \end{minted}
 
-  Vorteil dieser Methode ist, dass alle Geräte im lokalen Netzwerk sofort Zugriff erhalten, ohne dass die \texttt{/etc/hosts}-Datei auf jedem Client angepasst werden muss.
+      Nach dem Speichern und Schließen der Datei kann der Name per \texttt{ping} überprüft werden:
+
+      \begin{minted}[breaklines, linenos]{bash}
+ping mediaserver.local # ctrl+c zum Abbrechen
+      \end{minted}
+
+      Erfolgt eine Antwort, ist der Server nun auch unter \texttt{http://mediaserver.local} im Browser erreichbar.  
+      Diese Methode gilt allerdings nur für den jeweiligen Client und muss auf allen Endgeräten einzeln wiederholt werden.
+      \\
+      \newline
+      \texttt{Variante 2: Multicast-DNS (mDNS) mit Avahi auf dem Server}
+      Eine elegantere Lösung für lokale Netzwerke ist die Nutzung von Multicast-DNS (mDNS).  
+      Dadurch kündigt der Server seinen Hostnamen automatisch im Netzwerk an, sodass alle Clients diesen ohne manuelle Anpassungen auflösen können.
+
+      Dazu wird auf dem Server das Paket \texttt{avahi-daemon} installiert:
+
+      \begin{minted}[breaklines, linenos]{bash}
+sudo apt install avahi-daemon -y
+sudo systemctl enable avahi-daemon
+sudo systemctl start avahi-daemon
+      \end{minted}
+
+      Anschließend kann der Hostname (z.\,B. \texttt{mediaserver.local}) direkt im Browser oder per \texttt{ping} genutzt werden:
+
+      \begin{minted}[breaklines, linenos]{bash}
+ping mediaserver.local
+      \end{minted}
+
+      Vorteil dieser Methode ist, dass alle Geräte im lokalen Netzwerk sofort Zugriff erhalten, ohne dass die \texttt{/etc/hosts}-Datei auf jedem Client angepasst werden muss.
+  \end{enumerate}
    
 % ------ Fazit ------
 \chapter*{Fazit}
