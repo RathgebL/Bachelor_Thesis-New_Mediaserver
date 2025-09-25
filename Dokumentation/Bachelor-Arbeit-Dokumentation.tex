@@ -559,98 +559,110 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   Typische Implementierungen sind \emph{MiniDLNA/ReadyMedia} oder in NAS-Systeme integrierte Medienserver. 
   Während DLNA im privaten Bereich nach wie vor verbreitet ist, verliert es im professionellen Umfeld zunehmend an Relevanz, da moderne, HTTP-basierte Verfahren wie HLS oder DASH flexiblere Möglichkeiten bieten.\footcite[Vgl.][]{wikipedia_dlna}\footcite[Vgl.][]{dlna_specs} 
 
-\subsection{Datenformate und Standards}  
-Für den Betrieb eines Medienservers ist die Unterstützung gängiger Datenformate entscheidend, 
-da diese maßgeblich die Kompatibilität mit Endgeräten sowie die Qualität und Effizienz der Speicherung und Übertragung bestimmen.  
-\\
-\newline
-\textbf{Audioformate:}  
-Im Audiobereich haben sich unterschiedliche Standards etabliert, die sich hinsichtlich Qualität, Kompression und Einsatzgebiet unterscheiden.  
-Das MP3-Format (\emph{MPEG-1/2 Audio Layer III}) ist verlustbehaftet komprimiert und gilt als de facto Standard im Musikbereich, 
-insbesondere wegen seiner geringen Dateigrößen und breiten Unterstützung durch Endgeräte.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}  
-Für verlustfreie Archivierung wird häufig FLAC (\emph{Free Lossless Audio Codec}) genutzt, 
-das bei identischer Klangqualität wie das Original eine deutliche Speicherreduktion ermöglicht.  
-AAC (\emph{Advanced Audio Coding}), ebenfalls verlustbehaftet und von der MPEG-Gruppe spezifiziert, 
-wird heute von vielen Streamingdiensten und Plattformen (z.\,B. YouTube, iTunes, Spotify) als Standard eingesetzt.\footcite[Vgl.][]{openlearn_aac} 
-WAV (\emph{Waveform Audio File Format}) speichert Audiodaten unkomprimiert, was höchste Qualität gewährleistet, jedoch mit hohem Speicherbedarf einhergeht.
-Dieses Format findet daher primär in professionellen Produktionsumgebungen oder für kurzfristige Verarbeitungsschritte Anwendung.\footcite[Vgl.][]{wikipedia_wav}  
-\\
-\newline
-\textbf{Containerformate:}  
-Neben reinen Audioformaten sind Containerformate für die Organisation komplexerer Inhalte entscheidend.  
-Das Matroska-Format (MKV) ist ein freier, erweiterbarer Standard, der neben Audio- und Videoströmen auch Untertitel, 
-Kapitelinformationen und mehrere Tonspuren in einer Datei vereinen kann.\footcite[Vgl.][siehe 1. Introduction]{rfc9559}  
-MP4, ein ISO-Standard auf Basis von \emph{MPEG-4 Part 14}, ist weltweit eines der am weitesten verbreiteten Containerformate 
-und bildet insbesondere die Grundlage für Video-Streaming über HTTP. 
-Es überzeugt durch hohe Kompatibilität mit Abspielgeräten und Streaming-Plattformen.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}
-\\
-\newline
-\textbf{Metadatenstandards:}
-Metadaten („Daten über Daten“) beschreiben Eigenschaften von Mediendateien und ermöglichen deren effiziente Suche, Auffindbarkeit und Verwaltung. 
-Ein weit verbreiteter Standard in MP3-Dateien sind ID3-Tags. 
-Diese Container erlauben das Einbetten von Informationen wie Titel, Interpret, Album, Genre oder Coverbilder direkt in die Datei.\footcite[Vgl.][siehe 4. Declared ID3v2 frames]{id3org_spec}
+  \subsection{Datenformate und Standards}  
+  Für den Betrieb eines Medienservers ist die Unterstützung gängiger Datenformate entscheidend, 
+  da diese maßgeblich die Kompatibilität mit Endgeräten sowie die Qualität und Effizienz der Speicherung und Übertragung bestimmen.  
+  \\
+  \newline
+  \textbf{Audioformate:}  
+  Im Audiobereich haben sich unterschiedliche Standards etabliert, die sich hinsichtlich Qualität, Kompression und Einsatzgebiet unterscheiden.  
+  Das MP3-Format (\emph{MPEG-1/2 Audio Layer III}) ist verlustbehaftet komprimiert und gilt als de facto Standard im Musikbereich, 
+  insbesondere wegen seiner geringen Dateigrößen und breiten Unterstützung durch Endgeräte.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}  
+  Für verlustfreie Archivierung wird häufig FLAC (\emph{Free Lossless Audio Codec}) genutzt, 
+  das bei identischer Klangqualität wie das Original eine deutliche Speicherreduktion ermöglicht.  
+  AAC (\emph{Advanced Audio Coding}), ebenfalls verlustbehaftet und von der MPEG-Gruppe spezifiziert, 
+  wird heute von vielen Streamingdiensten und Plattformen (z.\,B. YouTube, iTunes, Spotify) als Standard eingesetzt.\footcite[Vgl.][]{openlearn_aac} 
+  WAV (\emph{Waveform Audio File Format}) speichert Audiodaten unkomprimiert, was höchste Qualität gewährleistet, jedoch mit hohem Speicherbedarf einhergeht.
+  Dieses Format findet daher primär in professionellen Produktionsumgebungen oder für kurzfristige Verarbeitungsschritte Anwendung.\footcite[Vgl.][]{wikipedia_wav}  
+  \\
+  \newline
+  \textbf{Containerformate:}  
+  Neben reinen Audioformaten sind Containerformate für die Organisation komplexerer Inhalte entscheidend.  
+  Das Matroska-Format (MKV) ist ein freier, erweiterbarer Standard, der neben Audio- und Videoströmen auch Untertitel, 
+  Kapitelinformationen und mehrere Tonspuren in einer Datei vereinen kann.\footcite[Vgl.][siehe 1. Introduction]{rfc9559}  
+  MP4, ein ISO-Standard auf Basis von \emph{MPEG-4 Part 14}, ist weltweit eines der am weitesten verbreiteten Containerformate 
+  und bildet insbesondere die Grundlage für Video-Streaming über HTTP. 
+  Es überzeugt durch hohe Kompatibilität mit Abspielgeräten und Streaming-Plattformen.\footcite[Vgl.][S.~702~f.]{tanenbaum_computernetworks}
+  \\
+  \newline
+  \textbf{Metadatenstandards:}
+  Metadaten („Daten über Daten“) beschreiben Eigenschaften von Mediendateien und ermöglichen deren effiziente Suche, Auffindbarkeit und Verwaltung. 
+  Ein weit verbreiteter Standard in MP3-Dateien sind ID3-Tags. 
+  Diese Container erlauben das Einbetten von Informationen wie Titel, Interpret, Album, Genre oder Coverbilder direkt in die Datei.\footcite[Vgl.][siehe 4. Declared ID3v2 frames]{id3org_spec}
 
-Ein generischer, interdisziplinärer Standard ist Dublin Core. Dieser umfasst eine Menge von Kernfeldern (z. B. Title, Creator, Subject, Date, Format, Rights), 
-die zur Beschreibung digitaler Ressourcen genutzt werden können\footcite[Vgl.][siehe The Elements]{dublincore_set}. 
-Seine Stärke liegt in der Interoperabilität: Dublin Core wird von vielen Bibliotheks-, Museums- und Archivsystemen unterstützt.\footcite[Vgl.][siehe 1.1. What is Metadata?]{dublincore_using}
+  Ein generischer, interdisziplinärer Standard ist Dublin Core. Dieser umfasst eine Menge von Kernfeldern (z. B. Title, Creator, Subject, Date, Format, Rights), 
+  die zur Beschreibung digitaler Ressourcen genutzt werden können\footcite[Vgl.][siehe The Elements]{dublincore_set}. 
+  Seine Stärke liegt in der Interoperabilität: Dublin Core wird von vielen Bibliotheks-, Museums- und Archivsystemen unterstützt.\footcite[Vgl.][siehe 1.1. What is Metadata?]{dublincore_using}
 
-Daneben gibt es weitere Metadatenstandards, die speziellere Anforderungen adressieren. 
-Beispiele sind METS (Metadata Encoding and Transmission Standard), MODS (Metadata Object Description Schema) 
-oder MARCXML, die in Bibliotheks- und Archivumgebungen zusätzlich verwendet werden, 
-insbesondere wenn detailliertere bibliografische Informationen benötigt werden.\footcite[Vgl.][]{loc_mets} \footcite[Vgl.][]{loc_mods}  
- 
-\subsection{Rechtsfragen}  
-Neben technischen Aspekten spielen rechtliche Rahmenbedingungen eine zentrale Rolle beim Betrieb von Medienservern.
-Im folgenden werden wesentliche Punkte skizziert, die insbesondere im Kontext von Bibliotheken und Bildungseinrichtungen relevant sind. 
-\\
-\newline
-\textbf{Lizenzen und Lizenzmodelle:}  
-Die Wahl der eingesetzten Software und Codecs ist auch aus lizenzrechtlicher Sicht relevant.  
-Freie Software wie Jellyfin unterliegt in der Regel der \emph{GNU General Public License (GPL)}, die die Nutzung, Modifikation und Weitergabe des Quellcodes gestattet, 
-solange abgeleitete Werke unter denselben Bedingungen veröffentlicht werden.\footcite[Vgl.][]{gnu_gplv3}  
-Kommerzielle Systeme wie Plex oder Emby hingegen stehen unter proprietären Lizenzen, die Nutzung, Verbreitung und Anpassung einschränken.  
-Darüber hinaus können auch bei der Verwendung von Codecs Lizenzgebühren anfallen: So ist AAC (\emph{Advanced Audio Coding}) durch MPEG-LA patentiert 
-und unterliegt Lizenzkosten bei bestimmter kommerzieller Nutzung, ebenso H.264/AVC.\footcite[Vgl.][]{wikipedia_mpegla}  
-\\
-\newline
-\textbf{Urheberrechtliche Rahmenbedingungen:}  
-Die Bereitstellung von Medieninhalten wird maßgeblich durch das Urheberrechtsgesetz (UrhG) geregelt.  
-Nach §~53 UrhG sind Privatkopien zwar grundsätzlich erlaubt, jedoch nur im engen persönlichen Umfeld.  
-Eine öffentliche Zugänglichmachung nach §~19a UrhG - wie sie bei einem Medienserver innerhalb einer Organisation oder Bibliothek vorliegt -
-setzt hingegen entsprechende Nutzungsrechte oder Lizenzen der Rechteinhaber voraus.\footcite[Vgl.][§§~53, 19a UrhG]{urhg2025}  
-\\
-\newline
-\textbf{Bibliotheksrecht im Hochschulkontext:}  
-Für Hochschulbibliotheken gelten Sonderregelungen.  
-§~60a UrhG erlaubt die Nutzung urheberrechtlich geschützter Werke für Unterricht und Lehre, etwa in Kursen oder in einer Lernplattform.  
-§~60e UrhG regelt darüber hinaus Nutzungen durch Bibliotheken, beispielsweise die Bereitstellung von Werken in elektronischer Form für Forschungs- und Unterrichtszwecke.  
-Dennoch müssen in der Praxis bestehende Lizenzverträge und Verlagsbedingungen beachtet werden, 
-da gesetzliche Schrankenregelungen nicht alle Nutzungsformen abdecken.\footcite[Vgl.][§§~60a, 60e UrhG]{urhg2025}  
+  Daneben gibt es weitere Metadatenstandards, die speziellere Anforderungen adressieren. 
+  Beispiele sind METS (Metadata Encoding and Transmission Standard), MODS (Metadata Object Description Schema) 
+  oder MARCXML, die in Bibliotheks- und Archivumgebungen zusätzlich verwendet werden, 
+  insbesondere wenn detailliertere bibliografische Informationen benötigt werden.\footcite[Vgl.][]{loc_mets} \footcite[Vgl.][]{loc_mods}  
+  
+  \subsection{Rechtsfragen}  
+  Neben technischen Aspekten spielen rechtliche Rahmenbedingungen eine zentrale Rolle beim Betrieb von Medienservern.
+  Im folgenden werden wesentliche Punkte skizziert, die insbesondere im Kontext von Bibliotheken und Bildungseinrichtungen relevant sind. 
+  \\
+  \newline
+  \textbf{Lizenzen und Lizenzmodelle:}  
+  Die Wahl der eingesetzten Software und Codecs ist auch aus lizenzrechtlicher Sicht relevant.  
+  Freie Software wie Jellyfin unterliegt in der Regel der \emph{GNU General Public License (GPL)}, die die Nutzung, Modifikation und Weitergabe des Quellcodes gestattet, 
+  solange abgeleitete Werke unter denselben Bedingungen veröffentlicht werden.\footcite[Vgl.][]{gnu_gplv3}  
+  Kommerzielle Systeme wie Plex oder Emby hingegen stehen unter proprietären Lizenzen, die Nutzung, Verbreitung und Anpassung einschränken.  
+  Darüber hinaus können auch bei der Verwendung von Codecs Lizenzgebühren anfallen: So ist AAC (\emph{Advanced Audio Coding}) durch MPEG-LA patentiert 
+  und unterliegt Lizenzkosten bei bestimmter kommerzieller Nutzung, ebenso H.264/AVC.\footcite[Vgl.][]{wikipedia_mpegla}  
+  \\
+  \newline
+  \textbf{Urheberrechtliche Rahmenbedingungen:}  
+  Die Bereitstellung von Medieninhalten wird maßgeblich durch das Urheberrechtsgesetz (UrhG) geregelt.  
+  Nach §~53 UrhG sind Privatkopien zwar grundsätzlich erlaubt, jedoch nur im engen persönlichen Umfeld.  
+  Eine öffentliche Zugänglichmachung nach §~19a UrhG - wie sie bei einem Medienserver innerhalb einer Organisation oder Bibliothek vorliegt -
+  setzt hingegen entsprechende Nutzungsrechte oder Lizenzen der Rechteinhaber voraus.\footcite[Vgl.][§§~53, 19a UrhG]{urhg2025}  
+  \\
+  \newline
+  \textbf{Bibliotheksrecht im Hochschulkontext:}  
+  Für Hochschulbibliotheken gelten Sonderregelungen.  
+  §~60a UrhG erlaubt die Nutzung urheberrechtlich geschützter Werke für Unterricht und Lehre, etwa in Kursen oder in einer Lernplattform.  
+  §~60e UrhG regelt darüber hinaus Nutzungen durch Bibliotheken, beispielsweise die Bereitstellung von Werken in elektronischer Form für Forschungs- und Unterrichtszwecke.  
+  Dennoch müssen in der Praxis bestehende Lizenzverträge und Verlagsbedingungen beachtet werden, 
+  da gesetzliche Schrankenregelungen nicht alle Nutzungsformen abdecken.\footcite[Vgl.][§§~60a, 60e UrhG]{urhg2025}  
 
 \section{Medienserver im Bibliothekskontext}  
 Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für den Zugang zu digitalen Sammlungen, bringt aber auch besondere Anforderungen mit sich - technisch, rechtlich und hinsichtlich Langzeitverfügbarkeit.
 
   \subsection{Digitalisierung von Beständen}  
-  Bibliotheken besitzen oft analoge oder hybride Bestände - etwa Audio- und Videomedien, Filmarchive oder Tonträger -, die durch Digitalisierung langfristig gesichert und zugänglich gemacht werden sollen. Der Prozess gliedert sich idealerweise in vier Phasen:
+  Bibliotheken besitzen oft analoge oder hybride Bestände - etwa Audio- und Videomedien, Filmarchive oder Tonträger -, die durch Digitalisierung langfristig gesichert und zugänglich gemacht werden sollen. Der Prozess gliedert sich idealerweise in folgende Phasen:
 
-  \begin{itemize}
+  \begin{enumerate}
     \item \textbf{Auswahl und Priorisierung:}  
-      Nicht alle Bestände können sofort digitalisiert werden. Kriterien für eine sinnvolle Auswahl sind u. a. der Erhaltungszustand, die Nutzungshäufigkeit, die rechtliche Situation sowie historische oder kulturelle Bedeutung. Institutionelle Richtlinien oder internationale Leitlinien wie UNESCO/PERSIST geben dazu Orientierung.:contentReference[oaicite:3]{index=3}  
-      Auch Bibliotheken wie die University of Cincinnati verwenden solche Kriterien in ihren Digitization-Selection-Guidelines.:contentReference[oaicite:4]{index=4}  
+      Nicht alle Bestände können sofort digitalisiert werden. 
+      Kriterien für eine sinnvolle Auswahl sind u. a. der Erhaltungszustand, die Nutzungshäufigkeit, die rechtliche Situation sowie historische oder kulturelle Bedeutung. Institutionelle Richtlinien oder internationale Leitlinien wie UNESCO/PERSIST geben dazu Orientierung.\footcite[Vgl.][]{unesco_persist_guidelines}  
 
     \item \textbf{Erfassung und Digitalisierung:}  
-      Die Objekte werden mit geeigneten Geräten gescannt oder digital abgewickelt (z. B. Scanner, Filmabtaster oder spezielle Audiogeräte). Wichtig ist, dass die digitalen Dateien eine hohe Qualität (z. B. Auflösung, Farbtiefe, Samplingrate) erreichen, sodass sie als Masterversionen für spätere Ableitungen dienen können.  
-      Die Smithsonian Institution nennt als Standardformat z. B. das Broadcast-Wave-Format (BWF) bei Audio mit 24 Bit / 96 kHz für Archivqualität.:contentReference[oaicite:5]{index=5}  
-      Für Bild-/Foto-Digitalisate gelten die FADGI-Technischen Richtlinien als international anerkannter Referenzrahmen, insbesondere hinsichtlich Bildqualität, Metadaten und Workflow-Controlling.:contentReference[oaicite:6]{index=6}  
-
+      Die Objekte werden mit geeigneten Geräten gescannt und digitalisiert (z. B. Scanner, Filmabtaster oder spezielle Audiogeräte). 
+      Wichtig ist, dass die digitalen Dateien eine hohe Qualität (z. B. Auflösung, Farbtiefe, Samplingrate) aufweisen, 
+      sodass sie als Masterversionen für spätere Ableitungen dienen können.  
+      In der Bibliothek der HfM Karlsruhe werden beispielsweise WAV-Dateien in CD-Qualität (44,1 kHz, 16 Bit) für Audio sowie JPEG-Scans mit 300 dpi für Booklets erstellt.  
+      Für die Bereitstellung auf dem neuen Medienserver werden die Audiodateien in das verlustfreie FLAC-Format transkodiert und die JPEG-Dateien zu PDFs zusammengefasst.  
+      Weitere Details hierzu finden sich im Kapitel „Praktische Umsetzung“.  
+    
+    \item \textbf{Speicherung und Sicherung:}
+      Die digitalen Dateien werden in einem strukturierten Dateisystem oder einer Datenbank abgelegt, 
+      idealerweise mit einer klaren Ordnerstruktur und aussagekräftigen Dateinamen. 
+      Parallel dazu sind regelmäßige Backups und Replikationen an verschiedenen Standorten essenziell, 
+      um Datenverluste durch Hardwareausfälle, menschliche Fehler oder Katastrophen zu vermeiden.
+  
     \item \textbf{Nachbearbeitung und Metadatenanreicherung:}  
-      Nach der Erfassung werden die Rohdaten optimiert (z. B. Rauschfilter, Farbkorrektur) und in normative Formate überführt. Parallel dazu werden Metadaten eingepflegt — technisch, beschreibend und strukturell —, um Auffindbarkeit, Verwaltung und Langzeitnutzung zu ermöglichen.
+      Nach der Erfassung werden die Rohdaten optimiert (z. B. Rauschfilter, Farbkorrektur) und in normative Formate überführt. 
+      Parallel dazu werden Metadaten eingepflegt — technisch, beschreibend und strukturell —, um Auffindbarkeit, Verwaltung und Langzeitnutzung zu ermöglichen.
+      Dieser Prozess wir im Rahmen dieser Arbeit verbessert werden, indem Metadaten bei der Konvertierung ins FLAC-Format anhand der Datei-Benennung eingebettet werden.
+      Mehr dazu ebenfalls im Kapitel „Praktische Umsetzung“.
 
     \item \textbf{Ableitung von Zugriffsvarianten:}  
-      Für den täglichen Zugriff werden üblicherweise abgeleitete Versionen (z. B. mit kleinerer Auflösung oder effizienteren Codecs) erzeugt, während die Masterdateien sicher archiviert bleiben.
-  \end{itemize}
-
-  Diese digitalen Prozesse orientieren sich an international anerkannten Standards, wie den FADGI-Richtlinien oder Metamorfoze, und an Best Practices in der digitalen Archivierung und Bibliothekenarbeit.:contentReference[oaicite:7]{index=7}  
+      Für den täglichen Zugriff werden üblicherweise abgeleitete Versionen (z. B. mit kleinerer Auflösung oder effizienteren Codecs) erzeugt,
+      während die Masterdateien sicher archiviert bleiben.
+      Die Auflösung für das Streaming kann üblicherweise bei der zuvor vorgestellten Software für Medienserver eingestellt und dynamisch angepasst werden.
+  \end{enumerate} 
 
 \subsection{Zugriff und Rechteverwaltung}  
 Im Bibliothekskontext bestehen oft restriktive Anforderungen an den Zugriff auf Medien:
