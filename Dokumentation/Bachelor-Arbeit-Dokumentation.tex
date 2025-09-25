@@ -832,38 +832,28 @@ ssh benutzername@server-ip
   Die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
   Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.  
 
-  \subsubsection*{Wichtige Befehle}  
-
-  \textbf{Service steuern:}  
+  \subsubsection*{Wichtige Befehle}    
   \begin{minted}[breaklines, linenos]{bash}
+# Service steuern
 sudo systemctl start ssh
 sudo systemctl stop ssh
 sudo systemctl restart ssh
 systemctl status ssh
-  \end{minted}  
 
-  \textbf{IP-Adresse des Servers ermitteln:}  
-  \begin{minted}[breaklines, linenos]{bash}
+# IP-Adresse ermitteln
 ip a
-  \end{minted}  
 
-  \textbf{SSH-Keys erstellen und übertragen (empfohlen):}  
-  \begin{minted}[breaklines, linenos]{bash}
+# SSH-Schlüssel generieren und auf den Server kopieren (empfohlen)
 ssh-keygen -t ed25519
 ssh-copy-id benutzername@server-ip
-  \end{minted}  
 
-  \textbf{Dateien übertragen (scp):}  
-  \begin{minted}[breaklines, linenos]{bash}
 # Datei von Client auf Server kopieren
 scp /pfad/zur/datei benutzername@server-ip:/ziel/pfad/
 
 # Datei vom Server auf Client kopieren
 scp benutzername@server-ip:/pfad/auf/server/datei /lokaler/pfad/
-  \end{minted}  
 
-  \textbf{Verzeichnisse synchronisieren (rsync):}  
-  \begin{minted}[breaklines, linenos]{bash}
+# Verzeichnisse synchronisieren
 rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
   \end{minted}  
 
@@ -880,7 +870,7 @@ rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
   sudo ufw allow 443/tcp
   \end{verbatim}  
   Alle weiteren Ports bleiben standardmäßig blockiert.  
-  Offizielle Informationen sind in der Ubuntu-Dokumentation verfügbar: \url{https://help.ubuntu.com/community/UFW}.\footcite[Vgl.][Kapitel~22, S.~932~ff.]{nemeth_unixlinux}
+  Offizielle Informationen sind in der Ubuntu-Dokumentation verfügbar: \url{https://help.ubuntu.com/community/UFW}.
 
   \subsection{Docker}  
   Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt. 
@@ -889,8 +879,7 @@ rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
   Dort findet sich auch der Inhalt des Skriptes \texttt{install-docker.sh}. Dieser sollte vor der Installation auf die neueste Version überprüft werden. 
   Ein Beispielskript (Stand 24. September 2025) findet sich im GitHub-Repository: \url{https://github.com/RathgebL/Bachelor_Thesis-New_Mediaserver}.
   Dieses enthält alle notwendigen Befehle zum Einrichten des Docker-Repositories und zur Installation der Docker-Pakete.
-  Der Installationsvorgang gliedert sich nun in folgende Schritte:  
-
+  Es kann nun wie folgt vorgegangen werden:  
   \begin{enumerate}
     \item Datenträger mit Skript verfügbar machen:
     \begin{minted}[breaklines, linenos]{bash}
@@ -958,9 +947,11 @@ sudo docker compose down
   \subsection{nginx}  
   \emph{nginx} ist ein moderner Webserver und Reverse Proxy, der sich durch hohe Performance auszeichnet.  
   Die offizielle Website bietet Installationshinweise und Downloads: \url{https://nginx.org/en/download.html}.  
-  Unter Ubuntu kann nginx direkt über die Paketverwaltung installiert werden:
+  Folgende Schritte sind nun auf Ubuntu notwendig, um von der Installation bis zur Nutzung zu gelangen:
 
-  \begin{minted}[breaklines, linenos]{bash}
+  \begin{enumerate}
+    \item{Installation:}
+    \begin{minted}[breaklines, linenos]{bash}
 # Paketliste aktualisieren
 sudo apt update
 
@@ -975,13 +966,14 @@ sudo systemctl status nginx
 
 # Test im Browser oder mit curl (sollte "Welcome to nginx!" zurückgeben)
 curl http://localhost
-  \end{minted} 
+    \end{minted} 
 
-  Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
-  die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
-  Für den Medienserver empfiehlt sich eine Konfiguration wie im folgenden Beispiel (als txt-Datei auch im GitHub-Repository verfügbar):  
+    \item{Konfiguration:}
+    Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
+    die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
+    Für den Medienserver empfiehlt sich eine Konfiguration wie im folgenden Beispiel (als txt-Datei auch im     GitHub-Repository verfügbar):  
 
-  \begin{minted}[breaklines, linenos]{nginx}
+    \begin{minted}[breaklines, linenos]{nginx}
 server {
     listen 80;
     server_name mediaserver.local;
@@ -1007,41 +999,36 @@ server {
         proxy_redirect     off;
     }
 }
-  \end{minted}  
+    \end{minted}  
 
-  Die Datei wird in \texttt{/etc/nginx/sites-available/mediaserver} abgelegt 
-  und über einen Symlink aktiviert:  
-
-  \begin{minted}[breaklines, linenos]{bash}
+    \item{Aktivierung:}
+    Die Datei wird in \texttt{/etc/nginx/sites-available/mediaserver} abgelegt 
+    und über einen Symlink aktiviert:  
+    \begin{minted}[breaklines, linenos]{bash}
 sudo ln -s /etc/nginx/sites-available/mediaserver \
            /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
-  \end{minted}  
+    \end{minted}  
 
-  Es folgen einige nützliche Befehle zur Verwaltung von nginx:
-  \textbf{Service steuern}  
-  \begin{minted}[breaklines, linenos]{bash}
+    \item{Nutzung:}
+    Nach erfolgreicher Installation und Konfiguration, sind folgen Befehle nützlich zur Verwaltung von nginx:
+    \begin{minted}[breaklines, linenos]{bash}
+# Service steuern
 sudo nginx -t                  # Konfiguration testen
 sudo systemctl start nginx     # starten
 sudo systemctl stop nginx      # stoppen
 sudo systemctl restart nginx   # neu starten
 sudo systemctl reload nginx    # nur Konfiguration neu laden
-  \end{minted}
 
-  \textbf{Status prüfen}  
-  \begin{minted}[breaklines, linenos]{bash}
+# Status prüfen
 systemctl status nginx
-  \end{minted}
 
-  \textbf{Logs ansehen}  
-  \begin{minted}[breaklines, linenos]{bash}
-# Zugriffe (wer greift auf was zu)
+# Logs einsehen
 tail -f /var/log/nginx/access.log
-
-# Fehler (z. B. falsche Pfade oder Syntaxfehler in Config)
 tail -f /var/log/nginx/error.log
-  \end{minted}
+    \end{minted}
+  \end{enumerate}
  
   \subsection{Navidrome}  
   Navidrome ist ein leichtgewichtiger Musikserver, der als Docker-Container besonders einfach bereitgestellt werden kann.  
