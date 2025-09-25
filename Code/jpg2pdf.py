@@ -72,10 +72,13 @@ def sort_booklet_files(files: list[Path]) -> list[Path]:
 
 # --- Booklet Finder ---
 def find_booklet_folders(base: Path):
-    # Durchsucht rekursiv den Basisordner nach Ordnern mit JPEG-Bildern.
     for folder in base.rglob("*"):
         if folder.is_dir():
-            jpegs = list(folder.glob("*.jpg")) + list(folder.glob("*.jpeg")) + list(folder.glob("*.JPG"))
+            jpegs = []
+            for ext in ("*.jpg", "*.jpeg", "*.JPG", "*.JPEG"):
+                jpegs.extend(folder.glob(ext))
+            # Filter: keine macOS "._"-Dateien
+            jpegs = [f for f in jpegs if not f.name.startswith("._")]
             if jpegs:
                 yield folder, sort_booklet_files(jpegs)
 
@@ -89,8 +92,13 @@ def build_pdf(folder: Path, images: list[Path], out_dir: Path):
     pdf_name = f"{base_name.replace(' ', '_')}.pdf"
     out_path = out_dir / pdf_name
 
+    # Warnung, wenn PDF schon existiert
+    if out_path.exists():
+        print(f"[WARNING] Überspringe {out_path}, Datei existiert bereits.")
+        return
     print(f"[INFO] Erstelle PDF: {out_path}")
 
+    # Bilder laden
     pil_images = []
     for img_path in images:
         try:
@@ -103,6 +111,7 @@ def build_pdf(folder: Path, images: list[Path], out_dir: Path):
         print(f"[WARNING] Keine gültigen Bilder in {folder}")
         return
 
+    # PDF speichern
     first, *rest = pil_images
     first.save(out_path, save_all=True, append_images=rest)
 
