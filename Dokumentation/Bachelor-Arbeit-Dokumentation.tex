@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=cyan]{hyperref}
 \usepackage[backend=biber,style=authoryear]{biblatex}
+\usepackage[printonlyused]{acronym}
 
 \addbibresource{bibliography.bib}
 
@@ -48,6 +49,47 @@
 \addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
 \listoftables
 \addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+
+% ------ Abkürzungsverzeichnis ------
+\chapter*{Abkürzungsverzeichnis}
+\begin{acronym}[WWW] % längste Abkürzung für Einrückung
+  \acro{API}{Application Programming Interface}
+  \acro{ARPANET}{Advanced Research Projects Agency Network}
+  \acro{TCP}{Transmission Control Protocol}
+  \acro{IP}{Internet Protocol}
+  \acro{TCPIP}{Transmission Control Protocol / Internet Protocol}
+  \acro{RTP}{Real-time Transport Protocol}
+  \acro{MPEG-DASH}{Dynamic Adaptive Streaming over HTTP (MPEG-DASH)}
+  \acro{HLS}{HTTP Live Streaming}
+  \acro{IT}{Informationstechnologie}
+  \acro{UNIX}{Uniplexed Information and Computing System}
+  \acro{KVM}{Kernel-based Virtual Machine}
+  \acro{NAS}{Network Attached Storage}
+  \acro{SAN}{Storage Area Network}
+  \acro{NFS}{Network File System}
+  \acro{SMB}{Server Message Block}
+  \acro{RAID}{Redundant Array of Independent Disks}
+  \acro{UID}{User ID}
+  \acro{GID}{Group ID}
+  \acro{ACL}{Access Control List}
+  \acro{RBAC}{Role-Based Access Control}
+  \acro{CPU}{Central Processing Unit}
+  \acro{RAM}{Random Access Memory}
+  \acro{TLS}{Transport Layer Security}
+  \acro{SSL}{Secure Sockets Layer}
+  \acro{VPN}{Virtual Private Network}
+  \acro{SSH}{Secure Shell}
+  \acro{IDS}{Intrusion Detection System}
+  \acro{IPS}{Intrusion Prevention System}
+  \acro{UDP}{User Datagram Protocol}
+  \acro{DNS}{Domain Name System}
+  \acro{HTTP}{Hypertext Transfer Protocol}
+  \acro{HTTPS}{Hypertext Transfer Protocol Secure}
+  \acro{RTSP}{Real-Time Streaming Protocol}
+  \acro{CDN}{Content Delivery Network}
+  \acro{QoS}{Quality of Service}
+  \acro{FEC}{Forward Error Correction}
+\end{acronym}
 
 % ------ Einleitung ------
 \cleardoublepage
@@ -145,17 +187,17 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
 
   \subsection{Historische Entwicklung}
   Die Entwicklung von Servern und Netzwerken ist eng mit der allgemeinen Geschichte der Computerkommunikation verknüpft. 
-  Erste Formen von Rechnernetzen entstanden bereits Ende der 1950er Jahre mit dem ARPANET, 
+  Erste Formen von Rechnernetzen entstanden bereits Ende der 1950er Jahre mit dem \ac{ARPANET}, 
   das als Vorläufer des heutigen Internets gilt 
   und den Grundstein für die paketorientierte Datenübertragung legte.\footcite[Vgl.][S.~45~f.]{tanenbaum_computernetworks}
 
-  In den frühen 1970er Jahren zeigte sich, dass die bestehenden Protokolle des ARPANET nicht ausreichten, 
+  In den frühen 1970er Jahren zeigte sich, dass die bestehenden Protokolle des \ac{ARPANET} nicht ausreichten, 
   um heterogene Netzwerke wie Funk- oder Satellitennetze zu integrieren. 
-  Vor diesem Hintergrund entwickelten Vinton Cerf und Robert Kahn 1974 das Transmission Control Protocol (TCP), 
-  das später in die heute gebräuchliche Protokollfamilie TCP/IP aufgeteilt wurde. 
-  TCP/IP ermöglichte die zuverlässige Kommunikation über unterschiedliche Netzwerke hinweg 
+  Vor diesem Hintergrund entwickelten Vinton Cerf und Robert Kahn 1974 das \ac{TCP}, 
+  das später in die heute gebräuchliche Protokollfamilie \ac{TCPIP} aufgeteilt wurde. 
+  \ac{TCPIP} ermöglichte die zuverlässige Kommunikation über unterschiedliche Netzwerke hinweg 
   und bildete die Grundlage für die Interoperabilität moderner Netze.\footcite[Vgl.][S.~45]{tanenbaum_computernetworks}
-  Im Jahr 1983 wurde TCP/IP im ARPANET als verbindlicher Standard eingeführt,
+  Im Jahr 1983 wurde \ac{TCPIP} im \ac{ARPANET} als verbindlicher Standard eingeführt,
   was gemeinhin als Geburtsstunde des modernen Internets gilt.\footnote{Vgl. \cite[S.~2]{postel_rfc801}; \cite{britannica_tcpip}.}
 
   In den 1980er und 1990er Jahren etablierte sich das Client-Server-Modell als dominierendes Paradigma für den Datenaustausch. 
@@ -168,17 +210,17 @@ die digitalisierte Bestände für ihre Nutzer zugänglich machen.
   Erste Streaming-Verfahren wie RealAudio (1995) ermöglichten die kontinuierliche Übertragung von Audioinhalten, 
   ohne dass die Daten vollständig gespeichert werden mussten. 
   Diese Technologie wurde später auf Video übertragen 
-  und in standardisierte Protokolle wie Real-time Transport Protocol (RTP) überführt.\footcite[Vgl.][S.~11~ff., S.~273~ff.]{steinmetz_multimedia}
+  und in standardisierte Protokolle wie \ac{RTP} überführt.\footcite[Vgl.][S.~11~ff., S.~273~ff.]{steinmetz_multimedia}
 
   Seit den 2000er Jahren prägen Breitbandinternet und die Verbreitung mobiler Endgeräte die Nutzung multimedialer Inhalte. 
-  Parallel dazu entwickelten sich adaptive Streaming-Technologien wie MPEG-DASH (Standardisierung 2012)
-  und Apple HLS (2009), die eine effiziente und bandbreitenabhängige Übertragung von Audio- 
+  Parallel dazu entwickelten sich adaptive Streaming-Technologien wie \ac{MPEG-DASH} (Standardisierung 2012)
+  und Apple \ac{HLS} (2009), die eine effiziente und bandbreitenabhängige Übertragung von Audio- 
   und Videoinhalten ermöglichen.\footcite[Vgl.]{iso_mpegdash, apple_hls}
   Medienserver sind in diesem Kontext zu zentralen Plattformen für die Speicherung und Bereitstellung digitaler Bestände geworden 
   und finden heute sowohl im privaten Umfeld als auch in Institutionen wie Hochschulen und Bibliotheken Anwendung.
 
   \subsection{Anwenwendungsbereiche}
-  Server übernehmen zentrale Aufgaben in der IT, etwa als Datei-, Datenbank-, Web- oder E-Mail-Server. 
+  Server übernehmen zentrale Aufgaben in der \ac{IT}, etwa als Datei-, Datenbank-, Web- oder E-Mail-Server. 
   Darüber hinaus kommen sie in Bereichen wie Virtualisierung, Cloud-Computing
   oder bei Sicherheitsdiensten (z.\,B. Authentifizierung, Firewalls) zum Einsatz.
 
@@ -202,11 +244,6 @@ die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher
   spezielle Kühlungssysteme sowie redundante Netzwerkverbindungen zum Einsatz, 
   um eine kontinuierliche Verfügbarkeit zu gewährleisten.\footcite[Vgl.][S.~152541]{ahmed2021energy} 
 
-  % Auch die Netzwerkanbindung ist von zentraler Bedeutung: 
-  % Mehrport-Netzwerkkarten, redundante Switch-Anbindungen oder Load-Balancing-Verfahren 
-  % stellen sicher, dass ein Server auch bei steigender Last oder im Fehlerfall 
-  % funktionsfähig bleibt.\footcite[Vgl.][?]{tanenbaum_computernetworks}
-
   Auf der Softwareseite bilden Betriebssysteme die Grundlage für den Betrieb, 
   wobei sich stabile, sichere und gut wartbare Plattformen durchgesetzt haben. 
   Darüber hinaus sind Serverdienste (z.\,B. Web-, Datenbank- oder Streamingdienste) 
@@ -217,7 +254,7 @@ die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher
 
   \subsection{Betriebssysteme für Server}
   Zu den gängigsten Server-Betriebssystemen zählen insbesondere 
-  Linux-Distributionen, Windows Server sowie UNIX-Derivate.
+  Linux-Distributionen, Windows Server sowie \ac{UNIX}-Derivate.
   Linux gilt als besonders verbreitet im Bereich Web- und Medienserver, 
   da es durch Stabilität, Sicherheit und Flexibilität überzeugt und 
   vor allem als bevorzugte Plattform für Webserver wie Apache dient.\footcite[Vgl.][S.~963~ff.]{nemeth_unixlinux} 
@@ -230,7 +267,7 @@ die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher
   Moderne Serverarchitekturen setzen zunehmend auf Virtualisierung und Containerisierung, 
   um Hardware effizienter auszunutzen und Dienste flexibel bereitzustellen. 
 
-  Klassische Virtualisierungslösungen wie VMware oder KVM ermöglichen die parallele Ausführung mehrerer 
+  Klassische Virtualisierungslösungen wie VMware oder \ac{KVM} ermöglichen die parallele Ausführung mehrerer 
   virtueller Maschinen auf einer physischen Hardware.\footcite[Vgl.][S.~1005, S.~995~f.]{nemeth_unixlinux} 
 
   Containerisierungstechnologien wie Docker und Kubernetes gehen darüber hinaus einen Schritt weiter, 
@@ -239,29 +276,28 @@ die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher
   bildet „die container-basierte Virtualisierungstechnologie, 
   wie Docker und Kubernetes, die Grundlage für cloud-native Anwendungen“.\footcite{mao2020containers}
 
-\subsection{Dateisysteme und Speicherlösungen}
-Für Medienserver spielt die Wahl der Speicherarchitektur eine zentrale Rolle. 
-Netzwerkspeicherlösungen wie Network Attached Storage (NAS) und Storage Area Networks (SAN) 
-ermöglichen die zentrale Bereitstellung großer Datenmengen. 
-NAS-Systeme stellen Speicher im Netzwerk auf Dateiebene bereit und zeichnen sich durch einfache Einrichtung, 
-schnellen Datenzugriff und unkomplizierte Administration aus.\footcite[Vgl.][S.~21857]{saravanamuthu2014study} 
-SANs hingegen arbeiten auf Blockebene und sind für besonders leistungsintensive Anwendungen optimiert; 
-sie bieten hohe Bandbreiten, niedrige Latenzen und ermöglichen die zentrale Verwaltung großer Speicherpools.\footcite[Vgl.][S.~21858~f.]{saravanamuthu2014study}  
+  \subsection{Dateisysteme und Speicherlösungen}
+  Für Medienserver spielt die Wahl der Speicherarchitektur eine zentrale Rolle. 
+  Netzwerkspeicherlösungen wie \ac{NAS} und \ac{SAN} 
+  ermöglichen die zentrale Bereitstellung großer Datenmengen. 
+  \ac{NAS}-Systeme stellen Speicher im Netzwerk auf Dateiebene bereit und zeichnen sich durch einfache Einrichtung, 
+  schnellen Datenzugriff und unkomplizierte Administration aus.\footcite[Vgl.][S.~21857]{saravanamuthu2014study} 
+  \ac{SAN}s hingegen arbeiten auf Blockebene und sind für besonders leistungsintensive Anwendungen optimiert; 
+  sie bieten hohe Bandbreiten, niedrige Latenzen und ermöglichen die zentrale Verwaltung großer Speicherpools.\footcite[Vgl.][S.~21858~f.]{saravanamuthu2014study}  
 
-Moderne Speicherlösungen sind darüber hinaus auf niedrige Latenz, hohe Bandbreite und Skalierbarkeit ausgelegt. 
-In experimentellen Vergleichen konnte gezeigt werden, dass SAN-Systeme bei großen Datenmengen und intensiven Workflows deutliche Leistungs- 
-und Latenzvorteile gegenüber NAS haben.\footcite[Vgl.][Abschnitt~IV; Ergebnisse]{jaikar2016performance}  
-NAS-Systeme dagegen bieten Dateizugriff über verbreitete Protokolle (z. B. NFS, SMB) 
-und sind häufig kostengünstiger in Anschaffung und Wartung.\footcite[Vgl.][S.~21857]{saravanamuthu2014study}
+  Moderne Speicherlösungen sind darüber hinaus auf niedrige Latenz, hohe Bandbreite und Skalierbarkeit ausgelegt. 
+  In experimentellen Vergleichen konnte gezeigt werden, dass \ac{SAN}-Systeme bei großen Datenmengen und intensiven Workflows deutliche Leistungs- 
+  und Latenzvorteile gegenüber \ac{NAS} haben.\footcite[Vgl.][Abschnitt~IV; Ergebnisse]{jaikar2016performance}  
+  \ac{NAS}-Systeme dagegen bieten Dateizugriff über verbreitete Protokolle (z. B. \ac{NFS}, \ac{SMB}) 
+  und sind häufig kostengünstiger in Anschaffung und Wartung.\footcite[Vgl.][S.~21857]{saravanamuthu2014study}
 
-
-Neben der Netzwerkanbindung ist Redundanz ein entscheidender Faktor: Mechanismen 
-wie RAID (Redundant Array of Independent Disks) schützen vor Datenverlust durch 
-Festplattenausfall, während Hot-Swapping und automatische Neusynchronisation 
-die Verfügbarkeit auch im Fehlerfall erhöhen. In der klassischen Untersuchung „RAID: 
-High-Performance, Reliable Secondary Storage“ wird herausgearbeitet, dass RAID-Systeme durch Striping über mehrere Festplatten 
-und durch Redundanz eine signifikante Verbesserung von Leistung und Zuverlässigkeit bieten, insbesondere bei großen Datenmengen 
-und paralleler Zugriffslast.\footcite[Vgl.][151 ~ff.]{chen2004raid}
+  Neben der Netzwerkanbindung ist Redundanz ein entscheidender Faktor: Mechanismen 
+  wie \ac{RAID} schützen vor Datenverlust durch 
+  Festplattenausfall, während Hot-Swapping und automatische Neusynchronisation 
+  die Verfügbarkeit auch im Fehlerfall erhöhen. In der klassischen Untersuchung „\ac{RAID}: 
+  High-Performance, Reliable Secondary Storage“ wird herausgearbeitet, dass \ac{RAID}-Systeme durch Striping über mehrere Festplatten 
+  und durch Redundanz eine signifikante Verbesserung von Leistung und Zuverlässigkeit bieten, insbesondere bei großen Datenmengen 
+  und paralleler Zugriffslast.\footcite[Vgl.][151 ~ff.]{chen2004raid}
 
 \section{Serveradministration}
 Die Administration eines Servers umfasst grundlegende Prozesse der Benutzerverwaltung, Wartung und Absicherung. 
@@ -269,8 +305,8 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
 
   \subsection{Benutzer- und Rechteverwaltung}
   Ein zentrales Element der Serveradministration ist die Verwaltung von Benutzern und deren Zugriffsrechten. 
-  In UNIX- und Linux-Systemen erfolgt die Identifikation über eindeutige Benutzerkennungen (User IDs, UIDs) 
-  und Gruppenzugehörigkeiten (Group IDs, GIDs).\footcite[Vgl.][S.~176~ff.]{nemeth_unixlinux}
+  In UNIX- und Linux-Systemen erfolgt die Identifikation über eindeutige Benutzerkennungen (\ac{UID}s) 
+  und Gruppenzugehörigkeiten (\ac{GID}s).\footcite[Vgl.][S.~176~ff.]{nemeth_unixlinux}
   Das klassische UNIX-Berechtigungsmodell unterscheidet dabei drei grundlegende Kategorien: 
   \emph{user} (Besitzer), \emph{group} (Mitglieder der zugewiesenen Gruppe) und \emph{others} (alle übrigen Nutzer). 
   Für jede dieser Kategorien lassen sich Lese- (read, r), Schreib- (write, w) und Ausführungsrechte (execute, x) festlegen.\footcite[Vgl.]{wikipedia_dateisystemrechte}
@@ -280,9 +316,9 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   Viele moderne Distributionen nutzen anstelle direkter Root-Anmeldungen das \texttt{sudo}-Kommando, 
   das einzelnen Benutzern temporär administrative Rechte verleiht und gleichzeitig Aktionen protokolliert.\footcite[Vgl.][S.~112~ff.]{nemeth_unixlinux}
 
-  Erweiterte Mechanismen wie \emph{Access Control Lists (ACLs)} ermöglichen eine feinere Abstufung der Berechtigungen, 
+  Erweiterte Mechanismen wie \ac{ACL}s ermöglichen eine feinere Abstufung der Berechtigungen, 
   indem sie Zugriffsrechte für mehrere Benutzer und Gruppen individuell definieren.\footcite[Vgl.][S.~159~ff.]{nemeth_unixlinux} 
-  In einigen Systemen wie Solaris findet darüber hinaus eine rollenbasierte Zugriffskontrolle (\emph{Role-Based Access Control, RBAC}) Anwendung. 
+  In einigen Systemen wie Solaris findet darüber hinaus eine rollenbasierte Zugriffskontrolle (\ac{RBAC}) Anwendung. 
   Dieses Konzept weist Rechte nicht mehr einzelnen Benutzern, sondern Rollen zu, die wiederum von Benutzern übernommen werden können. 
   Dadurch lassen sich administrative Aufgaben gezielt delegieren, ohne umfassende Superuser-Rechte vergeben zu müssen.\footcite[Vgl.][S.~108]{nemeth_unixlinux}
 
@@ -302,7 +338,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
 
   \subsection{Monitoring und Logging}
   Für den Betrieb von Servern ist die kontinuierliche Überwachung essenziell. 
-  Monitoring umfasst sowohl die Ressourcennutzung (CPU, RAM, Festplatten, Netzwerk) als auch die Erreichbarkeit zentraler Dienste. 
+  Monitoring umfasst sowohl die Ressourcennutzung (\ac{CPU}, \ac{RAM}, Festplatten, Netzwerk) als auch die Erreichbarkeit zentraler Dienste. 
   Hierfür stehen je nach System Werkzeuge wie \texttt{top} (Linux), \texttt{topas} (AIX) oder \texttt{prstat} (Solaris) zur Verfügung, 
   die eine regelmäßig aktualisierte Übersicht über aktive Prozesse und deren Ressourcennutzung bieten.\footcite[Vgl.][S.~133]{nemeth_unixlinux}
   Darüber hinaus ermöglichen sie Administratoren auch Eingriffe, 
@@ -343,8 +379,8 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   \newline
   \textbf{Verschlüsselung}:  
   Um die Vertraulichkeit und Integrität der Kommunikation zu gewährleisten, werden Verschlüsselungstechniken eingesetzt. 
-  Transport Layer Security (TLS/SSL) schützt Datenströme im Internet, Virtual Private Networks (VPNs) verschlüsseln den gesamten Datenverkehr zwischen Standorten, 
-  und Secure Shell (SSH) ermöglicht eine abgesicherte Fernadministration.\footcite[Vgl.][S.~801, S.~971, S.~926~ff., S.~942]{nemeth_unixlinux}  
+  \ac{TLS}/\ac{SSL} schützt Datenströme im Internet, \acp{VPN} verschlüsseln den gesamten Datenverkehr zwischen Standorten, 
+  und \ac{SSH} ermöglicht eine abgesicherte Fernadministration.\footcite[Vgl.][S.~801, S.~971, S.~926~ff., S.~942]{nemeth_unixlinux}  
   \\
   \newline
   \textbf{Benutzer- und Rechteverwaltung}:  
@@ -367,9 +403,9 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   \\
   \newline
   \textbf{Intrusion Detection und Monitoring}:  
-  Intrusion Detection Systeme (IDS) überwachen den Datenverkehr oder Host-Systeme auf verdächtige Aktivitäten. 
-  Intrusion Prevention Systeme (IPS) gehen noch einen Schritt weiter und können erkannte Angriffe automatisch blockieren. 
-  Beispiele sind Snort (Netzwerk-IDS) oder OSSEC (Host-basiertes IDS). 
+  \acp{IDS} überwachen den Datenverkehr oder Host-Systeme auf verdächtige Aktivitäten. 
+  \acp{IPS} gehen noch einen Schritt weiter und können erkannte Angriffe automatisch blockieren. 
+  Beispiele sind Snort (Netzwerk-\ac{IDS}) oder OSSEC (Host-basiertes \ac{IDS}). 
   In Kombination mit einer kontinuierlichen Log-Analyse ermöglichen diese Werkzeuge eine frühzeitige Erkennung von Angriffen.\footcite[Vgl.][S.~918~ff.]{nemeth_unixlinux} 
   \\ 
   \newline
@@ -383,7 +419,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   Technische Maßnahmen reichen allein nicht aus. 
   Ein umfassendes Sicherheitskonzept verlangt nach klar definierten Richtlinien, kontinuierlichen Audits und einem hohen Maß an Wachsamkeit. 
   Administratoren sollten regelmäßig die Wirksamkeit der Maßnahmen prüfen und neue Bedrohungslagen aktiv in die Planung einbeziehen. 
-  So wird Sicherheit zu einem fortlaufenden Prozess und nicht zu einem einmaligen Projekt.\footcite[Vgl.][S.~901, S.~905]{nemeth_unixlinux}  
+  So wird Sicherheit zu einem fortlaufenden Prozess und nicht zu einem einmaligen Projekt.\footcite[Vgl.][S.~901, S.~905]{nemeth_unixlinux}   
 
 \section{Netzwerktechnik für Medienserver}
 Netzwerke bilden die Grundlage für den Zugriff auf Medienserver. 
@@ -391,17 +427,17 @@ Dieser Abschnitt erläutert zentrale Konzepte, Protokolle sowie Leistungs- und S
 die für den effizienten Betrieb relevant sind.  
 
   \subsection{Grundlagen der Netzwerktechnik}  
-  Die Kommunikation in Netzwerken basiert auf dem \emph{TCP/IP}-Protokollstapel. 
-  \emph{IP} (\emph{Internet Protocol}) ist für die Adressierung und Weiterleitung von Paketen zuständig 
+  Die Kommunikation in Netzwerken basiert auf dem \ac{TCPIP}-Protokollstapel. 
+  \ac{IP} ist für die Adressierung und Weiterleitung von Paketen zuständig 
   und bildet die Grundlage für die Kommunikation in paketvermittelten Netzwerken.\footcite[Vgl.][S.~438]{tanenbaum_computernetworks}  
-  Darüber hinaus sorgen \emph{TCP} (\emph{Transmission Control Protocol}) und \emph{UDP} (\emph{User Datagram Protocol}) 
+  Darüber hinaus sorgen \ac{TCP} und \ac{UDP} 
   auf der Transportschicht für den eigentlichen Datentransport. 
-  TCP stellt eine verbindungsorientierte, zuverlässige Übertragung mit Fehlerkorrektur und Flusskontrolle bereit, 
-  während UDP ein verbindungsloses, leichtgewichtiges Protokoll ist, 
+  \ac{TCP} stellt eine verbindungsorientierte, zuverlässige Übertragung mit Fehlerkorrektur und Flusskontrolle bereit, 
+  während \ac{UDP} ein verbindungsloses, leichtgewichtiges Protokoll ist, 
   das insbesondere für zeitkritische Anwendungen wie Audio- und Videostreaming eingesetzt wird.\footcite[Vgl.][S.~228]{kurose_networking}
  
-  Dienste werden über \emph{Ports} identifiziert, etwa Port~80 für HTTP oder Port~443 für HTTPS.\footcite[Vgl.][S.~554]{tanenbaum_computernetworks}  
-  Für die Namensauflösung sorgt das Domain Name System (DNS), 
+  Dienste werden über \emph{Ports} identifiziert, etwa Port~80 für \ac{HTTP} oder Port~443 für \ac{HTTPS}.\footcite[Vgl.][S.~554]{tanenbaum_computernetworks}  
+  Für die Namensauflösung sorgt das \ac{DNS}, 
   das menschenlesbare Hostnamen in IP-Adressen übersetzt 
   und somit die Grundlage für jede netzwerkbasierte Medienübertragung bildet.\footcite[Vgl.][S.~611~f.]{tanenbaum_computernetworks}  
 
@@ -410,41 +446,41 @@ die für den effizienten Betrieb relevant sind.
   Die wichtigesten werden im Folgenden vorgestellt.  
   \\
   \newline
-  \textbf{HTTP (Hypertext Transfer Protocol):}
-  HTTP ist ein Anwendungsprotokoll auf der Anwendungsschicht und bildet das Herzstück des World Wide Web. 
-  Es wird in einem Client- und einem Server-Programm implementiert, die über den Austausch von HTTP-Nachrichten kommunizieren. 
+  \textbf{\ac{HTTP}:}
+  \ac{HTTP} ist ein Anwendungsprotokoll auf der Anwendungsschicht und bildet das Herzstück des World Wide Web. 
+  Es wird in einem Client- und einem Server-Programm implementiert, die über den Austausch von \ac{HTTP}-Nachrichten kommunizieren. 
   Diese Nachrichten sind nach einem standardisierten Format (RFC 1945, RFC 2616) definiert und regeln die Interaktion zwischen Webbrowser und Webserver.\footcite[Vgl.][S.~126]{kurose_networking} 
-  HTTP ist dabei ein \emph{zustandsloses} Protokoll, was bedeutet, dass der Server keine Informationen über vorherige Anfragen speichert. 
-  Jede Anfrage wird unabhängig behandelt, wodurch HTTP besonders einfach und skalierbar ist.\footcite[Vgl.][S.~128]{kurose_networking}   
+  \ac{HTTP} ist dabei ein \emph{zustandsloses} Protokoll, was bedeutet, dass der Server keine Informationen über vorherige Anfragen speichert. 
+  Jede Anfrage wird unabhängig behandelt, wodurch \ac{HTTP} besonders einfach und skalierbar ist.\footcite[Vgl.][S.~128]{kurose_networking}   
   \\
   \newline
-  \textbf{RTP (Real-Time Transport Protocol):}  
-  RTP transportiert Audio- und Videodaten meist über \emph{UDP (User Datagram Protocol)}. 
+  \textbf{\ac{RTP}:}  
+  \ac{RTP} transportiert Audio- und Videodaten meist über \ac{UDP}. 
   Es ist speziell für Echtzeitanwendungen optimiert und unterstützt Mechanismen zur 
   Synchronisation verschiedener Medienstöme (z.\,B. Audio und Video) 
   sowie zur Kompensation von Jitter, der durch schwankende Paketlaufzeiten entsteht.\footcite[Vgl.][S.~546~ff.]{tanenbaum_computernetworks}   
   \\
   \newline
-  \textbf{RTSP (Real-Time Streaming Protocol):}  
-  RTSP ist ein Steuerungsprotokoll, das Befehle wie \emph{Play}, \emph{Pause} oder \emph{Seek} ermöglicht. 
-  Es wird häufig zusammen mit dem \textbf{RTP (Real-Time Transport Protocol)} verwendet, 
+  \textbf{\ac{RTSP}:}  
+  \ac{RTSP} ist ein Steuerungsprotokoll, das Befehle wie \emph{Play}, \emph{Pause} oder \emph{Seek} ermöglicht. 
+  Es wird häufig zusammen mit dem \ac{RTP} verwendet, 
   das die eigentliche Datenübertragung übernimmt.\footcite[Vgl.][S.~638~f.]{kurose_networking}  
   \\
   \newline
-  \textbf{HLS (HTTP Live Streaming):}
-  HLS ist ein von Apple entwickeltes Streaming-Protokoll, das in \emph{RFC 8216} standardisiert ist.
-  Es basiert auf der Idee, Medieninhalte in kleine Segmente (Chunks) zu zerlegen, die sequenziell über HTTP übertragen werden.
+  \textbf{\ac{HLS}:}
+  \ac{HLS} ist ein von Apple entwickeltes Streaming-Protokoll, das in \emph{RFC 8216} standardisiert ist.
+  Es basiert auf der Idee, Medieninhalte in kleine Segmente (Chunks) zu zerlegen, die sequenziell über \ac{HTTP} übertragen werden.
   Ein Manifest (Playlist) beschreibt die Abfolge dieser Segmente, wodurch auch unterschiedliche Qualitätsstufen bereitgestellt werden können.
   Dies ermöglicht \emph{adaptives Streaming}, bei dem der Client dynamisch zwischen verschiedenen Bitraten und Auflösungen wechseln kann,
   um Schwankungen in der Netzwerkbandbreite auszugleichen.\footcite[Vgl.][siehe HTTP Live Streaming Overview]{rfc8216}
-  Dank der Nutzung von HTTP ist HLS besonders kompatibel mit bestehenden Infrastrukturen wie Caches und Content Delivery Networks (CDNs).\footcite[Vgl.][]{stockhammer2011dash}
+  Dank der Nutzung von \ac{HTTP} ist \ac{HLS} besonders kompatibel mit bestehenden Infrastrukturen wie Caches und \acp{CDN}.\footcite[Vgl.][]{stockhammer2011dash}
   \\
   \newline
-  \textbf{MPEG-DASH (Dynamic Adaptive Streaming over HTTP):}
-  MPEG-DASH ist ein von der MPEG-Gruppe entwickelter Standard für adaptives Multimedia-Streaming über HTTP.
-  Das Grundprinzip besteht darin, dass Multimedia-Inhalte in kleine Segmente zerlegt werden, die über herkömmliche HTTP-Server bereitgestellt werden.
+  \textbf{\ac{MPEG-DASH}:}
+  \ac{MPEG-DASH} ist ein von der MPEG-Gruppe entwickelter Standard für adaptives Multimedia-Streaming über \ac{HTTP}.
+  Das Grundprinzip besteht darin, dass Multimedia-Inhalte in kleine Segmente zerlegt werden, die über herkömmliche \ac{HTTP}-Server bereitgestellt werden.
   Der Client entscheidet dynamisch, welche Segmente er anfordert, um sich an schwankende Netzwerkbedingungen und Geräteeigenschaften anzupassen.\footcite[Vgl.][S.~1~ f.]{stockhammer2011dash}
-  Dadurch kombiniert DASH die weite Verbreitung von HTTP-Infrastrukturen mit der Möglichkeit eines qualitativ stabilen Medienkonsums auch unter variablen Bandbreitenbedingungen.
+  Dadurch kombiniert \ac{MPEG-DASH} die weite Verbreitung von \ac{HTTP}-Infrastrukturen mit der Möglichkeit eines qualitativ stabilen Medienkonsums auch unter variablen Bandbreitenbedingungen.
     
   \subsection{Leistungsanforderungen}  
   Streaming-Anwendungen stellen hohe Anforderungen an die Netzwerkinfrastruktur. 
@@ -455,9 +491,9 @@ die für den effizienten Betrieb relevant sind.
   Typische Verfahren sind Pre-Buffering und adaptive Puffergrößen.\footcite[Vgl.][S.~697~ff.]{tanenbaum_computernetworks}  
 
   \subsection{Qualität und Sicherheit}  
-  Die Sicherstellung einer konstanten Übertragungsqualität erfordert \textbf{Quality of Service (QoS)}-Mechanismen.  
-  QoS bezeichnet Techniken, die Netzwerkressourcen gezielt steuern, um die Anforderungen von Multimedia-Anwendungen zu erfüllen.\footcite[Vgl.][S.~9~ff.]{steinmetz_multimedia}  
-  Im Folgenden werden einige gängige QoS-Mechanismen vorgestellt: 
+  Die Sicherstellung einer konstanten Übertragungsqualität erfordert \ac{QoS}-Mechanismen.  
+  \ac{QoS} bezeichnet Techniken, die Netzwerkressourcen gezielt steuern, um die Anforderungen von Multimedia-Anwendungen zu erfüllen.\footcite[Vgl.][S.~9~ff.]{steinmetz_multimedia}  
+  Im Folgenden werden einige gängige \ac{QoS}-Mechanismen vorgestellt: 
   \\
   \newline
   \textbf{Traffic Shaping:}  
@@ -482,7 +518,7 @@ die für den effizienten Betrieb relevant sind.
   \\
   \newline
   \textbf{Error Control:}  
-  Fehlererkennungs- und Fehlerkorrekturverfahren (z.\,B. FEC - Forward Error Correction) sind essenziell, 
+  Fehlererkennungs- und Fehlerkorrekturverfahren (z.\,B. \ac{FEC}) sind essenziell, 
   um trotz Paketverlusten eine akzeptable Qualität sicherzustellen.  
   Dabei können Redundanzdaten eingesetzt werden, die eine Rekonstruktion verlorener Informationen ermöglichen.\footcite[Vgl.][S.~68]{steinmetz_multimedia}  
   \\
