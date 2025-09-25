@@ -666,51 +666,69 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
 
 \subsection{Zugriff und Rechteverwaltung}  
 Im Bibliothekskontext bestehen oft restriktive Anforderungen an den Zugriff auf Medien:
-
-\begin{itemize}
-  \item \textbf{Eingeschränkter Zugang:} Der Zugang zu digitalisierten Medien erfolgt häufig nur innerhalb des Hochschulnetzes oder über VPN-Verbindungen, um urheberrechtliche Beschränkungen und Lizenzvereinbarungen zu wahren.  
-  \item \textbf{Authentifizierung und Autorisierung:} Bibliotheken nutzen bestehende Identity-Management-Systeme (z. B. Shibboleth, LDAP, OpenID Connect), um sicherzustellen, dass nur berechtigte Nutzer (Studenten, Mitarbeitende) Zugriff haben.  
-  \item \textbf{Digitale Rechteverwaltung (DRM) / Lizenzsteuerung:} In manchen Fällen sind Inhalte lizenzpflichtig und müssen mit DRM-Technologien geschützt werden oder der Zugriff auf bestimmte Zeitfenster begrenzt sein.  
-  \item \textbf{Auditierung und Protokollierung:} Jede Nutzung (z. B. Streamabruf, Download) sollte protokolliert werden, um Vertragsbedingungen zu überwachen, Missbrauch zu erkennen und Nutzungsstatistiken zu führen.  
-\end{itemize}
-
-Diese Aspekte machen Bibliotheks-Medienserver anspruchsvoller als einfache Streaming-Installationen für private Nutzer.
+\\
+\newline
+\textbf{Eingeschränkter Zugang:} Der Zugang zu digitalisierten Medien erfolgt häufig nur innerhalb des Hochschulnetzes, 
+um urheberrechtliche Beschränkungen und Lizenzvereinbarungen zu wahren.  
+\\
+\newline
+\textbf{Authentifizierung und Autorisierung:} Bibliotheken nutzen bestehende Identity-Management-Systeme (z. B. Shibboleth, LDAP, OpenID Connect), 
+um sicherzustellen, dass nur berechtigte Nutzer (Studenten, Mitarbeitende) Zugriff haben.  
+\\
+\newline
+\textbf{Digitale Rechteverwaltung (DRM) / Lizenzsteuerung:} In manchen Fällen sind Inhalte lizenzpflichtig und müssen mit DRM-Technologien geschützt werden 
+oder der Zugriff auf bestimmte Zeitfenster begrenzt sein.  
+\\
+\newline
+\textbf{Auditierung und Protokollierung:} Jede Nutzung (z. B. Streamabruf, Download) sollte protokolliert werden, 
+um Vertragsbedingungen zu überwachen, Missbrauch zu erkennen und Nutzungsstatistiken zu führen.  
 
 \subsection{Nachhaltigkeit und Langzeitarchivierung}  
 Die Sicherung digitaler Medien über Jahrzehnte hinweg erfordert robuste Strategien:
-
-\begin{itemize}
-  \item \textbf{Redundanz und Verteilung (3-2-1 Regel):} Mindestens drei Kopien, auf zwei unterschiedlichen Speichermedien und eine Kopie an einem externen Standort. \footcite[Vgl.][„3-2-1 Rule“]{turn0search7}  
-  \item \textbf{Migration und Formatpflege:} Dateiformate und Speichermedien verändern sich. Archivbestände müssen regelmäßig überprüft und falls nötig in aktuelle, verlustfreie Formate migriert werden.  
-  \item \textbf{Integritätsprüfung und Fixity-Checks:} Regelmäßige Checksummenprüfungen und Monitoring, um bitweise Konsistenz und Unversehrtheit der Daten sicherzustellen.  
-  \item \textbf{Cloud- vs. On-Premises-Lösungen:} Bibliotheken wägen zwischen eigener Infrastruktur und Cloud-Diensten ab. Cloud erlaubt Skalierbarkeit und Redundanz, bringt aber Aspekte wie Datenhoheit, Kosten und Anbieterabhängigkeit mit sich. \footcite[Vgl.][„Cloud Services in Digital Preservation“]{turn0search1}\footcite[Vgl.][S. ?]{turn0search9}  
-  \item \textbf{Netzwerk der Kooperationen:} Verbünde, Konsortien und Netzwerke (z. B. MetaArchive Cooperative) ermöglichen verteilte Replikation, Format-Migration im Verbund und Schutz gegenüber Singularitätsrisiken. \footcite[Vgl.][]{turn0search21}  
-\end{itemize}
-
-\subsection{Lokale vs.\ Cloud-basierte Lösungen}  
-Beim Vergleich zwischen lokalen und cloudbasierten Medienservern im Bibliothekskontext ergeben sich folgende Vor- und Nachteile:
-
-\textbf{Lokale Lösungen}  
-
-\begin{itemize}
-  \item volle Kontrolle über Hardware, Daten und Sicherheit  
-  \item keine laufenden Speicher- oder Transferkosten an Drittanbieter  
-  \item abhängig von eigener Infrastruktur und personellen Ressourcen  
-  \item Risiko von Hardwarealterung, Ausfällen oder Standortschäden  
-\end{itemize}
-
-\textbf{Cloud-basierte Ansätze}  
-
-\begin{itemize}
-  \item hohe Skalierbarkeit, Redundanz und geografische Verteilung  
-  \item Backups und Disaster Recovery als Dienstleistung  
-  \item laufende Kosten, mögliche Datenübertragungs- und Auslagerungskosten  
-  \item Datenschutz- und Rechtsaspekte (Datenhoheit, Standort der Server) \footcite[Vgl.][„Digital Preservation and the Cloud“]{turn0search3}  
-  \item Abhängigkeit vom Anbieter, potenzieller Lock-in  
-\end{itemize}
-
-\textbf{Besonderer bibliothekarischer Kontext:}  
-Für Bibliotheken kann Hybridbetrieb (Teile lokal, Teile in der Cloud) sinnvoll sein: z. B. Masterarchive lokal, weniger kritische Katalogversionen in der Cloud. Ebenso kann ein gestaffelter Zugriff sinnvoll sein: interne Zugriffe lokal, externe Benutzer über Cloud-Endpunkte.
+\\
+\newline
+\textbf{Redundanz und Verteilung (3-2-1 Regel):}  
+Mindestens drei Kopien, auf zwei unterschiedlichen Speichermedien und eine Kopie an einem externen Standort. 
+Die Regel reduziert das Risiko von Datenverlust erheblich, da sie nicht nur Hardwaredefekte abdeckt, sondern auch Gefahren wie Softwarefehler, versehentliches Löschen oder Schadsoftware (z.\,B. Ransomware).
+Durch die räumliche Trennung einer Kopie („offsite“) ist zudem gewährleistet, dass selbst Katastrophenfälle wie Brand, Überschwemmung oder Diebstahl nicht alle Daten gleichzeitig gefährden.\footcite[Vgl.][siehe Backupstrategien]{wikipedia_datensicherung}
+In Bibliotheks- und Archivkontexten wird diese Strategie häufig als Mindeststandard angesehen, da sie eine langfristige Verfügbarkeit und Integrität der Bestände sicherstellt.  
+\\
+\newline
+\textbf{Migration und Formatpflege:}  
+Dateiformate und Speichermedien verändern sich im Laufe der Zeit, wodurch die Gefahr entsteht, dass Daten in veralteten oder nicht mehr unterstützten Umgebungen unzugänglich werden.  
+Um die langfristige Nutzbarkeit zu gewährleisten, müssen Archivbestände daher regelmäßig überprüft und gegebenenfalls in aktuelle, verlustfreie Formate migriert werden.  
+Dieser Prozess umfasst sowohl die technische Konvertierung (z.\,B. von proprietären in offene Formate) als auch die Übertragung auf moderne Speichersysteme.  
+Die \emph{Library of Congress} weist in ihren Leitlinien ausdrücklich darauf hin, dass Formatmigration und Medienaktualisierung essenzielle Strategien der digitalen Langzeitarchivierung sind.\footcite[Vgl.][siehe Sustainability Factors]{loc_formats}  
+\\
+\newline
+\textbf{Integritätsprüfung und Fixity-Checks:}  
+Digitale Bestände können im Laufe der Zeit durch Speicherfehler, Hardwaredefekte oder Übertragungsprobleme unbemerkt beschädigt werden.  
+Um die Unversehrtheit der Daten zu gewährleisten, werden regelmäßig \emph{Fixity-Checks} durchgeführt.  
+Dabei werden Prüfsummen (z.\,B. MD5, SHA-256) berechnet und mit früher gespeicherten Werten verglichen, um bitweise Veränderungen zu erkennen.  
+Ein kontinuierliches Monitoring dieser Integrität ist eine zentrale Maßnahme der digitalen Langzeitarchivierung 
+und wird in internationalen Empfehlungen wie den Richtlinien der NDSA (\emph{National Digital Stewardship Alliance}) ausdrücklich empfohlen.\footcite[Vgl.][siehe Levels of Digital Preservation V2.0 Matrix und Curatorial Guidance]{ndsa_fixity}
+\\
+\newline
+\textbf{Cloud- vs. On-Premises-Lösungen:}  
+Bibliotheken stehen bei der Bereitstellung von Medienservern vor der Wahl zwischen einer lokalen Infrastruktur (\emph{On-Premises}) und der Nutzung von Cloud-Diensten.  
+Cloud-Lösungen bieten Vorteile wie einfache Skalierbarkeit, hohe Redundanz und oftmals geringere Einstiegskosten, gehen jedoch mit Risiken wie eingeschränkter Datenhoheit, fortlaufenden Betriebskosten und einer Abhängigkeit vom jeweiligen Anbieter einher.\footcite[Vgl.][S.~1]{paletta2015cloud}  
+On-Premises-Installationen ermöglichen dagegen die vollständige Kontrolle über Hardware, Software und Daten, erfordern jedoch Investitionen in Infrastruktur, Fachpersonal und Wartung.  
+Die Entscheidung hängt daher maßgeblich von den institutionellen Rahmenbedingungen, rechtlichen Vorgaben und langfristigen Strategien ab.
+\\
+\newline
+\textbf{Netzwerk der Kooperationen:}  
+Bibliotheken und Gedächtnisinstitutionen schließen sich zunehmend zu Verbünden und Konsortien zusammen, 
+um die Herausforderungen der digitalen Langzeitarchivierung und digitalen Dienste gemeinsam zu bewältigen.  
+Ein Beispiel ist \emph{Goportis}, der Verbund der drei zentralen Fachbibliotheken in Deutschland 
+(Technische Informationsbibliothek, ZB MED - Informationszentrum Lebenswissenschaften und ZBW - Leibniz-Informationszentrum Wirtschaft). 
+Goportis koordiniert unter anderem Strategien zur digitalen Langzeitarchivierung, 
+bietet gemeinsame Infrastrukturen und setzt auf arbeitsteilige Services im Bereich Forschung und Datenmanagement.\footcite[Vgl.][]{wikipedia_goportis}  
+Ein weiteres Beispiel ist der \emph{Südwestdeutsche Bibliotheksverbund (SWB)}, dem zahlreiche wissenschaftliche Bibliotheken in Baden-Württemberg 
+und angrenzenden Regionen angehören. Unter anderem ist die Bibliothek der HfM hier Mitglied. 
+Der SWB betreibt eine zentrale Datenbank für Metadaten und digitale Ressourcen und stellt seinen Mitgliedsbibliotheken Werkzeuge zur Verfügung, 
+um Ressourcen zu erschließen, zu archivieren und kooperativ zugänglich zu machen.\footcite[Vgl.][]{swb}  
+Solche Netzwerke bieten organisatorische Vorteile wie abgestimmte Policies, gemeinsame Workflows zur Metadatenpflege 
+und Format-Migration sowie eine geteilte Infrastruktur für Monitoring, Austausch und Weiterentwicklung.
 
 
 % ------ Praktische Umsetzung ------
