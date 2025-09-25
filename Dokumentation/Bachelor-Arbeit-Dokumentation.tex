@@ -47,8 +47,8 @@
 \cleardoublepage
 \listoffigures
 \addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
-\listoftables
-\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+% \listoftables
+% \addcontentsline{toc}{chapter}{Tabellenverzeichnis}
 
 % ------ Abkürzungsverzeichnis ------
 \chapter*{Abkürzungsverzeichnis}
@@ -123,46 +123,37 @@
 \setcounter{section}{0}
 \renewcommand\thesection{\arabic{section}}
 
-In der Vergangenheit gab es bereits Projekte einen Medienserver für die Bibliothek der Hochschule für Musik Karlsruhe aufzusetzen. 
-Diese Projekte wurden jedoch nie abgeschlossen oder die Systeme wurden nicht dauerhaft betrieben.
-Es soll einen ersten Medienserver gegeben haben, jedoch nur mit limitiererter Funktionalität, 
-sodass Frederik Schroff im Jahr 2015 als Masterarbeit einen verbesserten Medienserver inklusive Datenbank aufsetzte.
-Dieser ist allerdings seit einigen Jahren nicht mehr in Betrieb.
-Während meiner Arbeit als Tutor in der Bibliothek, war meine offizielle Aufgabe stehts nur CDs einzulesen, zu benennen und abzuspeichern.
-Diese waren anschließend aber nicht abrufbar, sodass ich anfing die Arbeit zu hinterfragen.
-Nachdem ich als Praxisarbeit bereits den Digitalisierungsprozess der CDs durch die Erneuerung des dafür verwendeten Skripts verbesserte, 
-möchte ich nun den Medienserver neu aufsetzen, damit die angesammelten Daten auch genutzt werden können.
+In der Vergangenheit gab es bereits mehrere Projekte, die darauf abzielten, einen Medienserver für die Bibliothek der Hochschule für Musik Karlsruhe aufzubauen. 
+Ein erster Server wurde eingerichtet, verfügte jedoch nur über eingeschränkte Funktionalität. 
+Deshalb entwickelte Frederik Schroff im Jahr 2015 im Rahmen seiner Masterarbeit eine verbesserte Version mit Datenbankanbindung, 
+die jedoch seit einigen Jahren nicht mehr in Betrieb ist.  
 
-Ziel ist es den Server so zu gestalten, dass er einfach zu betreiben ist und über eine benutzerfreundliche Oberfläche verfügt.
-Es soll ermöglicht werden, die digitalisierten CDs damit unter Beachtung rechtlicher Rahmenbedingungen zu streamen.
+Während meiner Tätigkeit als Tutor in der Bibliothek bestand meine offizielle Aufgabe zunächst darin, CDs einzulesen, zu benennen und abzuspeichern. 
+Da diese Dateien jedoch anschließend nicht abrufbar waren, begann ich, den Arbeitsprozess zu hinterfragen. 
+Im Rahmen einer Praxisarbeit verbesserte ich den Digitalisierungsprozess bereits durch die Erneuerung des verwendeten Skripts. 
+Nun soll ein neuer Medienserver implementiert werden, damit die bereits digitalisierten Daten auch tatsächlich genutzt werden können.  
 
-\section{Zur Dokumentation}
-Die Dokumentation Gliedert sich in zwei Teile, wobei der erste Teil die technischen Hintergründe beschreibt
-und der zweite Teil auf die praktische Umsetzung in der Bibliothek eingeht.
-Damit dient sie nicht nur dazu einen Einstieg in den Themenbereich Netzwerk und Serveradminastration zu geben, 
-sondert bildet auch die Anleitung zur Nutzung und Wartung des Medienservers in der Bibliothek ab.
+Ziel ist es, den Server so zu gestalten, dass er leicht zu administrieren ist, über eine benutzerfreundliche Oberfläche verfügt 
+und die Möglichkeit bietet, die digitalisierten CDs unter Berücksichtigung der rechtlichen Rahmenbedingungen zu streamen.  
 
-Im ersten Teil werden grundlegende Begriffe erläutert, 
-die Entwicklung von Servern und Medienservern nachgezeichnet 
-sowie deren Anwendungsbereiche dargestellt. 
-Darauf aufbauend werden technische Aspekte der Serverarchitektur, 
-der Administration und der Netzwerktechnik vorgestellt, 
-bevor auf spezifische Eigenschaften von Medienservern eingegangen wird. 
-Abschließend wird die besondere Rolle von Medienservern im 
-Bibliothekskontext betrachtet. 
+\section{Zur Dokumentation}  
+Die Dokumentation gliedert sich in zwei Teile: Der erste Teil behandelt die technischen Hintergründe, 
+während der zweite Teil die praktische Umsetzung in der Bibliothek beschreibt. 
+Damit soll sie einerseits einen fundierten Einstieg in die Themenbereiche Netzwerk und Serveradministration bieten 
+und andererseits als Anleitung zur Nutzung und Wartung des Medienservers dienen.  
+
+Im ersten Teil werden grundlegende Begriffe erläutert, die Entwicklung von Servern und Medienservern nachgezeichnet 
+sowie deren Anwendungsbereiche dargestellt. Darauf aufbauend werden technische Aspekte der Serverarchitektur, 
+der Administration und der Netzwerktechnik vorgestellt, bevor auf spezifische Eigenschaften von Medienservern eingegangen wird. 
+Abschließend wird die besondere Rolle von Medienservern im Bibliothekskontext betrachtet.  
 
 Der zweite Teil beschreibt die praktische Umsetzung des Projekts. 
-Hier wird zunächst die Zielsetzung definiert und die notwendigen 
-Voraussetzungen hinsichtlich Hard- und Software sowie des Netzwerks erläutert. 
-Es folgt die detaillierte Installation und Konfiguration der 
-benötigten Komponenten, die Integration in die bestehende IT-Infrastruktur 
-sowie die Einrichtung der Benutzerverwaltung und Zugriffsrechte. 
-Darüber hinaus werden Testverfahren und Strategien zur 
-Fehlerbehebung dokumentiert. 
+Dazu zählen die Definition der Zielsetzung, die Darstellung der Voraussetzungen hinsichtlich Hard- und Software sowie des Netzwerks, 
+die detaillierte Installation und Konfiguration der benötigten Komponenten, 
+die Integration in die bestehende IT-Infrastruktur sowie die Einrichtung der Benutzerverwaltung und Zugriffsrechte. 
+Darüber hinaus werden Testverfahren und Strategien zur Fehlerbehebung dokumentiert.  
 
-Den Abschluss der Arbeit bilden ein Fazit mit einer 
-kritischen Reflexion des Projekts sowie ein Ausblick 
-auf mögliche Weiterentwicklungen.
+Den Abschluss der Arbeit bilden ein Fazit mit einer kritischen Reflexion des Projekts sowie ein Ausblick auf mögliche Weiterentwicklungen.
 
 % ------ Theoretische Grundlagen ------
 \chapter*{Theoretische Grundlagen}
@@ -469,7 +460,7 @@ die für den effizienten Betrieb relevant sind.
   Die wichtigesten werden im Folgenden vorgestellt.  
   \\
   \newline
-  \textbf{\ac{HTTP}:}
+  \textbf{HTTP:}
   \ac{HTTP} ist ein Anwendungsprotokoll auf der Anwendungsschicht und bildet das Herzstück des World Wide Web. 
   Es wird in einem Client- und einem Server-Programm implementiert, die über den Austausch von \ac{HTTP}-Nachrichten kommunizieren. 
   Diese Nachrichten sind nach einem standardisierten Format (RFC 1945, RFC 2616) definiert und regeln die Interaktion zwischen Webbrowser und Webserver.\footcite[Vgl.][S.~126]{kurose_networking} 
@@ -477,20 +468,20 @@ die für den effizienten Betrieb relevant sind.
   Jede Anfrage wird unabhängig behandelt, wodurch \ac{HTTP} besonders einfach und skalierbar ist.\footcite[Vgl.][S.~128]{kurose_networking}   
   \\
   \newline
-  \textbf{\ac{RTP}:}  
+  \textbf{RTP:}  
   \ac{RTP} transportiert Audio- und Videodaten meist über \ac{UDP}. 
   Es ist speziell für Echtzeitanwendungen optimiert und unterstützt Mechanismen zur 
   Synchronisation verschiedener Medienstöme (z.\,B. Audio und Video) 
   sowie zur Kompensation von Jitter, der durch schwankende Paketlaufzeiten entsteht.\footcite[Vgl.][S.~546~ff.]{tanenbaum_computernetworks}   
   \\
   \newline
-  \textbf{\ac{RTSP}:}  
+  \textbf{RTSP:}  
   \ac{RTSP} ist ein Steuerungsprotokoll, das Befehle wie \emph{Play}, \emph{Pause} oder \emph{Seek} ermöglicht. 
   Es wird häufig zusammen mit dem \ac{RTP} verwendet, 
   das die eigentliche Datenübertragung übernimmt.\footcite[Vgl.][S.~638~f.]{kurose_networking}  
   \\
   \newline
-  \textbf{\ac{HLS}:}
+  \textbf{HLS:}
   \ac{HLS} ist ein von Apple entwickeltes Streaming-Protokoll, das in \emph{RFC 8216} standardisiert ist.
   Es basiert auf der Idee, Medieninhalte in kleine Segmente (Chunks) zu zerlegen, die sequenziell über \ac{HTTP} übertragen werden.
   Ein Manifest (Playlist) beschreibt die Abfolge dieser Segmente, wodurch auch unterschiedliche Qualitätsstufen bereitgestellt werden können.
@@ -499,7 +490,7 @@ die für den effizienten Betrieb relevant sind.
   Dank der Nutzung von \ac{HTTP} ist \ac{HLS} besonders kompatibel mit bestehenden Infrastrukturen wie Caches und \acp{CDN}.\footcite[Vgl.][]{stockhammer2011dash}
   \\
   \newline
-  \textbf{\ac{MPEG-DASH}:}
+  \textbf{MPEG-DASH:}
   \ac{MPEG-DASH} ist ein von der MPEG-Gruppe entwickelter Standard für adaptives Multimedia-Streaming über \ac{HTTP}.
   Das Grundprinzip besteht darin, dass Multimedia-Inhalte in kleine Segmente zerlegt werden, die über herkömmliche \ac{HTTP}-Server bereitgestellt werden.
   Der Client entscheidet dynamisch, welche Segmente er anfordert, um sich an schwankende Netzwerkbedingungen und Geräteeigenschaften anzupassen.\footcite[Vgl.][S.~1~ f.]{stockhammer2011dash}
@@ -1105,84 +1096,8 @@ tail -f /var/log/nginx/error.log
 \section{Ausblick}
 % Ausblick folgt ...}
 
-% ------ Notizen (am Ende entfernen!) ------
-\section{Notizen}
 
-\begin{enumerate}
-  \item Server-Setup
-    \begin{itemize}
-      \item Rechner mit Ubuntu (24.04.3 LTS, da längerer Support) als Betriebssystem aufsetzen.
-        \begin{itemize}
-          \item Download von \url{https://ubuntu.com/download/server} auf USB-Stick
-          \item Stick einstecken, Rechner booten und Installation starten
-            \begin{itemize}
-              \item dafür beim Anschalten des Rechners \texttt{Shift} drücken
-              \item darauf achten, dass der Rechner in Zukunft nicht über USB bootet
-              \item Rechner per LAN-Kabel mit dem Netzwerk verbinden
-            \end{itemize}
-        \end{itemize}
-
-      \item Docker installieren
-        \begin{itemize}
-          \item Quickinstall:
-          \begin{minted}[linenos]{bash}
-sudo apt update
-sudo apt install docker.io
-sudo systemctl start docker
-sudo systemctl enable docker
-          \end{minted}
-
-          \item Von Docker-Webseite (\url{https://docs.docker.com/engine/install/ubuntu/}):
-          \begin{minted}[breaklines, linenos]{bash}
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-# Add the repository to Apt sources:
-echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-$(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-          \end{minted}
-
-          \item Test mit:
-          \begin{minted}[linenos]{bash}
-sudo docker run hello-world
-          \end{minted}
-        \end{itemize}
-    \end{itemize}
-
-  \item Auswahl und Installation der Medienserver-Software
-    \begin{itemize}
-      \item Hier kommen die Softwareoptionen rein
-      \item Installationsschritte …
-    \end{itemize}
-
-  \item Integration mit der bestehenden IT-Infrastruktur
-    \begin{itemize}
-      \item Netzwerk-Anbindung
-      \item Datenbanken anbinden …
-    \end{itemize}
-
-  \item Benutzerverwaltung und Zugriffsrechte
-    \begin{itemize}
-      \item Nutzergruppen definieren
-      \item Rechteverwaltung testen …
-    \end{itemize}
-
-  \item Testen und Fehlerbehebung
-    \begin{itemize}
-      \item Funktionstests
-      \item Lasttests
-      \item Bugfixing dokumentieren …
-    \end{itemize}
-\end{enumerate}
-\newpage
-
+\cleardoublepage
 \chapter*{Literaturverzeichnis}
 \addcontentsline{toc}{chapter}{Literaturverzeichnis}
 \printbibliography[heading=none]
