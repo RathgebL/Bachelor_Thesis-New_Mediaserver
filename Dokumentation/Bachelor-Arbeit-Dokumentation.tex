@@ -818,7 +818,7 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   Ist dies nicht der Fall, können nun folgende Schritte durchgeführt werden:  
 
   \begin{enumerate}
-    \item{Installation:}
+    \item Installation:
     
     \begin{minted}[breaklines, linenos]{bash}
 # System aktualisieren
@@ -834,7 +834,7 @@ sudo systemctl enable --now ssh
 sudo systemctl status ssh
     \end{minted}  
 
-    \item{Loggin:}
+    \item Loggin:
     der Zugriff erfolgt dann von einem Client aus über:  
     
     \begin{minted}[breaklines, linenos]{bash}
@@ -848,7 +848,7 @@ ssh benutzername@server-ip
 exit
     \end{minted}  
 
-    \item{SSH-Schlüssel statt Passwort nutzen:}
+    \item SSH-Schlüssel statt Passwort nutzen:
     die offizielle Dokumentation befindet sich unter \url{https://www.openssh.com/}.  
     Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.
     Dafür sind folgende Schritte notwendig:
@@ -871,7 +871,7 @@ PubkeyAuthentication yes
 sudo systemctl restart ssh
     \end{minted}
 
-  \item{Wichtige Befehle:} 
+  \item Wichtige Befehle:
   für die Nutzung von SSH lohnt es sich folgende Befehle zu kennen:   
   \begin{minted}[breaklines, linenos]{bash}
 # Service steuern
@@ -894,21 +894,6 @@ scp benutzername@server-ip:/pfad/auf/server/datei /lokaler/pfad/
 rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
   \end{minted}  
 \end{enumerate}
-
-  \subsection{UFW}  
-  Die \emph{Uncomplicated Firewall (UFW)} dient zur einfachen Verwaltung der Firewall-Regeln.  
-  UFW ist in den Ubuntu-Repositories enthalten und kann wie folgt installiert und aktiviert werden:  
-  \begin{verbatim}
-  sudo apt install ufw
-  sudo ufw enable
-  \end{verbatim}  
-  Anschließend lassen sich Regeln hinzufügen, z.\,B. um SSH und HTTPS freizuschalten:  
-  \begin{verbatim}
-  sudo ufw allow 22/tcp
-  sudo ufw allow 443/tcp
-  \end{verbatim}  
-  Alle weiteren Ports bleiben standardmäßig blockiert.  
-  Offizielle Informationen sind in der Ubuntu-Dokumentation verfügbar: \url{https://help.ubuntu.com/community/UFW}.
 
   \subsection{Docker}  
   Docker ist eine Container-Plattform, die Anwendungen in isolierten Umgebungen ausführt. 
@@ -988,7 +973,7 @@ sudo docker compose down
   Folgende Schritte sind nun auf Ubuntu notwendig, um von der Installation bis zur Nutzung zu gelangen:
 
   \begin{enumerate}
-    \item{Installation:}
+    \item Installation:
     \begin{minted}[breaklines, linenos]{bash}
 # Paketliste aktualisieren
 sudo apt update
@@ -1006,7 +991,7 @@ sudo systemctl status nginx
 curl http://localhost
     \end{minted} 
 
-    \item{Konfiguration:}
+    \item Konfiguration:
     Die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
     die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
     Für den Medienserver empfiehlt sich eine Konfiguration wie im folgenden Beispiel (als txt-Datei auch im     GitHub-Repository verfügbar):  
@@ -1039,7 +1024,7 @@ server {
 }
     \end{minted}  
 
-    \item{Aktivierung:}
+    \item Aktivierung:
     Die Datei wird in \texttt{/etc/nginx/sites-available/mediaserver} abgelegt 
     und über einen Symlink aktiviert:  
     \begin{minted}[breaklines, linenos]{bash}
@@ -1049,7 +1034,7 @@ sudo nginx -t
 sudo systemctl reload nginx
     \end{minted}  
 
-    \item{Nutzung:}
+    \item Nutzung:
     Nach erfolgreicher Installation und Konfiguration, sind folgen Befehle nützlich zur Verwaltung von nginx:
     \begin{minted}[breaklines, linenos]{bash}
 # Service steuern
@@ -1083,7 +1068,95 @@ tail -f /var/log/nginx/error.log
       volumes:
         - "./data:/data"
         - "./music:/music:ro"
-  \end{verbatim}   
+  \end{verbatim}
+  
+  \subsection{UFW}
+  Zu guter letzt brauchen wir noch eine Firewall. 
+  Die \emph{Uncomplicated Firewall} (UFW) ist eine benutzerfreundliche Schnittstelle und damit optimal für dieses Projekt. 
+  Durch ihre einfache Syntax ermöglicht sie eine unkomplizierte und zugleich sichere Verwaltung von Netzwerkzugriffen. 
+  Folgende Ports werden für den Betrieb des Medienservers benötigt:
+   
+  \begin{itemize}
+    \item \textbf{SSH (22/tcp)} für die sichere Fernwartung,
+    \item \textbf{4533/tcp} für den spezifischen Mediendienst,
+    \item \textbf{HTTP (80/tcp)} für den Webzugriff,
+    \item \textbf{mDNS (5353/udp)} für die automatische Erkennung im lokalen Netzwerk.
+  \end{itemize}
+
+  Alle anderen eingehenden Verbindungen sollen standardmäßig blockiert werden. 
+  Dadurch ist der Server vor ungewollten Zugriffen geschützt, ohne die für den Betrieb notwendigen Dienste einzuschränken. 
+  Nun folgt die Installation und Grundkonfiguration von UFW in wenigen Schritten:
+
+  \begin{enumerate}
+    \item Installation:
+    \begin{minted}[breaklines, linenos]{bash}
+sudo apt update
+sudo apt install ufw
+sudo ufw enable
+    \end{minted}
+
+    \item Konfiguration:
+    \begin{minted}[breaklines, linenos]{bash}
+# Standardregeln setzen
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Benötigte Ports freigeben
+sudo ufw allow 22/tcp
+sudo ufw allow 4533/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 5353/udp
+
+# Firewall aktivieren
+sudo ufw enable
+
+# Aktuellen Status prüfen
+sudo ufw status verbose
+    \end{minted}
+
+    \item Nutzung:
+    nun werden noch alle wichtigen Befle zur Nutzung von UFW vorgestellt:
+    \begin{minted}[breaklines, linenos]{bash}
+  # Status prüfen
+sudo ufw status
+sudo ufw status verbose     # mehr Details
+sudo ufw status numbered    # zeigt Regeln mit Nummern (praktisch zum Löschen)
+
+# Firewall aktivieren/deaktivieren
+sudo ufw enable             # Firewall einschalten
+sudo ufw disable            # Firewall ausschalten
+
+# Standardregeln setzen
+sudo ufw default deny incoming    # alle eingehenden Verbindungen blockieren
+sudo ufw default allow outgoing   # alle ausgehenden Verbindungen erlauben
+
+# Regeln hinzufügen:
+sudo ufw allow ssh                # SSH (Port 22)
+sudo ufw allow 4533/tcp           # Beispiel: Mediendienst
+sudo ufw allow 80/tcp             # HTTP
+sudo ufw allow 443/tcp            # HTTPS
+sudo ufw allow from 192.168.1.0/24  # nur lokales Netz
+sudo ufw allow 5353/udp           # Avahi/Multicast (.local)
+
+# Regeln blockieren:
+sudo ufw deny 23/tcp              # blockiert Telnet (Beispiel)
+sudo ufw reject 23/tcp            # blockiert + sendet Ablehnung
+
+# Regeln löschen:
+sudo ufw delete allow 4533/tcp    # löschen über Befehl
+sudo ufw status numbered          # Regeln nummeriert anzeigen
+sudo ufw delete <nummer>          # löschen über Regelnummer
+
+# Logging verwalten (Login-Detei unter /var/log/ufw.log):
+sudo ufw logging on               # Logging aktivieren
+sudo ufw logging off              # Logging deaktivieren
+sudo ufw logging medium           # mehr Details
+sudo ufw logging high             # sehr detailliert
+sudo ufw reset                    # Achtung: setzt UFW komplett zurück und entfernt alle Regeln.
+    \end{minted}
+  \end{enumerate}
+
+  Nach der Aktivierung sind die definierten Regeln sofort wirksam und bleiben auch nach einem Neustart des Servers erhalten.
 
 \section{Integration in die bestehende IT-Infrastruktur}
   \subsection{Netzwerk-Anbindung}  
