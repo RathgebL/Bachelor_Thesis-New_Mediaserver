@@ -1340,6 +1340,63 @@ sudo ufw reset                    # Achtung: setzt UFW komplett zurück und entf
 \section{Testen und Fehlerbehebung}
   \subsection{Funktionstests}
   \subsection{Problemlösung}
+    \subsubsection*{Probleme mit Navidrome}
+    \begin{enumerate}
+      \item Container läuft nicht:
+      Bei "Error 502 Bad Gateway", sollte zunächst geprüft werden, ob der Docker-Container vorhanden ist und richtig läuft.
+
+      \begin{minted}[breaklines, linenos]{bash}
+# Status des Containers prüfen
+sudo docker ps
+
+# Der Output sollte in etwa so aussehen:
+CONTAINER ID   IMAGE                     COMMAND                  CREATED          STATUS          PORTS                    NAMES
+abcd1234efgh   deluan/navidrome:latest   "/entrypoint.sh /bin/…"   10 minutes ago   Up 10 minutes   0.0.0:4533->4533/tcp   navidrome
+      \end{minted} 
+
+      Falls der Container nicht läuft (kein Eintrag vorhanden), kann dieser mit folgendem Befehl gestartet werden:
+      \begin{minted}[breaklines, linenos]{bash}
+sudo docker-compose up -d
+      \end{minted}
+
+      \item Daten nicht erreichbar:
+      Falls der Server zwar antwortet, aber die Inhalte nicht erreichbar sind (z.\,B. CDs werden ausgegraut dargestellt), 
+      sollte überprüft werden, ob die Pfade in der \texttt{docker-compose.yml} korrekt sind.  
+      In unserem Beispiel wird der Ordner \texttt{/mnt/media/music} in den Container eingebunden.  
+      Sollte ein anderer Pfad genutzt werden, muss dieser entsprechend angepasst werden.
+      Dafür folgenden Code ausführen:
+
+      \begin{minted}[breaklines, linenos]{bash}
+# Inhalt der docker-compose.yml anzeigen
+sudo nano /srv/navidrome/docker-compose.yml # gegebenfalls Pfad zur yml-Datei anpassen
+      \end{minted}
+
+      Nach jeder Anpassung der \texttt{docker-compose.yml} muss der Container neu gestartet werden.  
+      Andernfalls verwendet Navidrome weiterhin die alte Konfiguration.
+      
+      \begin{minted}[breaklines, linenos]{bash}
+# Container neu starten
+sudo docker-compose up -d --build
+      \end{minted}
+
+      \item Admin-Passwort vergessen:  
+      Falls das Passwort für das Admin-Konto vergessen wurde, kann dieses zurückgesetzt werden, indem ein temporärer Container mit einer Umgebungsvariable gestartet wird.  
+      Dies geschiet mit folgendem Code (das normale Setup über \texttt{docker-compose} bleibt unverändert):
+
+      \begin{minted}[breaklines, linenos]{bash}
+# Temporären Navidrome-Container starten und neues Passwort setzen. Gegebenenfalls Pfade und Port anpassen.
+docker run --rm \
+  -e ND_ADMIN_PASSWORD=Passwort \
+  -v /srv/navidrome/data:/data \
+  -v /mnt/expansion/music:/music:ro \
+  -p 4533:4533 \
+  deluan/navidrome:latest
+      \end{minted}
+
+      Danach im Webinterface mit Benutzer \texttt{admin} und mit "Passwort" einloggen. Nun ist es besonders wichtig in den Einstellungen ein neues sicheres Passwort festlegen.  
+      Sobald dies geschehen ist, den temporären Container mit \texttt{CTRL+C} beenden und das System wie gewohnt neu starten.
+    \end{enumerate}
+
     \subsubsection*{Probleme mit nginx}
     Wenn es zu Problemen beim Aufruf des Servers kommt, sollte zunächst geprüft werden, ob der nginx-Dienst richtig läuft.
     Beim aufbau des Medienservers sind folgende Probleme aufgetreten:
