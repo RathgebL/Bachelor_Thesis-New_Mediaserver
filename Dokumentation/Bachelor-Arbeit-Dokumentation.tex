@@ -69,6 +69,7 @@
   \acro{GID}{Group ID}
   \acro{GPL}{GNU General Public License}
   \acro{HfM}{Hochschule für Musik}
+  \acro{HDD}{Hard Disk Drive}
   \acro{HLS}{HTTP Live Streaming}
   \acro{HTTP}{Hypertext Transfer Protocol}
   \acro{HTTPS}{Hypertext Transfer Protocol Secure}
@@ -89,6 +90,7 @@
   \acro{NAS}{Network Attached Storage}
   \acro{NDSA}{National Digital Stewardship Alliance}
   \acro{NFS}{Network File System}
+  \acro{PC}{Personal Computer}
   \acro{PDF}{Portable Document Format}
   \acro{PERSIST}{Platform to Enhance the Sustainability of the Information Society Transglobally}
   \acro{QoS}{Quality of Service}
@@ -100,6 +102,7 @@
   \acro{SAN}{Storage Area Network}
   \acro{SHA-256}{Secure Hash Algorithm 256}
   \acro{SMB}{Server Message Block}
+  \acro{SSD}{Solid State Drive}
   \acro{SSH}{Secure Shell}
   \acro{SSL}{Secure Sockets Layer}
   \acro{SWB}{Südwestdeutscher Bibliotheksverbund}
@@ -787,16 +790,60 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
 \setcounter{section}{0}
 
 \section{Zielsetzung}
+Als bei mir die Idee, einen neuen Medienserver in der Bibliothek der \ac{HfM} Karlsruhe aufzubauen, aufkam, war meine Vorstellung, eine moderne, flexible, benutzerfreundliche 
+und nachhaltige Lösung selbst zu programmieren, die es ermöglicht, die digitalisierten CDs zugänglich zu machen.
+Im Gespräch mit dem Bibliotheksleiter Marc Weisser erfuhr ich, dass der alte, nicht mehr betriebene Medienserver damals als Masterarbeit von Frederik Schroff konzipiert und umgesetzt wurde.
+Damit war klar, einen komplett neuen Medienserver, mit eigenst programmierter Nutzeroberfläche, 
+und Datenbank aufzubauen, wäre ein sehr umfangreiches Projekt, das den Rahmen einer Bachelorarbeit schnell sprengen würde.
+Somit informierte ich mich über bestehende, quelloffene Medienserver-Software, die meinen Anforderungen möglichst nahekommt, um einen Kompromiss für die Umsetzbarkeit zu finden. 
+Im folgen soll es nun darum gehen, welche Ziele ich mir im hinblick auf Finktionalität, Benutzerfreundlichkeit, Wartbarkeit, Sicherheit und rechtliche Rahmenbedingungen gesetzt habe.
+  
+Am Ende wird im Fazit überprüft, inwieweit diese Ziele erreicht wurden, welche Herausforderungen es gab 
+und welche Verbesserungen oder Erweiterungen in Zukunft noch möglich sind.
+
   \subsection{Funktionalität}
+  Primäre Anforderungen im Bereich der Funktionalität sind flüssiges Streaming der digitalisierten CDs und die Option die entsprechenden Booklets abzurufen zu können.
+  Dies soll über eine Weboberfläche erfolgen.
+
   \subsection{Benutzerfreundlichkeit}
+  Um das Angebot des neuen Medienservers für Studenten und Dozenten möglichst attraktiv zu machen, ist es wichtig, dass die Weboberfläche möglichst einfach zu bedienen ist.
+  Dafür sollte deren Aufbau, Design und Funktionalität möglichst nah an bekannten Plattformen, wie z.B. Spotify, liegen.
+  Erweiterte Funktionalitäten, wie das Anlegen eines personalisierten Benutzeracoounts, um z.B. eigene Playlisten anlegen zu können, sollten über eine simple Registrierung per E-Mail Adresse und dem Setzen eines Passworts zugänglich sein.
+  Natürlich sollte die Nutzung aber auch ohne Anmeldung funktionieren. Dafür soll es einen Bibliotheks-Account gebn, der frei genutzt werden kann.
+  Der Zugriff auf den Server sollte primär von einem Rechner in der Bibliothek (ähnlich wie der Naxos-Rechner) möglich sein. 
+  Eventuell sogar generell von Rechnern, die mit dem lokalen Neztwerkverbunden sind.
+
   \subsection{Wartbarkeit}
   \subsection{Sicherheit}
   \subsection{Rechtliche Rahmenbedingungen}
-\section{Vorraussetzungen}
+\section{Voraussetzungen}
   \subsection{Hardware}
+  \subsection{Hardware}
+  Für den Betrieb des Medienservers ist ein zuverlässiger Rechner erforderlich, der als zentrale Instanz für die Verwaltung und Bereitstellung der Musikdateien dient. 
+  Ein handelsüblicher \ac{PC} mit einem \textbf{Intel i5 oder i7 Prozessor} (7.\,Generation oder neuer) bzw. einer vergleichbaren AMD-\ac{CPU}, mindestens 8\,GB \ac{RAM} und ausreichend Festplattenspeicher ist für den Anwendungsfall ausreichend. 
+  Besonderes Augenmerk liegt auf der Speicherkapazität, da die Sammlung mehrerer tausend digitalisierter CDs schnell mehrere Terabyte umfassen kann. 
+  Eine \ac{SSD} empfiehlt sich für das Betriebssystem und die Server-Software, während eine größere \ac{HDD} oder externe Laufwerke für die Musikdaten genutzt werden können.
+
+  Die bisher für rund 4.200 CDs erstellten Masterfiles im \ac{WAV}-Format nehmen ca. 5\,TB Speicherplatz ein. 
+  Im Bestand der Bibliothek befinden sich etwa 10.000 CDs – Tendenz steigend. 
+  Auch wenn die Speicherung im \texttt{\ac{FLAC}}-Format deutlich weniger Speicherplatz beansprucht, 
+  empfiehlt es sich, eine Festplatte mit mindestens 10\,TB Kapazität einzuplanen, um den zukünftigen Bedarf sicher abdecken zu können.
+
   \subsection{Software}
+  Als Server-Software wird \textbf{Navidrome} eingesetzt, eine moderne, ressourcenschonende Open-Source-Lösung für Musik-Streaming. 
+  Für die Bereitstellung und einfache Wartung wird Navidrome in einem \textbf{Docker-Container} betrieben. 
+  Vorausgesetzt sind daher eine aktuelle Installation von Ubuntu (oder einem vergleichbaren Linux-basierten System). 
+  Auf Client-Seite genügt ein Webbrowser, um auf die Musikbibliothek zuzugreifen. nginx
+
   \subsection{Netzwerk}
+  Da die Audiodateien im \texttt{\ac{FLAC}}-Format vorliegen, muss das Netzwerk eine ausreichende Bandbreite für mehrere parallele Streams bereitstellen. 
+  Ein einzelner \ac{FLAC}-Stream benötigt durchschnittlich etwa 1\,Mbit/s. 
+  Für zehn gleichzeitige Streams ist somit eine Bandbreite von mindestens 15\,Mbit/s einzuplanen. 
+  Dies liegt deutlich unterhalb der Kapazität eines \textbf{100\,Mbit/s-Netzwerks}, sodass dieses technisch ausreichen würde. 
+  Empfohlen wird jedoch ein \textbf{Gigabit-LAN}, um ausreichend Reserven für gleichzeitige Dateioperationen und zukünftige Erweiterungen zu gewährleisten.
+
   \subsection{Rechtliche Rahmenbedingungen}
+
 \section{Installation und Konfiguration}  
 Die Installation und Konfiguration der zentralen Softwarekomponenten stellt die Grundlage für den zuverlässigen und sicheren Betrieb des Medienservers dar.
 Nun werden die benötigten Werkzeuge und Dienste vorgestellt und ihre Einrichtung anhand einer praxisorientierten Schritt-für-Schritt-Anleitung beschrieben.
