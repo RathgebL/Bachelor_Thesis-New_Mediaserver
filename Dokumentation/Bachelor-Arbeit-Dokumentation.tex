@@ -790,34 +790,107 @@ Der Einsatz von Medienservern in Bibliotheken eröffnet neue Möglichkeiten für
 \setcounter{section}{0}
 
 \section{Zielsetzung}
-Als bei mir die Idee, einen neuen Medienserver in der Bibliothek der \ac{HfM} Karlsruhe aufzubauen, aufkam, war meine Vorstellung, eine moderne, flexible, benutzerfreundliche 
+Als bei mir die Idee aufkam, in der Bibliothek der \ac{HfM} Karlsruhe einen neuen Medienserver aufzubauen, war meine Vorstellung, eine moderne, flexible, benutzerfreundliche 
 und nachhaltige Lösung selbst zu programmieren, die es ermöglicht, die digitalisierten CDs zugänglich zu machen.
-Im Gespräch mit dem Bibliotheksleiter Marc Weisser erfuhr ich, dass der alte, nicht mehr betriebene Medienserver damals als Masterarbeit von Frederik Schroff konzipiert und umgesetzt wurde.
-Damit war klar, einen komplett neuen Medienserver, mit eigenst programmierter Nutzeroberfläche, 
-und Datenbank aufzubauen, wäre ein sehr umfangreiches Projekt, das den Rahmen einer Bachelorarbeit schnell sprengen würde.
-Somit informierte ich mich über bestehende, quelloffene Medienserver-Software, die meinen Anforderungen möglichst nahekommt, um einen Kompromiss für die Umsetzbarkeit zu finden. 
-Im folgen soll es nun darum gehen, welche Ziele ich mir im hinblick auf Finktionalität, Benutzerfreundlichkeit, Wartbarkeit, Sicherheit und rechtliche Rahmenbedingungen gesetzt habe.
+Im Gespräch mit dem Bibliotheksleiter Marc Weisser erfuhr ich, dass der alte, inzwischen stillgelegte Medienserver damals als Masterarbeit von Frederik Schroff konzipiert und umgesetzt worden war.
+Damit war klar: Einen komplett neuen Medienserver mit eigens programmierter Benutzeroberfläche 
+und Datenbank zu entwickeln, wäre ein sehr umfangreiches Projekt, das den Rahmen einer Bachelorarbeit sprengen würde.
+Daher informierte ich mich über bestehende, quelloffene Medienserver-Software, die meinen Anforderungen möglichst nahekommt, um eine praktikable Lösung zu finden. 
+Im Folgenden soll dargestellt werden, welche Ziele ich mir im Hinblick auf Funktionalität, Benutzerfreundlichkeit, Wartbarkeit, Sicherheit und rechtliche Rahmenbedingungen gesetzt habe.
   
-Am Ende wird im Fazit überprüft, inwieweit diese Ziele erreicht wurden, welche Herausforderungen es gab 
-und welche Verbesserungen oder Erweiterungen in Zukunft noch möglich sind.
+Am Ende wird im Fazit überprüft, inwieweit diese Ziele erreicht wurden, welche Herausforderungen aufgetreten sind 
+und welche Verbesserungen oder Erweiterungen in Zukunft möglich wären.
 
   \subsection{Funktionalität}
-  Primäre Anforderungen im Bereich der Funktionalität sind flüssiges Streaming der digitalisierten CDs und die Option die entsprechenden Booklets abzurufen zu können.
-  Dies soll über eine Weboberfläche erfolgen.
+  Primäre Anforderungen im Bereich der Funktionalität sind ein flüssiges Streaming der digitalisierten CDs sowie die Möglichkeit, die zugehörigen Booklets abrufen zu können.
+  Beides soll über eine Weboberfläche erfolgen.  
+  Darüber hinaus sind folgende Punkte wünschenswert:
+  \begin{itemize}
+    \item automatische Erkennung und Verwaltung von Metadaten (Komponist, Werk, Satz, Album),
+    \item eine effiziente Such- und Filterfunktion (z.\,B. nach Komponist, Werk, Interpret oder Genre),
+    \item Unterstützung von Playlisten,
+    \item Mehrbenutzerfähigkeit mit individuellen Konten und Berechtigungen.
+  \end{itemize}
 
   \subsection{Benutzerfreundlichkeit}
-  Um das Angebot des neuen Medienservers für Studenten und Dozenten möglichst attraktiv zu machen, ist es wichtig, dass die Weboberfläche möglichst einfach zu bedienen ist.
-  Dafür sollte deren Aufbau, Design und Funktionalität möglichst nah an bekannten Plattformen, wie z.B. Spotify, liegen.
-  Erweiterte Funktionalitäten, wie das Anlegen eines personalisierten Benutzeracoounts, um z.B. eigene Playlisten anlegen zu können, sollten über eine simple Registrierung per E-Mail Adresse und dem Setzen eines Passworts zugänglich sein.
-  Natürlich sollte die Nutzung aber auch ohne Anmeldung funktionieren. Dafür soll es einen Bibliotheks-Account gebn, der frei genutzt werden kann.
-  Der Zugriff auf den Server sollte primär von einem Rechner in der Bibliothek (ähnlich wie der Naxos-Rechner) möglich sein. 
-  Eventuell sogar generell von Rechnern, die mit dem lokalen Neztwerkverbunden sind.
+  Damit das Angebot des neuen Medienservers für Studierende und Lehrende möglichst attraktiv ist, muss die Weboberfläche einfach und intuitiv zu bedienen sein. 
+  Der Aufbau, das Design und die grundlegende Funktionalität sollten sich daher an bekannten Plattformen wie beispielsweise Spotify orientieren.  
+
+  Erweiterte Funktionen, wie das Anlegen eines personalisierten Benutzeraccounts zum Erstellen eigener Playlisten, 
+  sollen über eine einfache Registrierung per E-Mail-Adresse und Passwort zugänglich sein.  
+  Gleichzeitig sollte die Nutzung auch ohne individuelle Anmeldung möglich bleiben: Dafür kann ein allgemeiner Bibliotheks-Account bereitgestellt werden, 
+  der von allen genutzt werden kann.  
+
+  Der Zugriff auf den Server sollte in erster Linie von einem Rechner in der Bibliothek erfolgen (ähnlich wie beim Naxos-Rechner). 
+  Optional kann der Zugang auch für alle Geräte ermöglicht werden, die mit dem lokalen Hochschulnetzwerk (per LAN) verbunden sind.  
+
+  Weitere Anforderungen an die Benutzerfreundlichkeit sind:
+  \begin{itemize}
+    \item kurze Ladezeiten und zuverlässiges Streaming,
+    \item eine klare und konsistente Navigationsstruktur,
+    \item mehrsprachige Oberfläche (mindestens Deutsch und Englisch),
+    \item eindeutige und verständliche Fehlermeldungen.
+  \end{itemize}
 
   \subsection{Wartbarkeit}
-  \subsection{Sicherheit}
+  \subsection{Wartbarkeit}
+  Damit der Medienserver langfristig zuverlässig betrieben werden kann, ist eine gute Wartbarkeit entscheidend. 
+  Die Installation und Konfiguration der Server-Software sollte möglichst standardisiert erfolgen, um eine einfache Reproduzierbarkeit zu gewährleisten. 
+  Der Einsatz von Containervirtualisierung (z.\,B. \ac{Docker}) erleichtert dabei sowohl die Installation als auch spätere Updates.  
+
+  Wartung umfasst zudem die regelmäßige Aktualisierung der Server-Software und der darunterliegenden Betriebssystemkomponenten, 
+  sowie die Sicherstellung von Backups der Musikdaten und Konfigurationsdateien.  
+  Eine klare Dokumentation der Systemarchitektur und der administrativen Abläufe ist erforderlich, 
+  damit auch Personen ohne tiefgehende technische Vorkenntnisse die Verwaltung übernehmen können.  
+
+  Folgende Anforderungen ergeben sich für die Wartbarkeit:
+  \begin{itemize}
+    \item Verwendung etablierter Open-Source-Software mit aktiver Community und regelmäßigen Updates,
+    \item klare und nachvollziehbare Ordner- und Datenstruktur,
+    \item automatisierte Backups der Musikdatenbank und Konfiguration,
+    \item Möglichkeit zur einfachen Wiederherstellung nach einem Ausfall,
+    \item ausführliche Dokumentation der Installation, Konfiguration und Benutzerverwaltung,
+    \item modularer Aufbau, sodass Komponenten (z.\,B. Datenbank, Weboberfläche) getrennt aktualisiert oder ersetzt werden können.
+  \end{itemize}
+
+  \subsection{Sicherheit}  
+  Der Zugriff auf den Server soll grundsätzlich nur innerhalb des Hochschulnetzwerks möglich sein, 
+  wodurch ein unkontrollierter Zugriff von außen vermieden wird.  
+
+  Die Authentifizierung erfolgt entweder über einen allgemeinen Bibliotheks-Account oder über persönliche Benutzerkonten. 
+  Dabei sollten Passwörter sicher verschlüsselt gespeichert und Mindestanforderungen an die Passwortstärke durchgesetzt werden.  
+  Darüber hinaus ist es notwendig, dass die Server-Software regelmäßig aktualisiert wird, um bekannte Sicherheitslücken zu schließen.  
+
+  Wichtige Anforderungen an die Sicherheit sind:
+  \begin{itemize}
+    \item Zugriffsbeschränkung auf das Hochschulnetzwerk (z.\,B. IP-Filter oder VPN),
+    \item sichere Speicherung von Zugangsdaten (Hashing und Salt),
+    \item Rollenkonzepte für Benutzer (z.\,B. Admin, Standardnutzer, Gast),
+    \item verschlüsselte Verbindungen per \ac{HTTPS},
+    \item regelmäßige Updates der Server-Software und des Betriebssystems,
+    \item Protokollierung von Anmeldeversuchen und relevanten Systemereignissen.
+  \end{itemize}
+
   \subsection{Rechtliche Rahmenbedingungen}
+  Beim Betrieb eines Medienservers in einer Hochschulbibliothek sind die rechtlichen Vorgaben, insbesondere des Urheberrechts, zu beachten. 
+  Die Bereitstellung digitalisierter Tonträger ist in Deutschland durch das Urheberrechtsgesetz geregelt, 
+  vor allem durch §~60e \ac{UrhG}, der spezielle Schrankenregelungen für Bibliotheken vorsieht.  
+  Demnach dürfen Bibliotheken Werke aus ihrem Bestand in digitaler Form für Forschungs- und Unterrichtszwecke zugänglich machen, 
+  sofern der Zugriff auf die Räumlichkeiten der Bibliothek oder das Hochschulnetzwerk beschränkt bleibt.  
+
+  Eine öffentliche Zugänglichmachung außerhalb dieser Grenzen, beispielsweise über das offene Internet, ist hingegen nicht erlaubt.  
+  Darüber hinaus dürfen die digitalisierten Werke ausschließlich für wissenschaftliche oder didaktische Zwecke genutzt werden, 
+  eine kommerzielle Verwertung ist ausgeschlossen.  
+
+  Folgende rechtliche Anforderungen ergeben sich daraus:
+  \begin{itemize}
+    \item Zugänglichmachung ausschließlich über das Bibliotheksnetzwerk,
+    \item keine Verbreitung der digitalisierten Musikdateien an Dritte (Downloads nicht möglich),
+    \item Einhaltung der Schrankenregelungen nach §~60e \ac{UrhG},
+    \item Sicherstellung, dass die Nutzung ausschließlich zu Studien-, Lehr- und Forschungszwecken erfolgt.
+  \end{itemize}
+
 \section{Voraussetzungen}
-  \subsection{Hardware}
   \subsection{Hardware}
   Für den Betrieb des Medienservers ist ein zuverlässiger Rechner erforderlich, der als zentrale Instanz für die Verwaltung und Bereitstellung der Musikdateien dient. 
   Ein handelsüblicher \ac{PC} mit einem \textbf{Intel i5 oder i7 Prozessor} (7.\,Generation oder neuer) bzw. einer vergleichbaren AMD-\ac{CPU}, mindestens 8\,GB \ac{RAM} und ausreichend Festplattenspeicher ist für den Anwendungsfall ausreichend. 
