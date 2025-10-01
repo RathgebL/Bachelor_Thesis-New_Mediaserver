@@ -314,7 +314,7 @@ def embed_cover(flac_file: Path, source_wav: Path, dry_run: bool = False) -> Non
             container / "booklet" / "booklet.jpg",
             container / "booklet" / "booklet.jpeg",
         ]
-    else: 
+    elif candidates == []: 
         print(f"[BOOKLET] Weder booklet-b noch booklet vorhanden in {container}")
 
     # Kandidat wählen
