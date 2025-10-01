@@ -296,7 +296,7 @@ def write_flac_tags(flac_file: Path, tags: dict, dry_run: bool = False) -> None:
     audio.save()
 
 # --- Cover einbetten ---
-def embed_cover_if_present(flac_file: Path, source_wav: Path, dry_run: bool = False) -> None:
+def embed_cover(flac_file: Path, source_wav: Path, dry_run: bool = False) -> None:
     # Container bestimmen (eine Ebene über dem Werk-Ordner)
     kind = classify_path(source_wav)
     if kind == "single":
@@ -308,10 +308,19 @@ def embed_cover_if_present(flac_file: Path, source_wav: Path, dry_run: bool = Fa
         return False
 
     # Kandidaten für Coverbilder
-    candidates: list[Path] = [
+    candidates = [
         container / "booklet" / "booklet-b.jpg",
         container / "booklet" / "booklet-b.jpeg",
     ]
+
+    # Wenn keine -b Variante existiert -> Fallback auf normale booklet.*
+    if not any(p.exists() for p in candidates):
+        candidates = [
+            container / "booklet" / "booklet.jpg",
+            container / "booklet" / "booklet.jpeg",
+        ]
+    else: 
+        print("[BOOKLET] Weder booklet-b noch booklet vorhanden.")
 
     # Kandidat wählen
     img_path = next((p for p in candidates if p.exists()), None)
@@ -362,7 +371,7 @@ def process_one(wav: Path, in_root: Path, out_root: Path, trackmap: dict[Path, s
         write_flac_tags(out_flac, tags, dry_run=dry_run)
 
         # Cover einbetten
-        embed_cover_if_present(out_flac, wav, dry_run=dry_run)
+        embed_cover(out_flac, wav, dry_run=dry_run)
 
         return (wav, None)
     except Exception as e:
