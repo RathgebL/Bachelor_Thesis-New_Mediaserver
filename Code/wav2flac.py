@@ -3,7 +3,6 @@
 
 # --- Imports ---
 import os, re, unicodedata, subprocess, sys
-import tkinter as tk
 from tkinter import filedialog
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
@@ -44,11 +43,7 @@ def choose_directory(prompt: str, terminal: bool = False) -> Path:
             else:
                 print("Pfad existiert nicht oder ist kein Verzeichnis, bitte erneut eingeben.")
     else:
-        root = tk.Tk()
-        root.withdraw()  # Kein Hauptfenster
-        root.attributes("-topmost", True)  # Fenster immer im Vordergrund
-        path = filedialog.askdirectory(title=prompt, parent=root)
-        root.destroy()  # Tk-Fenster wieder schließen
+        path = filedialog.askdirectory(title=prompt)
 
         if not path:
             print(f"Abbruch: Kein Verzeichnis gewählt für {prompt}")
@@ -320,7 +315,7 @@ def embed_cover(flac_file: Path, source_wav: Path, dry_run: bool = False) -> Non
             container / "booklet" / "booklet.jpeg",
         ]
     else: 
-        print("[BOOKLET] Weder booklet-b noch booklet vorhanden.")
+        print(f"[BOOKLET] Weder booklet-b noch booklet vorhanden in {container}")
 
     # Kandidat wählen
     img_path = next((p for p in candidates if p.exists()), None)
