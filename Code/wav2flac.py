@@ -392,7 +392,9 @@ def main():
 
     # Ausgabeordner mit Timestamp
     run_ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    output_root = output_root / run_ts
+    inputfoldeername = os.path.basename(input_root)
+    inputfoldeername = inputfoldeername + "-to-" + run_ts
+    output_root = output_root / inputfoldeername
     print(f"Ausgabe-Ordner: {output_root}")
 
     # WAV-Dateien finden
