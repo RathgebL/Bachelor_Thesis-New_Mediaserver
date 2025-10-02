@@ -49,4 +49,4 @@ MaxLength = 512
 # Benutzer
 # -----------------------------
 SessionTimeout = 1800                 # nach wie vielen Sekunden Sessions auslaufen
-PasswordStrength = "weak"             # simple Passwörter reichen aus
+PasswordStrength = "good"             # mittlere Passwortstärke (alt. weak, strong)
