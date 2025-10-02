@@ -79,6 +79,10 @@ def smart_titlecase(s: str) -> str:
         if "-" in word:
             parts = [fix_word(p) for p in word.split("-")]
             return "-".join(parts)
+        
+        # Pluszeichen: BACH+VIVALDI → Bach+Vivaldi
+        if "+" in word:
+            return "+".join(fix_word(p) for p in word.split("+"))
 
         return w
 

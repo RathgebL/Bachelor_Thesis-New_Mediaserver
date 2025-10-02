@@ -68,6 +68,10 @@ def smart_titlecase(s: str) -> str:
         if "-" in word:
             parts = [fix_word(p) for p in word.split("-")]
             return "-".join(parts)
+        
+        # Pluszeichen: BACH+VIVALDI → Bach+Vivaldi
+        if "+" in word:
+            return "+".join(fix_word(p) for p in word.split("+"))
 
         return w
 
@@ -142,7 +146,6 @@ def build_pdf(folder: Path, images: list[Path], out_dir: Path):
     if out_path.exists():
         print(f"[WARNING] Überspringe {out_path}, Datei existiert bereits.")
         return
-    print(f"[INFO] Erstelle PDF: {out_path}")
 
     # Bilder laden
     pil_images = []
