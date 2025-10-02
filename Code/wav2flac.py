@@ -53,11 +53,6 @@ def choose_directory(prompt: str, terminal: bool = False) -> Path:
 def nfc(s: str) -> str: # Unicode-Normalisierung (NFC) für Umlaute auf macOS
     return unicodedata.normalize("NFC", s or "")
 
-def norm_name(s: str) -> str: # Normalisierung für Personennamen
-    s = s.replace("_", " ") # Unterstriche zu Leerzeichen
-    s = re.sub(r",\s*(\S)", r", \1", s) # Nach Komma immer ein Leerzeichen
-    return s
-
 def norm_text(s: str) -> str: # Normalisierung für Titel, Alben und Werke
     s = s.replace("_", " ") # Unterstriche zu Leerzeichen
     s = s.replace("--", "—") # Doppelter Bindestrich zu einfachem Bindestrich
@@ -65,6 +60,37 @@ def norm_text(s: str) -> str: # Normalisierung für Titel, Alben und Werke
     # Nummer vereinheitlichen
     s = s.replace("Nº", "No")
     s = re.sub(r"\b(?:no|nr)\.?\s*(\d+)(?=\D|$)", r"Nr. \1", s, flags=re.IGNORECASE) 
+    return s
+
+def smart_titlecase(s: str) -> str:
+    # Wandelt komplett großgeschriebene Strings in Title Case um
+    if not s or not s.isupper():
+        return s
+
+    def fix_word(word: str) -> str:
+        w = word.capitalize()
+
+        # Apostrophe: d'Arc → d'Arc, O'Neill → O'Neill
+        w = re.sub(r"([DdOo])'([A-Za-z])",
+                   lambda m: m.group(1).lower() + "'" + m.group(2).upper(),
+                   w)
+
+        # Bindestriche: LIVE-KONZERT → Live-Konzert
+        if "-" in word:
+            parts = [fix_word(p) for p in word.split("-")]
+            return "-".join(parts)
+
+        return w
+
+    return " ".join(fix_word(w) for w in s.split())
+
+def norm_name(s: str) -> str:
+    # Normalisierung für Personennamen
+    if not s:
+        return s
+    s = s.replace("_", " ")  # Unterstriche zu Leerzeichen
+    s = re.sub(r",\s*(\S)", r", \1", s)  # Nach Komma immer ein Leerzeichen
+    s = smart_titlecase(s)  # Falls komplett groß, in Title Case umwandeln
     return s
 
 # --- Classifier ---
