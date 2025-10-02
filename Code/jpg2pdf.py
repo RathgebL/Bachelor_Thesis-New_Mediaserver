@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 
 # --- Imports ---
-import sys, re, unicodedata, tkinter as tk
+import os, sys, re, unicodedata, tkinter as tk
 from tkinter import filedialog
 from pathlib import Path
 from PIL import Image
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
 
 # --- Utilities ---
 def ask_terminal_mode() -> bool:
@@ -161,12 +163,50 @@ def build_pdf(folder: Path, images: list[Path], out_dir: Path):
 
 # --- Main ---
 def main():
+    print("\n=== Booklet-PDF Generator ===")
+
+    # Anzahl Threads automatisch bestimmen
+    workers = os.cpu_count() or 4
+    print(f"Threads automatisch auf {workers} gesetzt (Anzahl CPU-Kerne).")
+
+    # Terminal/GUI Auswahl
     terminal = ask_terminal_mode()
+
+    # Input & Output Ordner auswählen
     base = choose_directory("Basis-Ordner wählen (Input)", terminal)
     out_dir = choose_directory("Ziel-Ordner wählen (Output)", terminal)
 
-    for folder, images in find_booklet_folders(base):
-        build_pdf(folder, images, out_dir)
+    # Alle Booklet-Folder finden
+    tasks = list(find_booklet_folders(base))
+    if not tasks:
+        print("Keine Booklet-Ordner mit JPEGs gefunden.", file=sys.stderr)
+        sys.exit(1)
+
+    errors = []
+    # Multithreading + Fortschrittsanzeige
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futures = {
+            ex.submit(build_pdf, folder, images, out_dir): folder
+            for folder, images in tasks
+        }
+        for fut in tqdm(as_completed(futures), total=len(futures), desc="Erstelle PDFs"):
+            folder = futures[fut]
+            try:
+                fut.result()
+            except Exception as e:
+                errors.append((folder, str(e)))
+
+    # Zusammenfassung
+    if errors:
+        print("\nFertig - mit Warnungen/Fehlern:")
+        for folder, err in errors[:50]:
+            print(f"  - {folder}: {err}")
+        if len(errors) > 50:
+            print(f"  ... und {len(errors)-50} weitere.")
+        sys.exit(2)
+    else:
+        print("\nFertig - alle PDFs erfolgreich erstellt.")
+
 
 if __name__ == "__main__":
     main()
