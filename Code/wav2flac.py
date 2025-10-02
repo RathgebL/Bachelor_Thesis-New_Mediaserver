@@ -77,11 +77,6 @@ def smart_titlecase(s: str) -> str:
         w = re.sub(r"([DdOo])'([A-Za-z])",
                    lambda m: m.group(1).lower() + "'" + m.group(2).upper(),
                    w)
-
-        # Bindestriche: LIVE-KONZERT → Live-Konzert
-        if "-" in word:
-            parts = [fix_word(p) for p in word.split("-")]
-            return "-".join(parts)
         
         # Alle definierten Sonderzeichen prüfen
         for sep in special_cases:
