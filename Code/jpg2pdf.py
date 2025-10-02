@@ -72,19 +72,18 @@ def smart_titlecase(s: str) -> str:
         # Pluszeichen: BACH+VIVALDI → Bach+Vivaldi
         if "+" in word:
             return "+".join(fix_word(p) for p in word.split("+"))
+        
+        # Komma: BACH,JOHANN_SEBASTIAN → Bach,Johann_Sebastian
+        if "," in word:
+            return ",".join(fix_word(p) for p in word.split(","))
+        
+        # Placeholder: JEAN§§§FERY → Jean§§§Fery
+        if "§§§" in word:
+            return "§§§".join(fix_word(p) for p in word.split("§§§"))
 
         return w
 
     return " ".join(fix_word(w) for w in s.split())
-
-def norm_name(s: str) -> str:
-    # Normalisierung für Personennamen
-    if not s:
-        return s
-    s = s.replace("_", " ")  # Unterstriche zu Leerzeichen
-    s = re.sub(r",\s*(\S)", r", \1", s)  # Nach Komma immer ein Leerzeichen
-    s = smart_titlecase(s)  # Falls komplett groß, in Title Case umwandeln
-    return s
     
 def sort_booklet_files(files: list[Path]) -> list[Path]:
     def sort_key(p: Path):
@@ -124,19 +123,22 @@ def build_pdf(folder: Path, images: list[Path], out_dir: Path):
     # Der direkte Elternordner von "booklet" ist immer der Namensgeber
     base_dir = folder.parent
     raw_name = nfc(base_dir.name)
+    placeholder = "§§§"
+    safe = raw_name.replace("--", placeholder)
 
     # Trennen in Komponist und Medientitel
-    if "-" in raw_name:
-        comp_raw, title_raw = raw_name.split("-", 1)
+    if "-" in safe:
+        comp_raw, title_raw = safe.split("-", 1)
     else:
-        comp_raw, title_raw = raw_name, ""
+        comp_raw, title_raw = safe, ""
 
     # Normalisierung
-    comp  = norm_name(comp_raw) if comp_raw else ""
+    comp  = smart_titlecase(comp_raw) if comp_raw else ""
     title = norm_text(title_raw) if title_raw else ""
 
     # Wieder zusammensetzen
     base_name = f"{comp}-{title}" if title else comp
+    base_name = base_name.replace(placeholder, "--")
 
     # Leerzeichen in Unterstriche wandeln, PDF-Endung anhängen
     pdf_name = f"{base_name.replace(' ', '_')}.pdf"
