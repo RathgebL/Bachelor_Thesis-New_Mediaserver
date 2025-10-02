@@ -67,6 +67,9 @@ def smart_titlecase(s: str) -> str:
     if not s or not s.isupper():
         return s
 
+    # Sonderzeichen für Trennung
+    special_cases = ["+", ",", "§§§", "_"]
+
     def fix_word(word: str) -> str:
         w = word.capitalize()
 
@@ -80,17 +83,10 @@ def smart_titlecase(s: str) -> str:
             parts = [fix_word(p) for p in word.split("-")]
             return "-".join(parts)
         
-        # Pluszeichen: BACH+VIVALDI → Bach+Vivaldi
-        if "+" in word:
-            return "+".join(fix_word(p) for p in word.split("+"))
-        
-        # Komma: BACH,JOHANN_SEBASTIAN → Bach,Johann_Sebastian
-        if "," in word:
-            return ",".join(fix_word(p) for p in word.split(","))
-        
-        # Placeholder: JEAN§§§FERY → Jean§§§Fery
-        if "§§§" in word:
-            return "§§§".join(fix_word(p) for p in word.split("§§§"))
+        # Alle definierten Sonderzeichen prüfen
+        for sep in special_cases:
+            if sep in word:
+                return sep.join(fix_word(p) for p in word.split(sep))
 
         return w
 
