@@ -53,13 +53,20 @@ def choose_directory(prompt: str, terminal: bool = False) -> Path:
 def nfc(s: str) -> str: # Unicode-Normalisierung (NFC) für Umlaute auf macOS
     return unicodedata.normalize("NFC", s or "")
 
-def norm_text(s: str) -> str: # Normalisierung für Titel, Alben und Werke
-    s = s.replace("_", " ") # Unterstriche zu Leerzeichen
-    s = s.replace("--", "—") # Doppelter Bindestrich zu einfachem Bindestrich
-    s = re.sub(r"\b[oO][pP]\.?\s*", "op. ", s) # Opus vereinheitlichen 
+def norm_text(s: str) -> str:  # Normalisierung für Titel, Alben und Werke
+    s = s.replace("_", " ")  # Unterstriche zu Leerzeichen
+    s = s.replace("--", "—")  # Doppelter Bindestrich zu einfachem Bindestrich
+    
+    # Opus vereinheitlichen
+    s = re.sub(r"\b[oO][pP]\.?\s*", "op. ", s)
+
     # Nummer vereinheitlichen
     s = s.replace("Nº", "No")
-    s = re.sub(r"\b(?:no|nr)\.?\s*(\d+)(?=\D|$)", r"Nr. \1", s, flags=re.IGNORECASE) 
+    s = re.sub(r"\b(?:no|nr)\.?\s*(\d+)(?=\D|$)", r"Nr. \1", s, flags=re.IGNORECASE)
+
+    # Volume vereinheitlichen → "Vol. n"
+    s = re.sub(r"\b(?:vol(?:ume)?)\.?\s*([0-9IVXLCDM]+)\b", r"Vol. \1", s, flags=re.IGNORECASE)
+
     return s
 
 def smart_titlecase(s: str) -> str:
