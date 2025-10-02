@@ -83,6 +83,14 @@ def smart_titlecase(s: str) -> str:
         # Pluszeichen: BACH+VIVALDI → Bach+Vivaldi
         if "+" in word:
             return "+".join(fix_word(p) for p in word.split("+"))
+        
+        # Komma: BACH,JOHANN_SEBASTIAN → Bach,Johann_Sebastian
+        if "," in word:
+            return ",".join(fix_word(p) for p in word.split(","))
+        
+        # Placeholder: JEAN§§§FERY → Jean§§§Fery
+        if "§§§" in word:
+            return "§§§".join(fix_word(p) for p in word.split("§§§"))
 
         return w
 
@@ -205,8 +213,28 @@ def parse_box(wav_path: Path) -> dict:
         boxset = boxtitle
 
     # Booklet-URL aus dem kompletten Medienordnernamen bauen
-    folder_name = norm_text(nfc(box_dir.name))
-    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}.pdf"
+    raw_folder = nfc(box_dir.name)
+    placeholder = "§§§" # Platzhalter für doppelten Bindestrich (falls im Namen wie "Jean--Féry")
+    safe = raw_folder.replace("--", placeholder)
+
+    if "-" in safe:
+        comp_raw, title_raw = safe.split("-", 1)
+    else:
+        comp_raw, title_raw = safe, ""
+
+    # Normalisierung
+    composer = smart_titlecase(norm_name(comp_raw))
+    title = norm_text(title_raw)
+
+    # Zusammensetzen und Platzhalter zurücksetzen
+    folder_name = f"{composer}-{title}" if title else composer
+    folder_name = folder_name.replace(placeholder, "--")
+
+    # Leerzeichen für die URL durch Unterstriche ersetzen
+    folder_name_url = folder_name.replace(" ", "_")
+
+    # URL erzeugen
+    bookleturl = f"http://mediaserver.local/booklets/{folder_name_url}.pdf"
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe

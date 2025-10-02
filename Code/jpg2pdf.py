@@ -123,7 +123,7 @@ def build_pdf(folder: Path, images: list[Path], out_dir: Path):
     # Der direkte Elternordner von "booklet" ist immer der Namensgeber
     base_dir = folder.parent
     raw_name = nfc(base_dir.name)
-    placeholder = "§§§"
+    placeholder = "§§§" # Platzhalter für doppelten Bindestrich (falls im Namen wie "Jean--Féry")
     safe = raw_name.replace("--", placeholder)
 
     # Trennen in Komponist und Medientitel
