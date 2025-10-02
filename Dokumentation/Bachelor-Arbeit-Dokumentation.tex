@@ -80,8 +80,10 @@
   \acro{IPS}{Intrusion Prevention System}
   \acro{IT}{Informationstechnologie}
   \acro{KVM}{Kernel-based Virtual Machine}
+  \acro{LAN}{Local Area Network}
   \acro{MARCXML}{Machine-Readable Cataloging in XML}
   \acro{MD5}{Message Digest Algorithm 5}
+  \acro{mDNS}{Multicast Domain Name System}
   \acro{METS}{Metadata Encoding and Transmission Standard}
   \acro{MKV}{Matroska Multimedia Container Format}
   \acro{MODS}{Metadata Object Description Schema}
@@ -109,11 +111,13 @@
   \acro{SWB}{Südwestdeutscher Bibliotheksverbund}
   \acro{TCP}{Transmission Control Protocol}
   \acro{TLS}{Transport Layer Security}
+  \acro{UFW}{Uncomplicated Firewall}
   \acro{UDP}{User Datagram Protocol}
   \acro{UNESCO}{United Nations Educational, Scientific and Cultural Organization}
   \acro{UNIX}{Uniplexed Information and Computing System}
   \acro{UID}{User ID}
   \acro{UrhG}{Urheberrechtsgesetz}
+  \acro{VLAN}{Virtual Local Area Network}
   \acro{VPN}{Virtual Private Network}
   \acro{WAV}{Waveform Audio File Format}
 \end{acronym}
@@ -983,6 +987,7 @@ ssh benutzername@server-ip
 
 # Wenn das geklappte, kann der SSH-Dienst auf dem Server angepasst werden
 sudo nano /etc/ssh/sshd_config
+
 # Folgende Zeilen anpassen oder hinzufügen:
 PasswordAuthentication no
 PubkeyAuthentication yes
@@ -1347,20 +1352,20 @@ tail -f /var/log/nginx/error.log
 
   \subsection{UFW}
   Zu guter letzt brauchen wir noch eine Firewall. 
-  Die \emph{Uncomplicated Firewall} (UFW) ist eine benutzerfreundliche Schnittstelle und damit optimal für dieses Projekt. 
+  Die \emph{\ac{UFW}} ist eine benutzerfreundliche Schnittstelle und damit optimal für dieses Projekt. 
   Durch ihre einfache Syntax ermöglicht sie eine unkomplizierte und zugleich sichere Verwaltung von Netzwerkzugriffen. 
   Folgende Ports werden für den Betrieb des Medienservers benötigt:
    
   \begin{itemize}
-    \item \textbf{SSH (22/tcp)} für die sichere Fernwartung,
-    \item \textbf{4533/tcp} für Navidrome,
-    \item \textbf{HTTP (80/tcp)} für den Webzugriff,
-    \item \textbf{mDNS (5353/udp)} für die automatische Erkennung im lokalen Netzwerk.
+    \item \textbf{\ac{SSH} (22/\ac{TCP})} für die sichere Fernwartung,
+    \item \textbf{4533/\ac{TCP}} für Navidrome,
+    \item \textbf{\ac{HTTP} (80/\ac{TCP})} für den Webzugriff,
+    \item \textbf{\acs{mDNS} (5353/\ac{UDP})} für die automatische Erkennung im lokalen Netzwerk.
   \end{itemize}
 
   Alle anderen eingehenden Verbindungen sollen standardmäßig blockiert werden. 
   Dadurch ist der Server vor ungewollten Zugriffen geschützt, ohne die für den Betrieb notwendigen Dienste einzuschränken. 
-  Nun folgt die Installation und Grundkonfiguration von UFW in wenigen Schritten:
+  Nun folgt die Installation und Grundkonfiguration von \ac{UFW} in wenigen Schritten:
 
   \begin{enumerate}
     \item Installation:
@@ -1390,7 +1395,7 @@ sudo ufw status verbose
     \end{minted}
 
     \item Nutzung:
-    nun werden noch alle wichtigen Befle zur Nutzung von UFW vorgestellt:
+    nun werden noch alle wichtigen Befle zur Nutzung von \ac{UFW} vorgestellt:
     \begin{minted}[breaklines, linenos]{bash}
   # Status prüfen
 sudo ufw status
@@ -1434,18 +1439,27 @@ sudo ufw reset                    # Achtung: setzt UFW komplett zurück und entf
 % ---------------------------------------------------------------
 
 \section{Integration in die bestehende IT-Infrastruktur}
-  \subsection{Netzwerk-Anbindung}  
+Sobald alle nötigen Installationen getätigt sind fehlen nur noch folgende Schritte, um den Server nutzen zu können.
+Diese Schritte geschehen in enger zusammenarbeit mit den IT-Mitarbeitern der Hochschule.
+
+  \subsection{Netzwerk-Anbindung} 
+  Der Server ist per \ac{LAN} angebunden und ist über seine \ac{IP}-Adresse im Netzwerk erreichbar. 
+  Damit der Zugriff zuverlässig funktioniert, sind mehrere Punkte zu beachten:
+
+  \begin{itemize}
+    \item \textbf{Sicherheit:} bisher nur provisorisch gesetzte Passwörter sollten, falls nötig, zu starken Passwörtern geändert und in einem Passwortmanager gespeichert werden, bevor der Server ans Netz geht.
+    \item \textbf{Firewall-Konfiguration:} Die Firewall der HfM muss so eingestellt sein, dass die nötigten Ports geöffnet sind.
+    \item \textbf{Subnetze und \ac{VLAN}s:} Im Hochschulnetzwerk müssen die relevanten Subnetze für den Zugriff freigeschaltet werden. 
+          Über die Segmentierung mittels VLANs lässt sich steuern, in welchen Netzwerkzonen Clients den Server erreichen dürfen.
+    \item \textbf{\ac{DNS}-Eintrag:} Damit Nutzer nicht auf die \ac{IP}-Adresse angewiesen sind, sollte ein aussagekräftiger \ac{DNS}-Hostname für den Server angelegt werden.
+\end{itemize}
+
+  Durch diese Maßnahmen ist gewährleistet, dass der Medienserver nahtlos in die bestehende IT-Infrastruktur integriert wird, sicher betrieben werden kann und von den vorgesehenen Nutzergruppen erreichbar ist.
+
   \subsection{Datenbank anbinden}
     \subsubsection{Datenstruktur}
     Benennungskonvention
   \subsubsection{Dateiformate}
-  \subsubsection{Metadaten}
-    \begin{itemize}
-      \item ID3-Tags
-      \item Vorbis Comments
-      \item FLAC-Metadaten
-      \item MusicBrainz
-    \end{itemize}
   \subsubsection{Datenverwaltung}
     Datenpflege
     Backup-Strategie
@@ -1455,7 +1469,6 @@ sudo ufw reset                    # Achtung: setzt UFW komplett zurück und entf
     Externe Quellen
   \subsubsection{Datenimport}
 \section{Benutzerverwaltung und Zugriffsrechte}
-  \subsection{Nutzergruppen definieren}
 \section{Testen und Fehlerbehebung}
   \subsection{Funktionstests}
   \subsection{Problemlösung}
