@@ -148,8 +148,28 @@ def parse_single(wav_path: Path) -> dict:
     title = norm_text(nfc(title_raw))
 
     # Booklet-URL aus dem kompletten Medienordnernamen bauen
-    folder_name = norm_text(nfc(media_dir.name))
-    bookleturl = f"http://mediaserver.local/booklets/{folder_name.replace(' ', '_')}.pdf"
+    raw_folder = nfc(media_dir.name)
+    placeholder = "§§§" # Platzhalter für doppelten Bindestrich (falls im Namen wie "Jean--Féry")
+    safe = raw_folder.replace("--", placeholder)
+
+    if "-" in safe:
+        comp_raw, title_raw = safe.split("-", 1)
+    else:
+        comp_raw, title_raw = safe, ""
+
+    # Normalisierung
+    composer = smart_titlecase(comp_raw)
+    title = norm_text(title_raw)
+
+    # Zusammensetzen und Platzhalter zurücksetzen
+    folder_name = f"{composer}-{title}" if title else composer
+    folder_name = folder_name.replace(placeholder, "--")
+
+    # Leerzeichen für die URL durch Unterstriche ersetzen
+    folder_name_url = folder_name.replace(" ", "_")
+
+    # URL erzeugen
+    bookleturl = f"http://mediaserver.local/booklets/{folder_name_url}.pdf"
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
@@ -223,7 +243,7 @@ def parse_box(wav_path: Path) -> dict:
         comp_raw, title_raw = safe, ""
 
     # Normalisierung
-    composer = smart_titlecase(norm_name(comp_raw))
+    composer = smart_titlecase(comp_raw)
     title = norm_text(title_raw)
 
     # Zusammensetzen und Platzhalter zurücksetzen
