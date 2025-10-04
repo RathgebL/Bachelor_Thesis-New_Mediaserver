@@ -276,7 +276,7 @@ die neben klassischen Serverkomponenten auch spezielle Anforderungen an Speicher
 
   \subsection{Betriebssysteme für Server}
   Zu den gängigsten Server-Betriebssystemen zählen insbesondere 
-  Linux-Distributionen, Windows Server sowie \ac{UNIX}-Derivate.
+  Linux-Dis\-tributionen, Windows Server sowie \ac{UNIX}-Derivate.
   Linux gilt als besonders verbreitet im Bereich Web- und Medienserver, 
   da es durch Stabilität, Sicherheit und Flexibilität überzeugt und 
   vor allem als bevorzugte Plattform für Webserver wie Apache dient.\footcite[Vgl.][S.~963~ff.]{nemeth_unixlinux} 
@@ -327,8 +327,8 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
 
   \subsection{Benutzer- und Rechteverwaltung}
   Ein zentrales Element der Serveradministration ist die Verwaltung von Benutzern und deren Zugriffsrechten. 
-  In UNIX- und Linux-Systemen erfolgt die Identifikation über eindeutige Benutzerkennungen (\ac{UID}s) 
-  und Gruppenzugehörigkeiten (\ac{GID}s).\footcite[Vgl.][S.~176~ff.]{nemeth_unixlinux}
+  In UNIX- und Linux-Systemen erfolgt die Identifikation über eindeutige Benutzerkennungen (\acs{UID}s) 
+  und Gruppenzugehörigkeiten (\acs{GID}s).\footcite[Vgl.][S.~176~ff.]{nemeth_unixlinux}
   Das klassische UNIX-Berechtigungsmodell unterscheidet dabei drei grundlegende Kategorien: 
   \emph{user} (Besitzer), \emph{group} (Mitglieder der zugewiesenen Gruppe) und \emph{others} (alle übrigen Nutzer). 
   Für jede dieser Kategorien lassen sich Lese- (read, r), Schreib- (write, w) und Ausführungsrechte (execute, x) festlegen.\footcite[Vgl.]{wikipedia_dateisystemrechte}
@@ -394,7 +394,7 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   \\
   \newline
   \textbf{Netzwerkschutz}:  
-  Ein zentraler Bestandteil der Serversicherheit ist der Schutz der Netzwerkschnittstellen. 
+  Zentraler Bestandteil der Serversicherheit ist der Schutz der Netzwerkschnittstellen. 
   Hierzu werden Firewalls eingesetzt, um eingehenden und ausgehenden Datenverkehr anhand von Regeln zu kontrollieren. 
   Klassische Paketfilter analysieren Header-Informationen wie Quell- und Zieladresse oder Ports und können so unerwünschte Verbindungen blockieren.\footcite[Vgl.][S.~932~ff.]{nemeth_unixlinux}  
   \\
@@ -540,7 +540,7 @@ die für den effizienten Betrieb relevant sind.
   \\
   \newline
   \textbf{Error Control:}  
-  Fehlererkennungs- und Fehlerkorrekturverfahren (z.\,B. \ac{FEC}) sind essenziell, 
+  Fehlererkennungs- und Fehlerkorrekturverfahren (z.\,B. \acs{FEC}) sind essenziell, 
   um trotz Paketverlusten eine akzeptable Qualität sicherzustellen.  
   Dabei können Redundanzdaten eingesetzt werden, die eine Rekonstruktion verlorener Informationen ermöglichen.\footcite[Vgl.][S.~68]{steinmetz_multimedia}  
   \\
@@ -837,7 +837,6 @@ und welche Verbesserungen oder Erweiterungen in Zukunft möglich wären.
     \item eindeutige und verständliche Fehlermeldungen.
   \end{itemize}
 
-  \subsection{Wartbarkeit}
   \subsection{Wartbarkeit}
   Damit der Medienserver langfristig zuverlässig betrieben werden kann, ist eine gute Wartbarkeit entscheidend. 
   Die Installation und Konfiguration der Server-Software sollte möglichst standardisiert erfolgen, um eine einfache Reproduzierbarkeit zu gewährleisten. 
