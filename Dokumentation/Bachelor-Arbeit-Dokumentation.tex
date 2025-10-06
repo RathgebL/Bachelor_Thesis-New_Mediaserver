@@ -981,6 +981,12 @@ exit
 # Auf dem Client SSH-Schlüssel generieren (falls noch nicht vorhanden)
 ssh-keygen -t ed25519 -C "user@client"
 
+# Schlüssel auf den Server kopieren
+ssh-copy-id username@server_ip
+
+# Schlüsselüberprüfen (optional)
+sudo nano ~/.ssh/authorized_keys
+
 # Loggin testen
 ssh benutzername@server-ip
 
