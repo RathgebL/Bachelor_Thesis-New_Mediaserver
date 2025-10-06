@@ -1344,7 +1344,7 @@ curl http://localhost
     \begin{minted}[breaklines, linenos]{nginx}
 server {
     listen 80;
-    server_name mediaserver.local;
+    server_name medien.hfm.eu;
 
     # Booklets bereitstellen
     location /booklets/ {
@@ -1356,7 +1356,7 @@ server {
 
     # Weiterleitung an Navidrome
     location / {
-        proxy_pass         http://127.0.0.1:4533;
+        proxy_pass         http://193.197.85.23:4533; # hier Server-IP eintragen
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
         proxy_set_header   Connection "upgrade";
@@ -1370,7 +1370,7 @@ server {
     \end{minted}  
 
     \item Aktivierung:
-    die Datei wird in \texttt{/etc/nginx/sites-available/mediaserver} abgelegt 
+    die Datei wird in \texttt{/etc/nginx/sites-available/medienserver} abgelegt 
     und über einen Symlink aktiviert:  
     \begin{minted}[breaklines, linenos]{bash}
 sudo ln -s /etc/nginx/sites-available/mediaserver \
