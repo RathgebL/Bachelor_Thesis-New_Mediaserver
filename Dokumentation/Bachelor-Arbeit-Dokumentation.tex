@@ -1119,24 +1119,69 @@ sudo mkdir -p /srv/navidrome
 sudo mkdir -p /srv/navidrome/data
     \end{minted}
 
-    Außerdem muss die Festplatte mit den Musikdateien (z.\,B. eine externe USB-Festplatte) eingebunden werden.
+    Außerdem muss die Festplatte mit den Musikdateien (z.\,B. eine interne Festplatte) eingebunden werden.
     
     \begin{minted}[breaklines, linenos]{bash}
-# Platte anschließen und Gerät ermitteln (z.B. sdb1)
+# Platte montieren und Gerät ermitteln (z.B. sdb)
 lsblk
 
 # Output könnte z.B. so aussehen:
-NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
-sda      8:0    0 238.5G  0 disk
-  sda1   8:1    0   512M  0 part /boot/efi
-  sda2   8:2    0   238G  0 part /
-sdb      8:16   1  14.9G  0 disk
-  sdb1   8:17   1  14.9G  0 part
+NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS 
+sda 8:0 0 465,8G 0 disk 
+  sda1 8:1 0 1G 0 part /boot/efi 
+  sda2 8:2 0 2G 0 part /boot 
+  sda3 8:3 0 462,7G 0 part 
+    ubuntu--vg-ubuntu--lv 252:0 0 100G 0 lvm / 
+sdb 8:16 0 10,9T 0 disk sdc 8:32 1 0B 0 disk 
+sr0 11:0 1 1024M 0 rom
 
-# Mountpoint erstellen (falls noch nicht vorhanden)
+# Partionierung überprüfen
+sudo fdisk -l /dev/sdb
+
+# Falls nicht vorhanden, neue GPT-Tabelle und eine Primärpartition über die gesamte Platte erstellt:
+sudo parted /dev/sdb --script mklabel gpt
+sudo parted /dev/sdb --script mkpart primary ext4 0% 100%
+# nun existiert die Partition /dev/sdb1
+
+# Dateisystem erstellen:
+sudo mkfs.ext4 /dev/sdb1
+
+# Mountpoint erstellen (falls noch nicht vorhanden):
 sudo mkdir -p /mnt/media
 sudo mount /dev/sdb1 /mnt/media
-      \end{minted}
+
+# Mountpoint prüfen:
+df -h /mnt/media
+
+# UUID der Partition ermitteln:
+sudo blkid /dev/sdb1
+
+# Output könnte z.B. so aussehen:
+/dev/sdb1: UUID="5b0eaff8-d4ff-4bf8-9860-ed9a38ccb35f" TYPE="ext4"
+
+# UUID in /etc/fstab eingetragen:
+sudo nano /etc/fstab
+
+# Am Ende der Datei folgende Zeile ergänzen (UUID anpassen):
+UUID=5b0eaff8-d4ff-4bf8-9860-ed9a38ccb35f /mnt/media ext4 defaults 0 2 
+
+# Testen:
+sudo mount -a
+df -h /mnt/media
+
+# Zugriffsrechte anpassen:
+sudo mkdir -p /mnt/media
+sudo chown -R medienserver:medienserver /mnt/media
+
+# Prüfen:
+ls -ld /mnt/media/music
+# Output könnte z.B. so aussehen:
+drwxr-xr-x 2 medienserver medienserver 4096 Oct  6 12:34 /mnt/media
+
+# Ordner anlegen:
+mkdir /mnt/media/music
+mkdir /mnt/media/booklets
+\end{minted}
 
     Im Anschluss wird eine \texttt{docker-compose.yml}-Datei mit den notwendigen Einstellungen angelegt. 
     Dazu muss folgender Befehl ausgeführt werden:
