@@ -104,14 +104,23 @@ def norm_name(s: str) -> str:
     return s
 
 # --- Classifier ---
-def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", "box" oder "unknown"
-    parts = [p.name for p in wav_path.parents] # Liste der Ordnernamen im Pfad
-    if "EinzelCDs" in parts:
-        return "single"
-    elif "Boxen" in parts:
-        return "box"
-    else:
-        return "unknown"    
+def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", "box" oder "unknown" auch mit Abweichungen im Ordnernamen
+    # Alle Ordnernamen in Kleinbuchstaben erfassen
+    parts = [p.name.lower() for p in wav_path.parents]
+
+    # Schlüsselwörter definieren
+    single_keywords = ["einzelcd", "einzel-cd", "einzelcds", "einzel-cds", "singlecd", "single-cd"]
+    box_keywords = ["box", "boxen", "cd-box", "cdbox", "boxset", "box-set"]
+
+    # Jeden Ordnernamen auf diese Muster prüfen
+    for name in parts:
+        normalized = re.sub(r"[^a-z0-9]", "", name)  # Bindestriche & Sonderzeichen entfernen
+        if any(key in normalized for key in single_keywords):
+            return "single"
+        if any(key in normalized for key in box_keywords):
+            return "box"
+
+    return "unknown"    
 
 # --- Parser ---
 def parse_single(wav_path: Path) -> dict:
