@@ -1119,10 +1119,10 @@ sudo mkdir -p /srv/navidrome
 sudo mkdir -p /srv/navidrome/data
     \end{minted}
 
-    Außerdem muss die Festplatte mit den Musikdateien (z.\,B. eine interne Festplatte) eingebunden werden.
+    Außerdem muss die Festplatte mit den Musikdateien und Booklets eingebunden werden.
     
     \begin{minted}[breaklines, linenos]{bash}
-# Platte montieren und Gerät ermitteln (z.B. sdb)
+# Platte montieren, dann Gerät ermitteln (z.B. sdb)
 lsblk
 
 # Output könnte z.B. so aussehen:
@@ -1135,50 +1135,51 @@ sda 8:0 0 465,8G 0 disk
 sdb 8:16 0 10,9T 0 disk sdc 8:32 1 0B 0 disk 
 sr0 11:0 1 1024M 0 rom
 
-# Partionierung überprüfen
+# Partitionierung überprüfen
 sudo fdisk -l /dev/sdb
 
-# Falls nicht vorhanden, neue GPT-Tabelle und eine Primärpartition über die gesamte Platte erstellt:
+# Falls nicht vorhanden, neue GPT-Tabelle und eine Primärpartition über die gesamte Platte erstellt
 sudo parted /dev/sdb --script mklabel gpt
 sudo parted /dev/sdb --script mkpart primary ext4 0% 100%
 # nun existiert die Partition /dev/sdb1
 
-# Dateisystem erstellen:
+# Dateisystem erstellen
 sudo mkfs.ext4 /dev/sdb1
 
-# Mountpoint erstellen (falls noch nicht vorhanden):
+# Mountpoint erstellen (falls noch nicht vorhanden)
 sudo mkdir -p /mnt/media
 sudo mount /dev/sdb1 /mnt/media
 
-# Mountpoint prüfen:
+# Mountpoint prüfen
 df -h /mnt/media
 
-# UUID der Partition ermitteln:
+# UUID der Partition ermitteln
 sudo blkid /dev/sdb1
 
 # Output könnte z.B. so aussehen:
 /dev/sdb1: UUID="5b0eaff8-d4ff-4bf8-9860-ed9a38ccb35f" TYPE="ext4"
 
-# UUID in /etc/fstab eingetragen:
+# UUID in /etc/fstab eingetragen
 sudo nano /etc/fstab
 
-# Am Ende der Datei folgende Zeile ergänzen (UUID anpassen):
+# Am Ende der Datei folgende Zeile ergänzen (UUID anpassen)
 UUID=5b0eaff8-d4ff-4bf8-9860-ed9a38ccb35f /mnt/media ext4 defaults 0 2 
 
-# Testen:
+# Testen
 sudo mount -a
 df -h /mnt/media
 
-# Zugriffsrechte anpassen:
+# Zugriffsrechte anpassen
 sudo mkdir -p /mnt/media
 sudo chown -R medienserver:medienserver /mnt/media
 
-# Prüfen:
+# Prüfen
 ls -ld /mnt/media/music
+
 # Output könnte z.B. so aussehen:
 drwxr-xr-x 2 medienserver medienserver 4096 Oct  6 12:34 /mnt/media
 
-# Ordner anlegen:
+# Ordner anlegen
 mkdir /mnt/media/music
 mkdir /mnt/media/booklets
 \end{minted}
@@ -1349,7 +1350,7 @@ server {
     # Booklets bereitstellen
     location /booklets/ {
         alias /mnt/media/booklets/;
-        autoindex off;              # kein Verzeichnislisting
+        autoindex off; # kein Verzeichnislisting
         autoindex_exact_size off;
         autoindex_localtime on;
     }
@@ -1373,7 +1374,7 @@ server {
     die Datei wird in \texttt{/etc/nginx/sites-available/medienserver} abgelegt 
     und über einen Symlink aktiviert:  
     \begin{minted}[breaklines, linenos]{bash}
-sudo ln -s /etc/nginx/sites-available/mediaserver \
+sudo ln -s /etc/nginx/sites-available/medienserver \
            /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
@@ -1493,18 +1494,47 @@ Sobald alle nötigen Installationen getätigt sind fehlen nur noch folgende Schr
 Diese Schritte geschehen in enger zusammenarbeit mit den IT-Mitarbeitern der Hochschule.
 
   \subsection{Netzwerk-Anbindung} 
-  Der Server ist per \ac{LAN} angebunden und ist über seine \ac{IP}-Adresse im Netzwerk erreichbar. 
-  Damit der Zugriff zuverlässig funktioniert, sind mehrere Punkte zu beachten:
+  Der Server ist per \ac{LAN} angebunden und über seine feste \ac{IP}-Adresse im Hochschulnetzwerk erreichbar. 
+  Damit der Zugriff zuverlässig und sicher funktioniert, sind mehrere Punkte zu beachten:
 
   \begin{itemize}
-    \item \textbf{Sicherheit:} bisher nur provisorisch gesetzte Passwörter sollten, falls nötig, zu starken Passwörtern geändert und in einem Passwortmanager gespeichert werden, bevor der Server ans Netz geht.
-    \item \textbf{Firewall-Konfiguration:} Die Firewall der HfM muss so eingestellt sein, dass die nötigten Ports geöffnet sind.
-    \item \textbf{Subnetze und \ac{VLAN}s:} Im Hochschulnetzwerk müssen die relevanten Subnetze für den Zugriff freigeschaltet werden. 
-          Über die Segmentierung mittels VLANs lässt sich steuern, in welchen Netzwerkzonen Clients den Server erreichen dürfen.
-    \item \textbf{\ac{DNS}-Eintrag:} Damit Nutzer nicht auf die \ac{IP}-Adresse angewiesen sind, sollte ein aussagekräftiger \ac{DNS}-Hostname für den Server angelegt werden.
-\end{itemize}
+    \item \textbf{Sicherheit:} Vor der Inbetriebnahme sollten alle bisher provisorisch gesetzten Passwörter durch starke, 
+    zufällig generierte Passwörter ersetzt und sicher in einem Passwortmanager gespeichert werden.
+    \item \textbf{Firewall-Konfiguration:} Die zentrale Firewall der HfM muss so konfiguriert werden, 
+    dass nur die für den Medienserver erforderlichen Ports geöffnet sind.
+    \item \textbf{Subnetze und \ac{VLAN}s:} Innerhalb des Hochschulnetzwerks müssen die relevanten Subnetze für den Zugriff freigeschaltet werden. 
+          Durch die Segmentierung mittels VLANs lässt sich gezielt steuern, aus welchen Netzwerkzonen Clients auf den Server zugreifen dürfen.
+    \item \textbf{\ac{DNS}-Eintrag:} Um den Zugriff zu vereinfachen, sollte ein sprechender DNS-Hostname für den Server angelegt werden. 
+          So können Nutzer den Server über einen Namen anstelle der IP-Adresse erreichen.
+  \end{itemize}
 
-  Durch diese Maßnahmen ist gewährleistet, dass der Medienserver nahtlos in die bestehende IT-Infrastruktur integriert wird, sicher betrieben werden kann und von den vorgesehenen Nutzergruppen erreichbar ist.
+  Durch diese Maßnahmen ist gewährleistet, dass der Medienserver nahtlos in die bestehende IT-Infrastruktur integriert, 
+  sicher betrieben und von den vorgesehenen Nutzergruppen zuverlässig erreicht werden kann.
+
+  Die Firewall der Hochschule wird durch einen externen Dienstleister verwaltet; Anpassungen müssen daher über das IT-Team der HfM beauftragt werden. 
+  Die Netzwerkkonfiguration des Servers wurde durch das IT-Team erstellt und unter \texttt{/etc/netplan/01-netcfg.yaml} abgelegt:
+
+  \begin{minted}[breaklines, linenos]{yaml}
+network: # Beginn der Netzwerkkonfiguration (Oberstruktur)
+  ethernets: # Definition kabelgebundener Netzwerkschnittstellen
+    enp0s31f6: # Name der Netzwerkschnittstelle (vom System erkannt)
+      dhcp4: no # DHCP deaktivieren, da statische IP-Konfiguration verwendet wird
+      addresses: # Liste der statisch zugewiesenen IP-Adressen
+        - 193.197.85.23/28 # IP-Adresse des Servers inkl. Subnetzmaske
+      gateway4: 193.197.85.30 # Standard-Gateway für ausgehenden Netzwerkverkehr
+      nameservers: # DNS-Server-Einstellungen
+        addresses: # Liste der DNS-Server
+          - 193.197.85.125 # Primärer DNS-Server der Hochschule
+          - 193.197.85.146 # Sekundärer DNS-Server der Hochschule (Fallback)
+  version: 2 # Netplan-Konfigurationsschema-Version (immer erforderlich)
+  \end{minted}
+
+  Diese Datei muss bei zukünftigen Änderungen der Netzwerkinfrastruktur gegebenenfalls angepasst werden
+  Mit folgendem Befehl kann die neue Konfiguration dann aktiviert werden:
+
+  \begin{minted}[breaklines, linenos]{bash}
+sudo netplan apply
+  \end{minted}
 
   \subsection{Datenbank anbinden}
     \subsubsection{Datenstruktur}
