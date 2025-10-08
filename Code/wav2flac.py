@@ -176,7 +176,7 @@ def parse_single(wav_path: Path) -> dict:
     folder_name_url = folder_name.replace(" ", "_")
 
     # URL erzeugen
-    bookleturl = f"http://mediaserver.local/booklets/{folder_name_url}.pdf"
+    bookleturl = f"http://medien.hfm.eu/booklets/{folder_name_url}.pdf"
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
@@ -261,7 +261,7 @@ def parse_box(wav_path: Path) -> dict:
     folder_name_url = folder_name.replace(" ", "_")
 
     # URL erzeugen
-    bookleturl = f"http://mediaserver.local/booklets/{folder_name_url}.pdf"
+    bookleturl = f"http://medien.hfm.eu/booklets/{folder_name_url}.pdf"
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
