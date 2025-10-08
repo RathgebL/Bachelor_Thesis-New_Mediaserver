@@ -1212,7 +1212,6 @@ services:
       - /srv/navidrome/data:/data
       - /mnt/media/music:/music:ro
       - /srv/navidrome/navidrome.toml:/navidrome.toml:ro
-
     \end{minted}
 
     \item Konfiguration:
@@ -1346,17 +1345,23 @@ server {
     listen 80;
     server_name medien.hfm.eu;
 
-    # Booklets bereitstellen
+    # ------------------------
+    # Booklets
+    # ------------------------
     location /booklets/ {
+        # mit Slash am Ende
         alias /mnt/media/booklets/;
-        autoindex off; # kein Verzeichnislisting
+        autoindex off;              # kein Verzeichnislisting für Nutzer
         autoindex_exact_size off;
         autoindex_localtime on;
     }
 
-    # Weiterleitung an Navidrome
+    # ------------------------
+    # Navidrome
+    # ------------------------
     location / {
-        proxy_pass         http://193.197.85.23:4533; # hier Server-IP eintragen
+        # Weiterleitung an Navidrome (läuft im Docker-Container auf Port 4533; ohne Slash am Ende)
+        proxy_pass         http://193.197.85.23:4533; # IP anpassen
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
         proxy_set_header   Connection "upgrade";
@@ -1364,7 +1369,24 @@ server {
         proxy_set_header   X-Real-IP $remote_addr;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
+
+        # wichtig, falls Navidrome selbst URLs generiert
         proxy_redirect     off;
+    }
+
+    # ------------------------
+    # Sperre Änderungen am Gastkonto
+    # ------------------------
+    location ~* ^/(rest/changePassword|rest/updateUser) {
+        # Wenn eingeloggter Benutzer "Bibliothek" ist -> blockieren
+        if ($http_cookie ~* "ND-User=Bibliothek") {
+            return 403;
+        }
+        proxy_pass         http://193.197.85.23:4533; # IP anpassen
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
     }
 }
     \end{minted}  
