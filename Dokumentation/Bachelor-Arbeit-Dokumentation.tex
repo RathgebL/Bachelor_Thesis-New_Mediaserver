@@ -1560,15 +1560,280 @@ sudo netplan apply
   \subsection{Datenbank anbinden}
     \subsubsection{Datenstruktur}
     Benennungskonvention
-  \subsubsection{Dateiformate}
-  \subsubsection{Datenverwaltung}
+    \subsubsection{Dateiformate}
+    \subsubsection{Datenverwaltung}
     Datenpflege
     Backup-Strategie
   \subsubsection{Datenquelle}
     Skript zur Digitalisierung
     Skript zur Metadatenanreicherung
     Externe Quellen
-  \subsubsection{Datenimport}
+  \subsubsection{Datenübertragung}
+  Um die Übertragung neu erstellter Mediendateien (\texttt{.flac}, \texttt{.pdf}) vom Digitalisierungsrechner auf den Medienserver zu vereinfachen 
+  und zu automatisieren, kann auf dem Server ein Upload-Mechanismus eingerichtet werden. 
+  Zunächst wird ein Ordner angelegt, der als Zwischenablage für neu bereitgestellte Dateien dient. 
+
+  \begin{minted}[breaklines, linenos]{bash}
+cd /srv
+sudo mkdir incoming_media
+  \end{minted}
+
+  Alle Dateien, die in diesem Verzeichnis abgelegt werden, werden regelmäßig überprüft 
+  und automatisch in die entsprechende Zielstruktur verschoben:
+  \begin{itemize}
+    \item Musikdateien (\texttt{.flac}) nach \texttt{/mnt/media/music}
+    \item Booklets (\texttt{.pdf}) nach \texttt{/mnt/media/booklets}
+  \end{itemize}
+
+  Die Verarbeitung erfolgt durch ein Bash-Skript (\texttt{process\_incoming.sh}), das die Dateien analysiert, 
+  verschiebt und alle Vorgänge in einer Logdatei protokolliert. 
+  Das Skript berücksichtigt verschiedene Dateitypen, legt bei Bedarf neue Zielverzeichnisse an und überspringt unbekannte Formate. 
+  Fehler und Warnungen werden im Log dokumentiert, um eine einfache Nachverfolgung zu ermöglichen.
+  Folgende Schritte müssen dafür durchgeführt werden:
+
+  \begin{itemize}
+    \item Script anlegen:
+    \begin{minted}[breaklines, linenos]{bash}
+sudo mkdir scripts
+sudo nano process_incoming.sh
+    \end{minted}
+
+    Nun folgendes einfügen (Beispiel-Datei auch im GitHub-Repository verfügbar):
+    \begin{minted}[breaklines, linenos]{bash}
+#!/bin/bash
+# ============================================================
+# Medienserver Upload-Verarbeitung
+# Verschiebt neue Uploads aus /incoming in die passende Zielstruktur
+# und sorgt für korrekte Rechte & Logging
+# ============================================================
+
+INCOMING="/srv/incoming_media"
+TARGET_MUSIC="/mnt/media/music"
+TARGET_BOOKLETS="/mnt/media/booklets"
+LOG="/srv/logs/process.log"
+
+# -------------------------------
+# Vorbereitung
+# -------------------------------
+mkdir -p "$(dirname "$LOG")"
+touch "$LOG"
+
+# Wenn keine Dateien im Incoming-Ordner, sofort beenden
+if ! find "$INCOMING" -type f | grep -q .; then
+    echo "$(date '+%F %T') [INFO] Keine neuen Dateien – Skript übersprungen." >> "$LOG"
+    exit 0
+fi
+
+# Logrotation ab ~50 KB (einfacher Schutz gegen Überlauf)
+MAXSIZE=50000  # ~50 KB
+if [[ -f "$LOG" && $(stat -c%s "$LOG") -gt $MAXSIZE ]]; then
+    mv "$LOG" "${LOG}.1"
+    touch "$LOG"
+    echo "$(date '+%F %T') [INFO] Logdatei rotiert (zu groß)" >> "$LOG"
+fi
+
+# -------------------------------
+# Hauptlogik
+# -------------------------------
+count=0
+
+find "$INCOMING" -type f | while read -r FILE; do
+    ((count++))
+    REL_PATH="${FILE#$INCOMING/}"
+
+    # Dateityp prüfen
+    if [[ "$FILE" == *.flac ]]; then
+        DEST="$TARGET_MUSIC/$REL_PATH"
+    elif [[ "$FILE" == *.pdf ]]; then
+        DEST="$TARGET_BOOKLETS/$REL_PATH"
+    else
+        echo "$(date '+%F %T') [SKIP] Unbekannter Typ: $FILE" >> "$LOG"
+        continue
+    fi
+
+    # Zielverzeichnis anlegen
+    mkdir -p "$(dirname "$DEST")"
+
+    # Datei verschieben
+    if mv "$FILE" "$DEST"; then
+        echo "$(date '+%F %T') [OK] Verschoben: $FILE → $DEST" >> "$LOG"
+    else
+        echo "$(date '+%F %T') [ERROR] Konnte Datei nicht verschieben: $FILE" >> "$LOG"
+    fi
+done
+
+# -------------------------------
+# Wenn keine Dateien gefunden
+# -------------------------------
+if [[ $count -eq 0 ]]; then
+    echo "$(date '+%F %T') [INFO] Keine neuen Dateien gefunden." >> "$LOG"
+fi
+
+# -------------------------------
+# Rechte setzen (Leserechte für nginx/Navidrome)
+# -------------------------------
+chmod -R o+r "$TARGET_MUSIC" "$TARGET_BOOKLETS" 2>/dev/null
+find "$TARGET_MUSIC" "$TARGET_BOOKLETS" -type d -exec chmod o+x {} \; 2>/dev/null
+
+echo "$(date '+%F %T') [INFO] Verarbeitung abgeschlossen." >> "$LOG"
+    \end{minted}
+
+    \item Script ausführbar machen:
+    \begin{minted}[breaklines, linenos]{bash}
+chmod +x /usr/local/bin/process_uploads.sh
+    \end{minted}
+
+    \item Script testen:
+    \begin{minted}[breaklines, linenos]{bash}
+# Script manuell ausführen
+sudo /srv/scripts/process_incoming.sh
+
+# Log einsehen
+tail -n 10 /srv/logs/process.log
+    \end{minted}
+  \end{itemize}
+
+  Zur zeitgesteuerten Ausführung kann ein \texttt{systemd}-Dienst eingerichtet werden, 
+  der aus zwei Einheiten besteht:
+  \begin{itemize}
+    \item \texttt{process\_incoming.service} – führt das Skript einmalig aus
+    \item \texttt{process\_incoming.timer} – startet den Dienst automatisch in regelmäßigen Abständen
+  \end{itemize}
+
+  Die Kombination aus Service und Timer hat den Vorteil, dass sie eine robustere und besser protokollierte Alternative zu Cron darstellt. 
+  Systemd-Timer starten automatisch nach einem Neustart des Servers, unterstützen persistente Intervalle und integrieren sich in das zentrale Linux-Loggingsystem (\texttt{journalctl}). 
+  Zudem werden alle Aktionen des Skripts zusätzlich in einer separaten Logdatei unter \texttt{/srv/logs/process.log} festgehalten.
+
+  Dafür müssen folgende Schritte unternommen werden:
+
+  \begin{itemize}
+    \item Service anlegen und testen:
+    \begin{minted}[breaklines, linenos]{bash}
+# Service-Datei erstellen
+sudo nano /etc/systemd/system/process_incoming.service
+    \end{minted}
+
+    Inhalt der Datei:
+    \begin{minted}[breaklines, linenos]{ini}
+# ===============================================
+# Systemd Service: process_incoming.service
+# -----------------------------------------------
+# Zweck:
+#   Führt das Skript /srv/scripts/process_incoming.sh aus,
+#   das neue Uploads aus /srv/incoming_media automatisch
+#   in die Zielstruktur verschiebt.
+#
+# Besonderheiten:
+#   - läuft automatisch über process_incoming.timer
+#   - startet bei Fehlern neu
+#   - schreibt Logdateien nach /srv/logs/
+# ===============================================
+
+[Unit]
+# Beschreibung, erscheint in 'systemctl list-units'
+Description=Verarbeite neue Uploads aus /srv/incoming_media
+
+# Warten, bis Netzwerk verfügbar ist (nicht zwingend, aber sicher)
+After=network.target
+
+
+[Service]
+# --- Allgemeine Ausführungseinstellungen ---
+# "oneshot" bedeutet: das Skript läuft einmal und beendet sich.
+# (nicht als dauerhaft laufender Prozess)
+Type=oneshot
+
+# Das eigentliche Skript, das ausgeführt wird
+ExecStart=/srv/scripts/process_incoming.sh
+
+# Ausführender Benutzer und Gruppe (nicht root!)
+User=medienserver
+Group=medienserver
+
+# CPU-Priorität senken, um andere Prozesse nicht zu blockieren
+Nice=10
+
+
+# --- Fehlerbehandlung ---
+# Service wird neu gestartet, falls ein Fehler (Exit-Code != 0) auftritt
+Restart=on-failure
+
+# Wartezeit zwischen zwei Neustarts
+RestartSec=30s
+
+
+# --- Logging ---
+# Standard- und Fehlerausgabe (stdout/stderr) in Logdatei umleiten.
+# Die Datei wird automatisch erstellt, falls sie fehlt.
+StandardOutput=append:/srv/logs/systemd_process_incoming.log
+StandardError=append:/srv/logs/systemd_process_incoming.log
+    \end{minted}
+
+    \noindent Service anschließend testen:
+    \begin{minted}[breaklines, linenos]{bash}
+sudo systemctl daemon-reload
+sudo systemctl start process_incoming.service
+sudo systemctl status process_incoming.service
+    \end{minted}
+
+    \item Timer anlegen und testen:
+    \begin{minted}[breaklines, linenos]{bash}
+# Timer-Datei erstellen
+sudo nano /etc/systemd/system/process_incoming.timer
+    \end{minted}
+
+    \noindent Inhalt der Datei:
+    \begin{minted}[breaklines, linenos]{ini}
+# ===============================================
+# Systemd Timer: process_incoming.timer
+# -----------------------------------------------
+# Zweck:
+#   Startet regelmäßig den Service 'process_incoming.service',
+#   der neue Uploads aus /srv/incoming_media verarbeitet.
+#
+# Vorteile:
+#   - Keine Cronjobs nötig (sauber über systemd integriert)
+#   - Logging & Fehlerbehandlung über systemd
+#   - Zeitplan flexibel konfigurierbar
+# ===============================================
+
+[Unit]
+# Beschreibung, wird in systemctl-Übersicht angezeigt
+Description=Timer für process_incoming.service – prüft regelmäßig auf neue Uploads
+
+[Timer]
+# --- Ausführungsplan ---
+# Startet 1 Minute nach dem Bootvorgang
+OnBootSec=1m
+
+# Wiederholt alle 5 Minuten
+OnUnitActiveSec=5m
+
+# --- Optionale Alternativen ---
+# • Nur einmal täglich:  OnCalendar=daily
+# • Jede Stunde:         OnUnitActiveSec=1h
+# • Manuelle Testvariante: OnActiveSec=30s (für Debugging)
+
+# --- Stabilität ---
+# Startet den Service nach verpassten Ausführungen (z. B. nach Reboot)
+Persistent=true
+
+[Install]
+# Verknüpfung mit systemd (wird beim Booten aktiviert)
+WantedBy=timers.target
+    \end{minted}
+
+    \noindent Timer aktivieren und testen:
+    \begin{minted}[breaklines, linenos]{bash}
+sudo systemctl daemon-reload
+sudo systemctl enable --now process_incoming.timer
+sudo systemctl list-timers --all | grep process_incoming
+    \end{minted}
+  \end{itemize}
+
+  Durch diese Automatisierung können Mitarbeitende der Bibliothek neue Mediendateien einfach in den Upload-Ordner kopieren, ohne direkt auf den Server zugreifen zu müssen. 
+  Die Übertragung, Strukturierung und Integration in die bestehende Medienbibliothek erfolgen anschließend vollautomatisch.
+
 \section{Benutzerverwaltung und Zugriffsrechte}
 \section{Testen und Fehlerbehebung}
   \subsection{Funktionstests}
@@ -1742,6 +2007,33 @@ ping mediaserver.local
 
       Vorteil dieser Methode ist, dass alle Geräte im lokalen Netzwerk sofort Zugriff erhalten, ohne dass die \texttt{/etc/hosts}-Datei auf jedem Client angepasst werden muss.
   \end{enumerate}
+
+  \subsubsection*{Probleme mit systemd (automatische Einsortierung der Medien auf Serverseite)}
+  Damit das Skript \texttt{process\_incoming.sh} ordnungsgemäß ausgeführt werden kann, 
+  müssen die Zugriffsrechte auf alle beteiligten Verzeichnisse korrekt gesetzt werden. 
+  Insbesondere benötigt der in der Service-Datei angegebene Benutzer \texttt{medienserver} Schreibrechte auf die Logdateien sowie Lese- 
+  und Schreibrechte auf die Upload- und Zielordner.
+
+  Nachfolgende Befehle stellen sicher, dass der Benutzer \texttt{medienserver} alle benötigten Rechte besitzt:
+
+  \begin{minted}[breaklines, linenos]{bash}
+# Eigentümer und Gruppe setzen
+sudo chown -R medienserver:medienserver /srv/scripts
+sudo chown -R medienserver:medienserver /srv/incoming_media
+sudo chown -R medienserver:medienserver /srv/logs
+sudo chown -R medienserver:medienserver /mnt/media/music
+sudo chown -R medienserver:medienserver /mnt/media/booklets
+
+# Schreib- und Ausführungsrechte vergeben
+sudo chmod -R 755 /srv/scripts
+sudo chmod -R 775 /srv/incoming_media /mnt/media/music /mnt/media/booklets
+sudo chmod 664 /srv/logs/process.log
+  \end{minted}
+
+  Damit wird sichergestellt, dass das Skript im Kontext des Benutzers \texttt{medienserver} ausgeführt werden kann, 
+  Logdateien angelegt und beschrieben werden dürfen und der automatische Verschiebevorgang in die Zielverzeichnisse fehlerfrei funktioniert.
+  Das Vergeben der richtigen Besitzrechte ist insbesondere deshalb erforderlich, weil der \texttt{systemd}-Dienst standardmäßig mit dem Benutzer \texttt{medienserver} läuft und 
+  ansonsten beim Zugriff auf das Logverzeichnis oder die Mediendateien Fehler wie \enquote{Permission denied} verursachen würde.
    
 % ------ Fazit ------
 \chapter*{Fazit}
