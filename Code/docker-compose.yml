@@ -1,3 +1,4 @@
+version: "3" # gegebenfalls anpassen oder weglassen
 services:
   navidrome:
     image: deluan/navidrome:latest
@@ -6,11 +7,11 @@ services:
     ports:
       - "4533:4533"
     environment:
-      # nur das Nötigste als ENV
       ND_LOGLEVEL: "info"
       ND_SCANSCHEDULE: "1h"
-      ND_ENABLEDOWNLOADS: "false"   # erzwingt: keine Downloads
+      ND_ENABLEDOWNLOADS: "false"
+      # ND_ENABLEPUBLICSIGNUP: "true"   # optional: öffnet Self-Signup; Vorsicht mit dieser Einstellung!
     volumes:
-      - /home/navidrome/data:/data
-      - /media/user/Expansion/music:/music:ro
-      - ./navidrome.toml:/navidrome.toml:ro
+      - /srv/navidrome/data:/data
+      - /mnt/media/music:/music:ro
+      - /srv/navidrome/navidrome.toml:/navidrome.toml:ro
