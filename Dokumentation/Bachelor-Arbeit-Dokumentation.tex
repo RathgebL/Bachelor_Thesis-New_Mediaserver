@@ -1591,7 +1591,7 @@ sudo mkdir incoming_media
   Fehler und Warnungen werden im Log dokumentiert, um eine einfache Nachverfolgung zu ermöglichen.
   Folgende Schritte müssen dafür durchgeführt werden:
 
-  \begin{itemize}
+  \begin{enumerate}
     \item Script anlegen:
     \begin{minted}[breaklines, linenos]{bash}
 sudo mkdir scripts
@@ -1691,7 +1691,7 @@ sudo /srv/scripts/process_incoming.sh
 # Log einsehen
 tail -n 10 /srv/logs/process.log
     \end{minted}
-  \end{itemize}
+  \end{enumerate}
 
   Zur zeitgesteuerten Ausführung kann ein \texttt{systemd}-Dienst eingerichtet werden, 
   der aus zwei Einheiten besteht:
@@ -1706,7 +1706,7 @@ tail -n 10 /srv/logs/process.log
 
   Dafür müssen folgende Schritte unternommen werden:
 
-  \begin{itemize}
+  \begin{enumerate}
     \item Service anlegen und testen:
     \begin{minted}[breaklines, linenos]{bash}
 # Service-Datei erstellen
@@ -1829,10 +1829,195 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now process_incoming.timer
 sudo systemctl list-timers --all | grep process_incoming
     \end{minted}
-  \end{itemize}
+  \end{enumerate}
 
-  Durch diese Automatisierung können Mitarbeitende der Bibliothek neue Mediendateien einfach in den Upload-Ordner kopieren, ohne direkt auf den Server zugreifen zu müssen. 
-  Die Übertragung, Strukturierung und Integration in die bestehende Medienbibliothek erfolgen anschließend vollautomatisch.
+  Um die Daten vom Arbeitsrechner in der Bibliothek auf den Server zu übertragen,
+  fehlt noch ein Upload-Ordner aus dem automatisch Dateien an den Server geschickt werden.
+  Diese Funktion ist mit \texttt{rsync} und \texttt{launchd} möglich. 
+  Folgende Schritte müssen zur Einrichtung vorgenommen werden:
+
+  \begin{enumerate}
+    \item Upload-Ordner und Skript anlegen:
+    \begin{minted}[breaklines, linenos]{bash}
+mkdir /Desktop/_upload-to-server
+mkdir /Desktop/Scripts
+nano /Desktop/Scripts/upload_media.sh
+    \end{minted}
+
+    Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren)
+
+    \begin{minted}[breaklines, linenos]{bash}
+#!/bin/bash
+# ============================================================
+#  Upload-Skript für Medienserver (macOS)
+#  ------------------------------------------------------------
+#  Zweck:
+#    - Überträgt neue Medien-Dateien (FLACs, PDFs, JPGs etc.)
+#      aus dem lokalen Upload-Ordner auf den zentralen Server.
+#    - Erfolgreich übertragene Dateien werden lokal gelöscht.
+#    - Logdatei dokumentiert alle Aktionen.
+# ============================================================
+
+# -------------------------------
+# Konfiguration
+# -------------------------------
+SOURCE="/Users/bibliothek/Desktop/_upload-to-server"            # Lokaler Upload-Ordner
+DEST="medienserver@193.197.85.23:/srv/incoming_media"           # Ziel auf Server
+LOGFILE="/Users/bibliothek/Desktop/Logs/upload_media.log"       # Lokale Log-Datei
+
+# -------------------------------
+# Vorbereitung
+# -------------------------------
+mkdir -p "$(dirname "$LOGFILE")"    # Log-Verzeichnis anlegen, falls fehlt
+touch "$LOGFILE"                    # Log-Datei sicherstellen
+
+echo "-------------------------------------------------------" >> "$LOGFILE"
+echo "$(date '+%F %T') [INFO] Starte Upload-Prozess..." >> "$LOGFILE"
+
+# Prüfen, ob der Upload-Ordner existiert und Dateien enthält
+if ! find "$SOURCE" -type f | grep -q .; then
+    echo "$(date '+%F %T') [INFO] Keine Dateien im Upload-Ordner – Upload übersprungen." >> "$LOGFILE"
+    exit 0
+fi
+
+# -------------------------------
+# Upload via rsync
+# -------------------------------
+# -a : Archivmodus (bewahrt Zeitstempel, Rechte etc.)
+# -v : Verbose (ausführliche Ausgabe)
+# -z : Kompression während der Übertragung
+# --remove-source-files : löscht Dateien, wenn erfolgreich übertragen
+# --progress : Fortschrittsanzeige (hier ins Log umgeleitet)
+# --exclude : ignoriert Systemdateien
+rsync -avz --remove-source-files --progress \
+  --exclude=".DS_Store" \
+  "$SOURCE/" "$DEST/" >> "$LOGFILE" 2>&1
+
+RSYNC_EXIT=$?
+
+# -------------------------------
+# Nachbearbeitung
+# -------------------------------
+if [[ $RSYNC_EXIT -eq 0 ]]; then
+    echo "$(date '+%F %T') [OK] Upload erfolgreich abgeschlossen." >> "$LOGFILE"
+
+    # Leere Unterordner entfernen (Hauptordner bleibt bestehen)
+    find "$SOURCE" -mindepth 1 -type d -empty -delete
+    echo "$(date '+%F %T') [CLEANUP] Leere Unterordner entfernt." >> "$LOGFILE"
+else
+    echo "$(date '+%F %T') [ERROR] Upload fehlgeschlagen (Exit-Code: $RSYNC_EXIT)." >> "$LOGFILE"
+fi
+
+echo "$(date '+%F %T') [INFO] Upload-Vorgang beendet." >> "$LOGFILE"
+echo "-------------------------------------------------------" >> "$LOGFILE"
+    \end{minted}
+
+    \item Aktivieren:
+    \begin{minted}[breaklines, linenos]{bash}
+chmod +x /Users/bibliothek/Desktop/Scripts/upload_media.sh # Pfad zur Datei gegebenfalls anpassen
+    \end{minted}
+
+    \item Laucnchd-Job zur Automatisierung des Prozesses anlegen:
+    \begin{minted}[breaklines, linenos]{bash}
+cd ~/Library/LaunchAgents
+nano de.hfm.upload_media.plist
+    \end{minted}
+
+    Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren)
+
+    \begin{minted}[breaklines, linenos]{XML}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!-- ===========================================================
+         Launchd-Job für automatischen Upload zum Medienserver
+         ===========================================================
+         Dieses LaunchAgent-File sorgt dafür, dass das Skript
+         „upload_media.sh“ regelmäßig ausgeführt wird.
+         Der Job läuft im Benutzerkontext (nicht systemweit) und
+         lädt alle 30 Minuten neue Mediendateien hoch.
+    -->
+
+    <!-- Label: interner Name des Jobs
+         ---------------------------------
+         Wird von launchd verwendet, um den Job zu identifizieren.
+         Der Name sollte eindeutig und im Reverse-Domain-Format sein. -->
+    <key>Label</key>
+    <string>de.hfm.upload_media</string>
+
+    <!-- ProgramArguments: Pfad und Argumente des Skripts
+         ---------------------------------
+         Gibt an, welches Skript oder Programm ausgeführt wird.
+         Hier nur ein Argument: der vollständige Pfad zur .sh-Datei. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/bibliothek/Desktop/Scripts/upload_media.sh</string>
+    </array>
+
+    <!-- RunAtLoad: Start beim Login
+         ---------------------------------
+         Wenn der Benutzer sich anmeldet, wird das Skript sofort
+         einmal ausgeführt. Praktisch, damit der Prozess gleich
+         nach dem Hochfahren aktiv ist. -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- StartInterval: Wiederholungsintervall
+         ---------------------------------
+         Legt fest, wie oft der Job automatisch ausgeführt wird.
+         Zeitangabe in Sekunden → 1800 = 30 Minuten. -->
+    <key>StartInterval</key>
+    <integer>1800</integer>
+
+    <!-- StandardOutPath & StandardErrorPath: Logdateien
+         ---------------------------------
+         Hier werden alle Standard-Ausgaben und Fehler des Skripts
+         gespeichert, damit man prüfen kann, ob alles korrekt läuft.
+         Beide Dateien liegen im Ordner ~/Desktop/Logs -->
+    <key>StandardOutPath</key>
+    <string>/Users/bibliothek/Desktop/Logs/upload_media_launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/bibliothek/Desktop/Logs/upload_media_launchd_error.log</string>
+
+    <!-- EnvironmentVariables: Umgebungsvariablen
+         ---------------------------------
+         Optional, falls PATH-Probleme auftreten.
+         Manche macOS-LaunchAgents haben eine minimale PATH-Umgebung.
+         Hier wird der Standard-Systempfad explizit angegeben,
+         damit Befehle wie „rsync“ und „ssh“ zuverlässig gefunden werden. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+</dict>
+</plist>
+    \end{minted}
+
+    \item Launch-Job laden und testen:
+    \begin{minted}[breaklines, linenos]{bash}
+launchctl load ~/Library/LaunchAgents/de.hfm.upload_media.plist
+    \end{minted}
+
+    Datei (.pdf oder .flac) in den Upload-Ordner legen und Test durchführen
+
+    \begin{minted}[breaklines, linenos]{bash}
+launchctl start de.hfm.upload_media # manuell starten
+launchctl list | grep upload_media # Status prüfen
+
+# Logs prüfen unter:
+~/Desktop/Logs/upload_media_launchd.log
+~/Desktop/Logs/upload_media_launchd_error.log
+~/Desktop/Logs/upload_media.log
+
+# nach Änderungen immer folgendes ausführen:
+launchctl unload ~/Library/LaunchAgents/de.hfm.upload_media.plist
+launchctl load ~/Library/LaunchAgents/de.hfm.upload_media.plist
+    \end{minted}
+  \end{enumerate}
 
 \section{Benutzerverwaltung und Zugriffsrechte}
 \section{Testen und Fehlerbehebung}
@@ -2007,6 +2192,21 @@ ping mediaserver.local
 
       Vorteil dieser Methode ist, dass alle Geräte im lokalen Netzwerk sofort Zugriff erhalten, ohne dass die \texttt{/etc/hosts}-Datei auf jedem Client angepasst werden muss.
   \end{enumerate}
+
+  \subsubsection*{Probleme mit launchd (automatischer Datentransfer zum Server)}
+  Wenn für den SSH-Key ein Passwort dei der Erstellung angelegt wurde, kann es zu Problemen bei der Automatisierung des Datentrasfers mit launchd kommen.
+  Dies lässt sich aber einfach lösen in dem man das Passwort zur Keychain hinzufügt.
+  
+  \begin{minted}[breaklines, linenos]{bash}
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519 # Key gegebenfalls anpassen
+  \end{minted}
+
+  Nun das Passwort angeben. Danach testen:
+  \begin{minted}[breaklines, linenos]{bash}
+ssh medienserver@Server-IP
+  \end{minted}
+
+  Es sollte nicht mehr nach dem Passwort gefragt werden.
 
   \subsubsection*{Probleme mit systemd (automatische Einsortierung der Medien auf Serverseite)}
   Damit das Skript \texttt{process\_incoming.sh} ordnungsgemäß ausgeführt werden kann, 
