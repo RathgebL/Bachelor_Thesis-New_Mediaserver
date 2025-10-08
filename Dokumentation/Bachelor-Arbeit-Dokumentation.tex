@@ -1200,19 +1200,19 @@ services:
   navidrome:
     image: deluan/navidrome:latest
     container_name: navidrome
-    restart: unless-stopped # Container automatisch neustarten
+    restart: unless-stopped
     ports:
       - "4533:4533"
     environment:
-      # nur das Nötigste als ENV
       ND_LOGLEVEL: "info"
       ND_SCANSCHEDULE: "1h"
-      ND_ENABLEDOWNLOADS: "false" # erzwingt: keine Downloads
+      ND_ENABLEDOWNLOADS: "false"
+      # ND_ENABLEPUBLICSIGNUP: "true"   # optional: öffnet Self-Signup; Vorsicht mit dieser Einstellung!
     volumes:
-    # gegebenfalls anpassen
-      - /home/navidrome/data:/data
+      - /srv/navidrome/data:/data
       - /mnt/media/music:/music:ro
-      - ./navidrome.toml:/navidrome.toml:ro
+      - /srv/navidrome/navidrome.toml:/navidrome.toml:ro
+
     \end{minted}
 
     \item Konfiguration:
@@ -1241,7 +1241,7 @@ EnableUserEditing = false             # Nutzer können ihre eigenen Daten nicht 
 MaxUserSessions = 1                   # verhindert, dass ein Konto gleichzeitig mehrfach genutzt wird
 TranscodingCacheSize = "500MB"        # Zwischenspeicher für Transkodierung
 PreCacheTranscoding = true            # fängt schon an zu transkodieren, bevor der Nutzer Play drückt
-ScannerParallelism = 4                # wie viele Threads der Scanner nutzt (abhängig von CPU)
+ScannerParallelism = 8                # wie viele Threads der Scanner nutzt (abhängig von CPU)
 
 # -----------------------------
 # Sicherheit
@@ -1270,8 +1270,7 @@ MaxLength = 512
 # -----------------------------
 # Benutzer
 # -----------------------------
-SessionTimeout = 1800                 # nach wie vielen Sekunden Sessions auslaufen
-PasswordStrength = "weak"             # simple Passwörter reichen aus
+SessionTimeout = 1800
     \end{minted}
 
     Nähere Informationen zu den Konfigurationsmöglichkeiten sind in der offiziellen Dokumentation verfügbar: \url{https://www.navidrome.org/docs/configuration/}.
