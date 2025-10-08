@@ -1628,6 +1628,23 @@ docker run --rm \
 
       Danach im Webinterface mit Benutzer \texttt{admin} und mit "Passwort" einloggen. Nun ist es besonders wichtig in den Einstellungen ein neues sicheres Passwort festlegen.  
       Sobald dies geschehen ist, den temporären Container mit \texttt{CTRL+C} beenden und das System wie gewohnt neu starten.
+    
+      \item Änderung von Umgebeungsvariablen:
+      Werden Änderungen von Umgebungsvariablen im docker-compose.yml bei Navidrome nicht direkt übernommen, kann folgender Schritt helfen:
+      \begin{minted}[breaklines, linenos]{bash}
+# Zuerst ins Richtige Verzeichnis wechseln
+cd /srv/navidrome
+
+# Container löschen
+sudo docker compose down
+sudo docker compose rm -f
+
+# Container neu erstellen
+sudo docker compose up -d
+
+# Überprüfen
+sudo docker exec -it navidrome printenv | grep ENABLEDOWNLOADS # Variable anpassen
+      \end{minted}
     \end{enumerate}
 
     \subsubsection*{Probleme mit nginx}
