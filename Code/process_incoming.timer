@@ -1,0 +1,37 @@
+# ===============================================
+# Systemd Timer: process_incoming.timer
+# -----------------------------------------------
+# Zweck:
+#   Startet regelmäßig den Service 'process_incoming.service',
+#   der neue Uploads aus /srv/incoming_media verarbeitet.
+#
+# Vorteile:
+#   - Keine Cronjobs nötig (sauber über systemd integriert)
+#   - Logging & Fehlerbehandlung über systemd
+#   - Zeitplan flexibel konfigurierbar
+# ===============================================
+
+[Unit]
+# Beschreibung, wird in systemctl-Übersicht angezeigt
+Description=Timer für process_incoming.service – prüft regelmäßig auf neue Uploads
+
+[Timer]
+# --- Ausführungsplan ---
+# Startet 1 Minute nach dem Bootvorgang
+OnBootSec=1m
+
+# Wiederholt alle 5 Minuten
+OnUnitActiveSec=5m
+
+# --- Optionale Alternativen ---
+# • Nur einmal täglich:  OnCalendar=daily
+# • Jede Stunde:         OnUnitActiveSec=1h
+# • Manuelle Testvariante: OnActiveSec=30s (für Debugging)
+
+# --- Stabilität ---
+# Startet den Service nach verpassten Ausführungen (z. B. nach Reboot)
+Persistent=true
+
+[Install]
+# Verknüpfung mit systemd (wird beim Booten aktiviert)
+WantedBy=timers.target

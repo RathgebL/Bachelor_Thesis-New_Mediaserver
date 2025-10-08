@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!-- ===========================================================
+         Launchd-Job für automatischen Upload zum Medienserver
+         ===========================================================
+         Dieses LaunchAgent-File sorgt dafür, dass das Skript
+         „upload_media.sh“ regelmäßig ausgeführt wird.
+         Der Job läuft im Benutzerkontext (nicht systemweit) und
+         lädt alle 30 Minuten neue Mediendateien hoch.
+    -->
+
+    <!-- Label: interner Name des Jobs
+         ---------------------------------
+         Wird von launchd verwendet, um den Job zu identifizieren.
+         Der Name sollte eindeutig und im Reverse-Domain-Format sein. -->
+    <key>Label</key>
+    <string>de.hfm.upload_media</string>
+
+    <!-- ProgramArguments: Pfad und Argumente des Skripts
+         ---------------------------------
+         Gibt an, welches Skript oder Programm ausgeführt wird.
+         Hier nur ein Argument: der vollständige Pfad zur .sh-Datei. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/bibliothek/Desktop/Scripts/upload_media.sh</string>
+    </array>
+
+    <!-- RunAtLoad: Start beim Login
+         ---------------------------------
+         Wenn der Benutzer sich anmeldet, wird das Skript sofort
+         einmal ausgeführt. Praktisch, damit der Prozess gleich
+         nach dem Hochfahren aktiv ist. -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- StartInterval: Wiederholungsintervall
+         ---------------------------------
+         Legt fest, wie oft der Job automatisch ausgeführt wird.
+         Zeitangabe in Sekunden → 1800 = 30 Minuten. -->
+    <key>StartInterval</key>
+    <integer>1800</integer>
+
+    <!-- StandardOutPath & StandardErrorPath: Logdateien
+         ---------------------------------
+         Hier werden alle Standard-Ausgaben und Fehler des Skripts
+         gespeichert, damit man prüfen kann, ob alles korrekt läuft.
+         Beide Dateien liegen im Ordner ~/Desktop/Logs -->
+    <key>StandardOutPath</key>
+    <string>/Users/bibliothek/Desktop/Logs/upload_media_launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/bibliothek/Desktop/Logs/upload_media_launchd_error.log</string>
+
+    <!-- EnvironmentVariables: Umgebungsvariablen
+         ---------------------------------
+         Optional, falls PATH-Probleme auftreten.
+         Manche macOS-LaunchAgents haben eine minimale PATH-Umgebung.
+         Hier wird der Standard-Systempfad explizit angegeben,
+         damit Befehle wie „rsync“ und „ssh“ zuverlässig gefunden werden. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+</dict>
+</plist>

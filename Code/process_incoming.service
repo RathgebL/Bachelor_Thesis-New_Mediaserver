@@ -1,0 +1,52 @@
+# ===============================================
+# Systemd Service: process_incoming.service
+# -----------------------------------------------
+# Zweck:
+#   Führt das Skript /srv/scripts/process_incoming.sh aus,
+#   das neue Uploads aus /srv/incoming_media automatisch
+#   in die Zielstruktur verschiebt.
+#
+# Besonderheiten:
+#   - läuft automatisch über process_incoming.timer
+#   - startet bei Fehlern neu
+#   - schreibt Logdateien nach /srv/logs/
+# ===============================================
+
+[Unit]
+# Beschreibung, erscheint in 'systemctl list-units'
+Description=Verarbeite neue Uploads aus /srv/incoming_media
+
+# Warten, bis Netzwerk verfügbar ist (nicht zwingend, aber sicher)
+After=network.target
+
+
+[Service]
+# --- Allgemeine Ausführungseinstellungen ---
+# "oneshot" bedeutet: das Skript läuft einmal und beendet sich.
+# (nicht als dauerhaft laufender Prozess)
+Type=oneshot
+
+# Das eigentliche Skript, das ausgeführt wird
+ExecStart=/srv/scripts/process_incoming.sh
+
+# Ausführender Benutzer und Gruppe (nicht root!)
+User=medienserver
+Group=medienserver
+
+# CPU-Priorität senken, um andere Prozesse nicht zu blockieren
+Nice=10
+
+
+# --- Fehlerbehandlung ---
+# Service wird neu gestartet, falls ein Fehler (Exit-Code != 0) auftritt
+Restart=on-failure
+
+# Wartezeit zwischen zwei Neustarts
+RestartSec=30s
+
+
+# --- Logging ---
+# Standard- und Fehlerausgabe (stdout/stderr) in Logdatei umleiten.
+# Die Datei wird automatisch erstellt, falls sie fehlt.
+StandardOutput=append:/srv/logs/systemd_process_incoming.log
+StandardError=append:/srv/logs/systemd_process_incoming.log
