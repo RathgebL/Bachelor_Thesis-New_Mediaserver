@@ -54,11 +54,8 @@ def nfc(s: str) -> str: # Unicode-Normalisierung (NFC) für Umlaute auf macOS
     return unicodedata.normalize("NFC", s or "")
 
 def norm_text(s: str) -> str:  # Normalisierung für Titel, Alben und Werke
-    s = s.replace("_", " ")  # Unterstriche zu Leerzeichen
-    s = s.replace("--", "—")  # Doppelter Bindestrich zu einfachem Bindestrich
-    
-    # Opus vereinheitlichen
-    s = re.sub(r"\b[oO][pP]\.?\s*", "op. ", s)
+     # Opus vereinheitlichen
+    s = re.sub(r"\b(?:[oO][pP](?:us)?)(?:\.?\s*)(?=\d)", "op. ", s)
 
     # Nummer vereinheitlichen
     s = s.replace("Nº", "No")
@@ -75,7 +72,7 @@ def smart_titlecase(s: str) -> str:
         return s
 
     # Sonderzeichen für Trennung
-    special_cases = ["+", ",", "§§§", "_"]
+    special_cases = ["+", ",", "§§§", "_", "."]
 
     def fix_word(word: str) -> str:
         w = word.capitalize()
@@ -94,13 +91,21 @@ def smart_titlecase(s: str) -> str:
 
     return " ".join(fix_word(w) for w in s.split())
 
+def norm_sym(s: str) -> str:
+    s = s.replace("_", " ")  # Unterstriche zu Leerzeichen
+    s = s.replace("§§§", "-") # Platzhalter zu Bindestrich für Namen wie Jean-Féry
+
+    return s
+
 def norm_name(s: str) -> str:
     # Normalisierung für Personennamen
     if not s:
         return s
-    s = s.replace("_", " ")  # Unterstriche zu Leerzeichen
-    s = re.sub(r",\s*(\S)", r", \1", s)  # Nach Komma immer ein Leerzeichen
-    s = smart_titlecase(s)  # Falls komplett groß, in Title Case umwandeln
+
+    s = norm_sym(s)
+    s = re.sub(r",\s*(\S)", r", \1", s) # Nach Komma immer ein Leerzeichen
+    s = s.replace("+", " & ") # Plus zu Und-Zeichen
+
     return s
 
 # --- Classifier ---
@@ -124,17 +129,21 @@ def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", 
 
 # --- Parser ---
 def parse_single(wav_path: Path) -> dict:
-    work_dir  = wav_path.parent # Komponist,Vorname-Werk
-    media_dir = work_dir.parent # Komponist,Vorname-Medientitel
+    placeholder = "§§§"  # Platzhalter für doppelten Bindestrich
+
+    # Pfade mit Platzhalter
+    work_dir  = Path(str(wav_path.parent).replace("--", placeholder))
+    media_dir = Path(str(work_dir.parent).replace("--", placeholder))
 
     # Album aus dem Medientitel-Ordner
     m_album = re.match(r"^(?P<comp>[^-]+?)\s*-\s*(?P<album>.+)$", media_dir.name) # Trennt Komponist und Album
     album  = norm_text(nfc(m_album.group("album"))) if m_album else "Unknown Album" # Weist Album zu, wenn nicht gefunden "Unknown Album"
+    allcomposers = smart_titlecase(nfc(m_album.group("comp"))) if m_album else "Unknown Artist" # Komponist für Booklet-URL aus dem Medienverzeichnis
 
     # Werktitel und Komponist aus dem Werk-Ordner
     m_work = re.match(r"^(?P<comp>[^-]+?)\s*-\s*(?P<work>.+)$", work_dir.name) # Trennt Komponist und Werk
     work = norm_text(nfc(m_work.group("work"))) if m_work else "" # Weist Werk zu, wenn nicht gefunden leer
-    composer = norm_name(nfc(m_work.group("comp"))) if m_work else "Unknown Artist" # Weist Komponist zu, wenn nicht gefunden "Unknown Artist"
+    composer = smart_titlecase(nfc(m_work.group("comp"))) if m_work else "Unknown Artist" # Komponist für Metadaten aus Werkverzeichnis
 
     # Titel und Satznummer aus dem Dateinamen
     fname = wav_path.name
@@ -155,28 +164,17 @@ def parse_single(wav_path: Path) -> dict:
     title = norm_text(nfc(title_raw))
 
     # Booklet-URL aus dem kompletten Medienordnernamen bauen
-    raw_folder = nfc(media_dir.name)
-    placeholder = "§§§" # Platzhalter für doppelten Bindestrich (falls im Namen wie "Jean--Féry")
-    safe = raw_folder.replace("--", placeholder)
-
-    if "-" in safe:
-        comp_raw, title_raw = safe.split("-", 1)
-    else:
-        comp_raw, title_raw = safe, ""
-
-    # Normalisierung
-    composer = smart_titlecase(comp_raw)
-    title = norm_text(title_raw)
-
-    # Zusammensetzen und Platzhalter zurücksetzen
-    folder_name = f"{composer}-{title}" if title else composer
+    folder_name = f"{allcomposers}-{album}"
     folder_name = folder_name.replace(placeholder, "--")
 
-    # Leerzeichen für die URL durch Unterstriche ersetzen
-    folder_name_url = folder_name.replace(" ", "_")
-
     # URL erzeugen
-    bookleturl = f"http://medien.hfm.eu/booklets/{folder_name_url}.pdf"
+    bookleturl = f"http://medien.hfm.eu/booklets/{folder_name}.pdf"
+
+    # Normalisierung
+    composer = norm_name(composer)
+    album = norm_sym(album)
+    work = norm_sym(work)
+    title = norm_sym(title)
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
@@ -194,23 +192,28 @@ def parse_single(wav_path: Path) -> dict:
     }
 
 def parse_box(wav_path: Path) -> dict:
-    work_dir = wav_path.parent # Komponist,Vorname-Werk 
-    disc_dir = work_dir.parent # Komponist,Vorname-Medientitel_CDNummer
-    box_dir  = disc_dir.parent # Komponist,Vorname-BoxTitel
+    placeholder = "§§§"  # Platzhalter für doppelten Bindestrich
+
+    # Pfade mit Platzhalter
+    work_dir  = Path(str(wav_path.parent).replace("--", placeholder)) # Komponist,Vorname-Werk
+    disc_dir = Path(str(work_dir.parent).replace("--", placeholder)) # Komponist,Vorname-Medientitel_CDNummer
+    box_dir = Path(str(disc_dir.parent).replace("--", placeholder)) # Komponist,Vorname-BoxTitel
 
     # Box-Titel aus dem Box-Ordner
     m_box = re.match(r"^(?P<comp>[^-]+?)\s*-\s*(?P<box>.+)$", box_dir.name)
     boxtitle = norm_text(nfc(m_box.group("box"))) if m_box else "Unknown Album"
+    allcomposers = smart_titlecase(nfc(m_box.group("comp"))) if m_box else "Unknown Artist" # Komponist für Booklet-URL aus dem Medienverzeichnis
 
     # Disc-Titel aus dem Disc-Ordner
     m_disc = re.match(r"^(?P<comp>[^-]+?)\s*-\s*(?P<title>.+?)(?:\._CD(?P<discnum>\d{1,2}))?$", disc_dir.name)
     disctitle = norm_text(nfc(m_disc.group("title"))) if m_disc else "Unknown Album" # Weist Disc-Titel zu, wenn nicht gefunden "Unknown Album"
     discnumber = m_disc.group("discnum") if m_disc and m_disc.group("discnum") else "" # Weist Discnummer zu, wenn nicht gefunden leer
+    
 
     # Werktitel aus dem Werk-Ordner
     m_work = re.match(r"^(?P<comp>[^-]+?)\s*-\s*(?P<work>.+)$", work_dir.name) # Trennt Komponist und Werk
     work = norm_text(nfc(m_work.group("work"))) if m_work else "" # Weist Werk zu, wenn nicht gefunden leer
-    composer = norm_name(nfc(m_work.group("comp"))) if m_work else "Unknown Artist" # Weist Komponist zu, wenn nicht gefunden "Unknown Artist"
+    composer = norm_name(nfc(m_work.group("comp"))) if m_work else "Unknown Artist" # Komponist für Metadaten aus Werkverzeichnis
 
     # Titel aus Dateiname
     fname = wav_path.name
@@ -238,30 +241,20 @@ def parse_box(wav_path: Path) -> dict:
         # Titel weicht ab
         album = disctitle
         boxset = boxtitle
-
+        
     # Booklet-URL aus dem kompletten Medienordnernamen bauen
-    raw_folder = nfc(box_dir.name)
-    placeholder = "§§§" # Platzhalter für doppelten Bindestrich (falls im Namen wie "Jean--Féry")
-    safe = raw_folder.replace("--", placeholder)
-
-    if "-" in safe:
-        comp_raw, title_raw = safe.split("-", 1)
-    else:
-        comp_raw, title_raw = safe, ""
-
-    # Normalisierung
-    composer = smart_titlecase(comp_raw)
-    title = norm_text(title_raw)
-
-    # Zusammensetzen und Platzhalter zurücksetzen
-    folder_name = f"{composer}-{title}" if title else composer
+    folder_name = f"{allcomposers}-{boxtitle}"
     folder_name = folder_name.replace(placeholder, "--")
 
-    # Leerzeichen für die URL durch Unterstriche ersetzen
-    folder_name_url = folder_name.replace(" ", "_")
-
     # URL erzeugen
-    bookleturl = f"http://medien.hfm.eu/booklets/{folder_name_url}.pdf"
+    bookleturl = f"http://medien.hfm.eu/booklets/{folder_name}.pdf"
+
+    # Normalisierung
+    composer = norm_name(composer)
+    boxset = norm_sym(boxset)
+    album = norm_sym(album)
+    work = norm_sym(work)
+    title = norm_sym(title)
 
     return {
         "artist":         composer, # Komponist als Interpret, da fehlende Info, aber Pflichtangabe
