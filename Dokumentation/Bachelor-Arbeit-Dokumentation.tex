@@ -1557,21 +1557,34 @@ network: # Beginn der Netzwerkkonfiguration (Oberstruktur)
 sudo netplan apply
   \end{minted}
 
-  \subsection{Datenbank anbinden}
-    \subsubsection{Datenstruktur}
-    Benennungskonvention
-    \subsubsection{Dateiformate}
-    \subsubsection{Datenverwaltung}
-    Datenpflege
-    Backup-Strategie
-  \subsubsection{Datenquelle}
+\section{Datenbank-Anbindung}
+Ein Medienserver ist nur dann sinnvoll nutzbar, wenn er über strukturierte und vollständige Mediendaten verfügt. 
+In diesem Projekt umfasst die Datenbasis sowohl Audioaufnahmen (z.\,B. digitalisierte CDs im \texttt{.wav}-Format) 
+als auch zugehörige Booklets (Scans im \texttt{.jpg}-Format).  
+
+In diesem Abschnitt wird erläutert, wie diese Daten bislang erstellt und verwaltet werden, 
+welche Anpassungen für die Integration in den Medienserver notwendig sind und 
+wie der automatisierte Datentransfer, die Strukturierung und die Sicherung der Mediendaten umgesetzt werden können.  
+
+Der Ablauf gliedert sich dabei in folgende Schritte:
+\begin{itemize}
+  \item \textbf{Datenquelle:} Herkunft und Aufbereitung der Mediendaten.
+  \item \textbf{Datenstruktur:} Aufbau und Formatierung der Daten bisher und im neuen Zielsystem.
+  \item \textbf{Datenübertragung:} Mechanismen zum Import und zur Synchronisation neuer Dateien.
+  \item \textbf{Datenverwaltung:} Pflege, Sicherung und Backup der Bestände.
+\end{itemize}
+ 
+    \subsection{Datenquelle}
     Skript zur Digitalisierung
     Skript zur Metadatenanreicherung
-    Externe Quellen
-  \subsubsection{Datenübertragung}
-  Um die Übertragung neu erstellter Mediendateien (\texttt{.flac}, \texttt{.pdf}) vom Digitalisierungsrechner auf den Medienserver zu vereinfachen 
-  und zu automatisieren, kann auf dem Server ein Upload-Mechanismus eingerichtet werden. 
-  Zunächst wird ein Ordner angelegt, der als Zwischenablage für neu bereitgestellte Dateien dient. 
+    Externe und weitere Quellen
+
+    \subsection{Datenstruktur}
+
+    \subsection{Datenübertragung}
+    Um die Übertragung neu erstellter Mediendateien (\texttt{.flac}, \texttt{.pdf}) vom Digitalisierungsrechner auf den Medienserver zu vereinfachen 
+    und zu automatisieren, kann auf dem Server ein Upload-Mechanismus eingerichtet werden. 
+    Zunächst wird ein Ordner angelegt, der als Zwischenablage für neu bereitgestellte Dateien dient. 
 
   \begin{minted}[breaklines, linenos]{bash}
 cd /srv
@@ -1997,7 +2010,7 @@ nano de.hfm.upload_media.plist
 </plist>
     \end{minted}
 
-    \item Launch-Job laden und testen:
+    \item Launchd-Job laden und testen:
     \begin{minted}[breaklines, linenos]{bash}
 launchctl load ~/Library/LaunchAgents/de.hfm.upload_media.plist
     \end{minted}
@@ -2018,6 +2031,10 @@ launchctl unload ~/Library/LaunchAgents/de.hfm.upload_media.plist
 launchctl load ~/Library/LaunchAgents/de.hfm.upload_media.plist
     \end{minted}
   \end{enumerate}
+
+  \subsection{Datenverwaltung}
+    Datenpflege
+    Backup-Strategie
 
 \section{Benutzerverwaltung und Zugriffsrechte}
 \section{Testen und Fehlerbehebung}
