@@ -48,7 +48,7 @@ def norm_text(s: str) -> str:  # Normalisierung für Titel, Alben und Werke
     s = s.replace("--", "—")  # Doppelter Bindestrich zu einfachem Bindestrich
     
     # Opus vereinheitlichen
-    s = re.sub(r"\b[oO][pP]\.?\s*", "op. ", s)
+    s = re.sub(r"\b(?:[oO][pP](?:us)?)(?:\.?\s*)(?=\d)", "op. ", s)
 
     # Nummer vereinheitlichen
     s = s.replace("Nº", "No")
@@ -65,7 +65,7 @@ def smart_titlecase(s: str) -> str:
         return s
 
     # Sonderzeichen für Trennung
-    special_cases = ["+", ",", "§§§", "_"]
+    special_cases = ["+", ",", "§§§", "_", "."]
 
     def fix_word(word: str) -> str:
         w = word.capitalize()
@@ -136,7 +136,7 @@ def build_pdf(folder: Path, images: list[Path], out_dir: Path):
     title = norm_text(title_raw) if title_raw else ""
 
     # Wieder zusammensetzen
-    base_name = f"{comp}-{title}" if title else comp
+    base_name = f"{comp}-{title}"
     base_name = base_name.replace(placeholder, "--")
 
     # Leerzeichen in Unterstriche wandeln, PDF-Endung anhängen
