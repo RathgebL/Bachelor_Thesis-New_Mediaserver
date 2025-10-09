@@ -1002,9 +1002,9 @@ PubkeyAuthentication yes
 sudo systemctl restart ssh
     \end{minted}
 
-  \item Wichtige Befehle:
-  für die Nutzung von SSH lohnt es sich folgende Befehle zu kennen:   
-  \begin{minted}[breaklines, linenos]{bash}
+    \item Wichtige Befehle:
+    für die Nutzung von SSH lohnt es sich folgende Befehle zu kennen:   
+    \begin{minted}[breaklines, linenos]{bash}
 # Service steuern
 sudo systemctl start ssh
 sudo systemctl stop ssh
@@ -1023,8 +1023,8 @@ scp benutzername@server-ip:/pfad/auf/server/datei /lokaler/pfad/
 
 # Verzeichnisse synchronisieren
 rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
-  \end{minted}  
-\end{enumerate}
+    \end{minted}  
+  \end{enumerate}
 
 % ---------------------------------------------------------------
 
@@ -1035,7 +1035,8 @@ rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
   Dort findet sich auch der Inhalt des Skriptes \texttt{install-docker.sh}. Dieser sollte vor der Installation auf die neueste Version überprüft werden. 
   Ein Beispielskript (Stand 24. September 2025) findet sich im GitHub-Repository: \url{https://github.com/RathgebL/Bachelor_Thesis-New_Mediaserver}.
   Dieses enthält alle notwendigen Befehle zum Einrichten des Docker-Repositories und zur Installation der Docker-Pakete.
-  Es kann nun wie folgt vorgegangen werden:  
+  Es kann nun wie folgt vorgegangen werden: 
+
   \begin{enumerate}
     \item Datenträger mit Skript verfügbar machen:
     \begin{minted}[breaklines, linenos]{bash}
@@ -1565,14 +1566,6 @@ als auch zugehörige Booklets (Scans im \texttt{.jpg}-Format).
 In diesem Abschnitt wird erläutert, wie diese Daten bislang erstellt und verwaltet werden, 
 welche Anpassungen für die Integration in den Medienserver notwendig sind und 
 wie der automatisierte Datentransfer, die Strukturierung und die Sicherung der Mediendaten umgesetzt werden können.  
-
-Der Ablauf gliedert sich dabei in folgende Schritte:
-\begin{itemize}
-  \item \textbf{Datenquelle:} Herkunft und Aufbereitung der Mediendaten.
-  \item \textbf{Datenstruktur:} Aufbau und Formatierung der Daten bisher und im neuen Zielsystem.
-  \item \textbf{Datenübertragung:} Mechanismen zum Import und zur Synchronisation neuer Dateien.
-  \item \textbf{Datenverwaltung:} Pflege, Sicherung und Backup der Bestände.
-\end{itemize}
  
     \subsection{Datenquelle}
     Skript zur Digitalisierung
@@ -1691,12 +1684,12 @@ find "$TARGET_MUSIC" "$TARGET_BOOKLETS" -type d -exec chmod o+x {} \; 2>/dev/nul
 echo "$(date '+%F %T') [INFO] Verarbeitung abgeschlossen." >> "$LOG"
     \end{minted}
 
-    \item Script ausführbar machen:
+    \item Skript ausführbar machen:
     \begin{minted}[breaklines, linenos]{bash}
 chmod +x /usr/local/bin/process_uploads.sh
     \end{minted}
 
-    \item Script testen:
+    \item Skript testen:
     \begin{minted}[breaklines, linenos]{bash}
 # Script manuell ausführen
 sudo /srv/scripts/process_incoming.sh
@@ -1845,19 +1838,20 @@ sudo systemctl list-timers --all | grep process_incoming
   \end{enumerate}
 
   Um die Daten vom Arbeitsrechner in der Bibliothek auf den Server zu übertragen,
-  fehlt noch ein Upload-Ordner aus dem automatisch Dateien an den Server geschickt werden.
+  fehlt noch ein Upload-Ordner aus dem automatisch oder manuell Dateien an den Server geschickt werden.
   Diese Funktion ist mit \texttt{rsync} und \texttt{launchd} möglich. 
   Folgende Schritte müssen zur Einrichtung vorgenommen werden:
 
   \begin{enumerate}
     \item Upload-Ordner und Skript anlegen:
     \begin{minted}[breaklines, linenos]{bash}
-mkdir /Desktop/_upload-to-server
-mkdir /Desktop/Scripts
-nano /Desktop/Scripts/upload_media.sh
+mkdir /Users/bibliothek/Scripts
+mkdir /Users/bibliothek/Logs
+mkdir /Users/bibliothek/Desktop/_upload-to-server
+nano /Users/bibliothek/Scripts/upload_media.sh
     \end{minted}
 
-    Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren)
+    Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren):
 
     \begin{minted}[breaklines, linenos]{bash}
 #!/bin/bash
@@ -1936,7 +1930,7 @@ cd ~/Library/LaunchAgents
 nano de.hfm.upload_media.plist
     \end{minted}
 
-    Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren)
+    Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren):
 
     \begin{minted}[breaklines, linenos]{XML}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -2029,6 +2023,72 @@ launchctl list | grep upload_media # Status prüfen
 # nach Änderungen immer folgendes ausführen:
 launchctl unload ~/Library/LaunchAgents/de.hfm.upload_media.plist
 launchctl load ~/Library/LaunchAgents/de.hfm.upload_media.plist
+    \end{minted}
+  \end{enumerate}
+
+  Alternativ kann der Updoad auch manuell erfolgen, da das automatische Starten über \texttt{launchd} auf dem Bibliotheks-Mac ohne Administratorrechte eventuell nicht möglich ist.  
+  Der manuelle Start kann durch einen einfachen Doppelklick auf eine \texttt{.command}-Datei auf dem Desktop ausgeführt werden und ruft das eigentliche Upload-Skript auf, 
+  welches die Mediendateien über \texttt{rsync} auf den Server überträgt.
+  Hierfür folgendes ausführen:
+
+  \begin{enumerate}
+    \item Skript anlegen:
+
+    \begin{minted}[breaklines, linenos]{bash}
+nano /Users/bibliothek/Desktop/_upload-starten.command
+    \end{minted}
+
+    Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren):
+
+    \begin{minted}[breaklines, linenos]{bash}
+#!/bin/bash
+# ============================================================
+#  Upload-Starter für den Medienserver (per Doppelklick)
+# ============================================================
+
+# -------------------------------
+# Pfadkonfiguration
+# -------------------------------
+SCRIPT="/Users/bibliothek/Scripts/upload_media.sh"     # Hauptskript
+LOGFILE="/Users/bibliothek/Logs/upload_media_manual.log"  # Log-Datei
+
+# -------------------------------
+# Vorbereitung: Log sicherstellen
+# -------------------------------
+mkdir -p "$(dirname "$LOGFILE")"   # Log-Verzeichnis anlegen, falls nicht vorhanden
+touch "$LOGFILE"                   # Leere Log-Datei erstellen (falls nicht existiert)
+
+# -------------------------------
+# Startzeit in Log schreiben
+# -------------------------------
+echo "-------------------------------------------------------" >> "$LOGFILE"
+echo "$(date '+%F %T') [INFO] Manuell gestarteter Upload..." >> "$LOGFILE"
+
+# -------------------------------
+# Upload ausführen
+# -------------------------------
+# Führt das eigentliche Upload-Skript aus und leitet
+# Standardausgabe und Fehlerausgabe in die Log-Datei um.
+bash "$SCRIPT" >> "$LOGFILE" 2>&1
+
+# -------------------------------
+# Abschlussmeldung
+# -------------------------------
+echo "$(date '+%F %T') [INFO] Upload abgeschlossen." >> "$LOGFILE"
+echo "-------------------------------------------------------" >> "$LOGFILE"
+
+# -------------------------------
+# Rückmeldung im Terminalfenster
+# -------------------------------
+echo "Upload abgeschlossen. Details im Log unter: $LOGFILE"
+read -n 1 -s -r -p "Drücke eine Taste zum Schließen..."
+    \end{minted}
+
+    \item Skript ausführbar machen:
+    Danach kann der Upload-Prozess jederzeit durch Doppelklick auf die Datei gestartet werden.
+
+    \begin{minted}[breaklines, linenos]{bash}
+chmod +x ~/Desktop/Upload-starten.command
     \end{minted}
   \end{enumerate}
 
@@ -2208,32 +2268,70 @@ ping mediaserver.local
       \end{minted}
 
       Vorteil dieser Methode ist, dass alle Geräte im lokalen Netzwerk sofort Zugriff erhalten, ohne dass die \texttt{/etc/hosts}-Datei auf jedem Client angepasst werden muss.
-  \end{enumerate}
+    \end{enumerate}
 
-  \subsubsection*{Probleme mit launchd (automatischer Datentransfer zum Server)}
-  Wenn für den SSH-Key ein Passwort dei der Erstellung angelegt wurde, kann es zu Problemen bei der Automatisierung des Datentrasfers mit launchd kommen.
-  Dies lässt sich aber einfach lösen in dem man das Passwort zur Keychain hinzufügt.
-  
-  \begin{minted}[breaklines, linenos]{bash}
-ssh-add --apple-use-keychain ~/.ssh/id_ed25519 # Key gegebenfalls anpassen
-  \end{minted}
 
-  Nun das Passwort angeben. Danach testen:
-  \begin{minted}[breaklines, linenos]{bash}
+    \subsubsection*{Probleme mit \texttt{launchd} (automatischer Datentransfer zum Server)}
+    Wenn für den SSH-Key bei der Erstellung ein Passwort vergeben wurde, kann es zu Problemen bei der Automatisierung des Datentransfers mit \texttt{launchd} kommen.  
+    Dies lässt sich jedoch einfach beheben, indem das Passwort in der macOS-Keychain hinterlegt wird.
+
+    \begin{minted}[breaklines, linenos]{bash}
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519   # Key gegebenenfalls anpassen
+    \end{minted}
+
+    Nun das Passwort einmalig eingeben. Anschließend kann die Verbindung getestet werden:
+
+    \begin{minted}[breaklines, linenos]{bash}
 ssh medienserver@Server-IP
-  \end{minted}
+    \end{minted}
 
-  Es sollte nicht mehr nach dem Passwort gefragt werden.
+    Es sollte nun keine Passwortabfrage mehr erscheinen.  
+    Falls der Upload trotz korrektem SSH-Schlüssel nicht funktioniert, kann das manuelle Startskript auf dem Desktop verwendet werden:
 
-  \subsubsection*{Probleme mit systemd (automatische Einsortierung der Medien auf Serverseite)}
-  Damit das Skript \texttt{process\_incoming.sh} ordnungsgemäß ausgeführt werden kann, 
-  müssen die Zugriffsrechte auf alle beteiligten Verzeichnisse korrekt gesetzt werden. 
-  Insbesondere benötigt der in der Service-Datei angegebene Benutzer \texttt{medienserver} Schreibrechte auf die Logdateien sowie Lese- 
-  und Schreibrechte auf die Upload- und Zielordner.
+    \begin{minted}[breaklines, linenos]{bash}
+bash ~/Desktop/Upload-starten.command
+    \end{minted}
 
-  Nachfolgende Befehle stellen sicher, dass der Benutzer \texttt{medienserver} alle benötigten Rechte besitzt:
+    Dieses öffnet ein Terminalfenster, startet den Upload-Prozess und schreibt eine Logdatei unter:
+    \texttt{\textasciitilde/Logs/upload\_media\_manual.log}.
 
-  \begin{minted}[breaklines, linenos]{bash}
+    \paragraph{Fehleranalyse:}
+    Wenn der Upload nicht startet oder abbricht, geben die Logdateien Aufschluss über die Ursache.  
+    Je nach Startmethode liegen diese in unterschiedlichen Dateien:
+    \begin{itemize}
+      \item \texttt{\textasciitilde/Logs/upload\_media\_manual.log} – manueller Start (Doppelklick auf \texttt{.command})
+      \item \texttt{\textasciitilde/Logs/upload\_media\_launchd.log} – automatischer Start über \texttt{launchd}
+      \item \texttt{\textasciitilde/Logs/upload\_media\_launchd\_error.log} – Fehlerausgabe von \texttt{launchd}
+    \end{itemize}
+
+    Die letzten Einträge einer Logdatei lassen sich wie folgt anzeigen:
+    \begin{minted}[breaklines, linenos]{bash}
+tail -n 20 ~/Logs/upload_media_manual.log
+    \end{minted}
+
+    Typische Fehlermeldungen sind:
+    \begin{itemize}
+      \item \texttt{ssh: Could not resolve hostname ...} → Hostname oder Server-IP prüfen.
+      \item \texttt{Operation not permitted} → Das Skript hat keine Rechte auf den Ziel- oder Log-Ordner.
+      \item \texttt{Permission denied (publickey)} → SSH-Key wurde nicht erkannt oder nicht in der Keychain hinterlegt.
+    \end{itemize}
+
+    Falls der lokale Upload-Ordner nach der Übertragung leer oder verschwunden ist, liegt das an der Option \texttt{--remove-source-files} im Upload-Skript.  
+    Diese löscht Dateien nach erfolgreichem Transfer, um den Ordner automatisch zu bereinigen.  
+    Soll dies nicht geschehen, kann die Option entfernt oder auskommentiert werden:
+    \begin{minted}[breaklines, linenos]{bash}
+# Variante ohne automatisches Löschen:
+rsync -avz --progress --exclude=".DS_Store" "$SOURCE/" "$DEST/"
+    \end{minted}
+
+    \subsubsection*{Probleme mit \texttt{systemd} (automatische Einsortierung der Medien auf Serverseite)}
+    Damit das Skript \texttt{process\_incoming.sh} auf dem Server ordnungsgemäß ausgeführt werden kann, 
+    müssen die Zugriffsrechte auf alle beteiligten Verzeichnisse korrekt gesetzt sein.  
+    Insbesondere benötigt der in der Service-Datei angegebene Benutzer \texttt{medienserver} Schreibrechte auf die Logdateien sowie Lese- und Schreibrechte auf die Upload- und Zielordner.
+
+    Nachfolgende Befehle stellen sicher, dass der Benutzer \texttt{medienserver} alle benötigten Rechte besitzt:
+
+    \begin{minted}[breaklines, linenos]{bash}
 # Eigentümer und Gruppe setzen
 sudo chown -R medienserver:medienserver /srv/scripts
 sudo chown -R medienserver:medienserver /srv/incoming_media
@@ -2245,12 +2343,38 @@ sudo chown -R medienserver:medienserver /mnt/media/booklets
 sudo chmod -R 755 /srv/scripts
 sudo chmod -R 775 /srv/incoming_media /mnt/media/music /mnt/media/booklets
 sudo chmod 664 /srv/logs/process.log
-  \end{minted}
+    \end{minted}
 
-  Damit wird sichergestellt, dass das Skript im Kontext des Benutzers \texttt{medienserver} ausgeführt werden kann, 
-  Logdateien angelegt und beschrieben werden dürfen und der automatische Verschiebevorgang in die Zielverzeichnisse fehlerfrei funktioniert.
-  Das Vergeben der richtigen Besitzrechte ist insbesondere deshalb erforderlich, weil der \texttt{systemd}-Dienst standardmäßig mit dem Benutzer \texttt{medienserver} läuft und 
-  ansonsten beim Zugriff auf das Logverzeichnis oder die Mediendateien Fehler wie \enquote{Permission denied} verursachen würde.
+    Damit wird sichergestellt, dass das Skript im Kontext des Benutzers \texttt{medienserver} ausgeführt werden kann, 
+    Logdateien angelegt und beschrieben werden dürfen und der automatische Verschiebevorgang in die Zielverzeichnisse fehlerfrei funktioniert.  
+    Das Vergeben der richtigen Besitzrechte ist insbesondere deshalb erforderlich, 
+    weil der \texttt{systemd}-Dienst standardmäßig mit dem Benutzer \texttt{medienserver} läuft und 
+    ansonsten beim Zugriff auf das Logverzeichnis oder die Mediendateien Fehler wie \enquote{Permission denied} verursachen würde.
+
+    \subsubsection*{Allgemeine Tests und Überwachung der Datenübertragung}
+    Nach erfolgreicher Einrichtung von \texttt{launchd} und \texttt{systemd} sollte regelmäßig überprüft werden, ob die Automatisierung funktioniert.
+
+    \begin{itemize}
+      \item \textbf{Upload prüfen (Client):}
+      \begin{minted}[breaklines, linenos]{bash}
+# Testdatei in den Upload-Ordner legen
+cp ~/Desktop/test.flac ~/Desktop/_upload-to-server/
+# Logausgabe live beobachten
+tail -f ~/Logs/upload_media_manual.log
+      \end{minted}
+
+      \item \textbf{Verarbeitung prüfen (Server):}
+      \begin{minted}[breaklines, linenos]{bash}
+# Status des systemd-Timers anzeigen
+sudo systemctl status process_incoming.timer
+
+# Letzte Logeinträge auf dem Server prüfen
+sudo tail -n 20 /srv/logs/process.log
+      \end{minted}
+    \end{itemize}
+
+    Auf diese Weise kann sowohl der Datenfluss vom Client zum Server als auch die automatische Verarbeitung der Mediendateien verifiziert werden.
+
    
 % ------ Fazit ------
 \chapter*{Fazit}
