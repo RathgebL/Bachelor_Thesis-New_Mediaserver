@@ -1511,32 +1511,31 @@ sudo ufw reset                    # Achtung: setzt UFW komplett zurück und entf
 
 % ---------------------------------------------------------------
 
-\section{Integration in die bestehende IT-Infrastruktur}
-Sobald alle nötigen Installationen getätigt sind fehlen nur noch folgende Schritte, um den Server nutzen zu können.
-Diese Schritte geschehen in enger zusammenarbeit mit den IT-Mitarbeitern der Hochschule.
+\section{Netzwerk-Anbindung}
+Sobald alle nötigen Installationen getätigt sind, fehlt nur noch die Netzwerkanbindung, um den Server testen zu können.
+Dieser Schritt geschiet in enger zusammenarbeit mit den IT-Mitarbeitern der Hochschule.
+  
+Der Server ist bereits per \ac{LAN} angebunden und über seine \ac{IP}-Adresse im Hochschulnetzwerk erreichbar. 
+Damit der Zugriff zuverlässig und sicher funktioniert, sind nun mehrere Punkte zu beachten:
 
-  \subsection{Netzwerk-Anbindung} 
-  Der Server ist per \ac{LAN} angebunden und über seine feste \ac{IP}-Adresse im Hochschulnetzwerk erreichbar. 
-  Damit der Zugriff zuverlässig und sicher funktioniert, sind mehrere Punkte zu beachten:
+\begin{itemize}
+  \item \textbf{Sicherheit:} Vor der Inbetriebnahme sollten alle bisher provisorisch gesetzten Passwörter durch starke, 
+  zufällig generierte Passwörter ersetzt und sicher in einem Passwortmanager gespeichert werden.
+  \item \textbf{Firewall-Konfiguration:} Die zentrale Firewall der HfM muss so konfiguriert werden, 
+  dass nur die für den Medienserver erforderlichen Ports geöffnet sind.
+  \item \textbf{Subnetze und \ac{VLAN}s:} Innerhalb des Hochschulnetzwerks müssen die relevanten Subnetze für den Zugriff freigeschaltet werden. 
+        Durch die Segmentierung mittels VLANs lässt sich gezielt steuern, aus welchen Netzwerkzonen Clients auf den Server zugreifen dürfen.
+  \item \textbf{\ac{DNS}-Eintrag:} Um den Zugriff zu vereinfachen, sollte ein sprechender DNS-Hostname für den Server angelegt werden. 
+        So können Nutzer den Server über einen Namen anstelle der IP-Adresse erreichen.
+\end{itemize}
 
-  \begin{itemize}
-    \item \textbf{Sicherheit:} Vor der Inbetriebnahme sollten alle bisher provisorisch gesetzten Passwörter durch starke, 
-    zufällig generierte Passwörter ersetzt und sicher in einem Passwortmanager gespeichert werden.
-    \item \textbf{Firewall-Konfiguration:} Die zentrale Firewall der HfM muss so konfiguriert werden, 
-    dass nur die für den Medienserver erforderlichen Ports geöffnet sind.
-    \item \textbf{Subnetze und \ac{VLAN}s:} Innerhalb des Hochschulnetzwerks müssen die relevanten Subnetze für den Zugriff freigeschaltet werden. 
-          Durch die Segmentierung mittels VLANs lässt sich gezielt steuern, aus welchen Netzwerkzonen Clients auf den Server zugreifen dürfen.
-    \item \textbf{\ac{DNS}-Eintrag:} Um den Zugriff zu vereinfachen, sollte ein sprechender DNS-Hostname für den Server angelegt werden. 
-          So können Nutzer den Server über einen Namen anstelle der IP-Adresse erreichen.
-  \end{itemize}
+Durch diese Maßnahmen ist gewährleistet, dass der Medienserver nahtlos in die bestehende IT-Infrastruktur integriert, 
+sicher betrieben und von den vorgesehenen Nutzergruppen zuverlässig erreicht werden kann.
 
-  Durch diese Maßnahmen ist gewährleistet, dass der Medienserver nahtlos in die bestehende IT-Infrastruktur integriert, 
-  sicher betrieben und von den vorgesehenen Nutzergruppen zuverlässig erreicht werden kann.
+Die Firewall der Hochschule wird durch einen externen Dienstleister verwaltet; Anpassungen müssen daher über das IT-Team der HfM beauftragt werden. 
+Die Netzwerkkonfiguration des Servers wurde durch das IT-Team erstellt und unter \texttt{/etc/netplan/01-netcfg.yaml} abgelegt:
 
-  Die Firewall der Hochschule wird durch einen externen Dienstleister verwaltet; Anpassungen müssen daher über das IT-Team der HfM beauftragt werden. 
-  Die Netzwerkkonfiguration des Servers wurde durch das IT-Team erstellt und unter \texttt{/etc/netplan/01-netcfg.yaml} abgelegt:
-
-  \begin{minted}[breaklines, linenos]{yaml}
+\begin{minted}[breaklines, linenos]{yaml}
 network: # Beginn der Netzwerkkonfiguration (Oberstruktur)
   ethernets: # Definition kabelgebundener Netzwerkschnittstellen
     enp0s31f6: # Name der Netzwerkschnittstelle (vom System erkannt)
@@ -1549,14 +1548,14 @@ network: # Beginn der Netzwerkkonfiguration (Oberstruktur)
           - 193.197.85.125 # Primärer DNS-Server der Hochschule
           - 193.197.85.146 # Sekundärer DNS-Server der Hochschule (Fallback)
   version: 2 # Netplan-Konfigurationsschema-Version (immer erforderlich)
-  \end{minted}
+\end{minted}
 
-  Diese Datei muss bei zukünftigen Änderungen der Netzwerkinfrastruktur gegebenenfalls angepasst werden
-  Mit folgendem Befehl kann die neue Konfiguration dann aktiviert werden:
+Diese Datei muss bei zukünftigen Änderungen der Netzwerkinfrastruktur gegebenenfalls angepasst werden
+Mit folgendem Befehl kann die neue Konfiguration dann aktiviert werden:
 
-  \begin{minted}[breaklines, linenos]{bash}
+\begin{minted}[breaklines, linenos]{bash}
 sudo netplan apply
-  \end{minted}
+\end{minted}
 
 \section{Datenbank-Anbindung}
 Ein Medienserver ist nur dann sinnvoll nutzbar, wenn er über strukturierte und vollständige Mediendaten verfügt. 
@@ -1567,7 +1566,7 @@ In diesem Abschnitt wird erläutert, wie diese Daten bislang erstellt und verwal
 welche Anpassungen für die Integration in den Medienserver notwendig sind und 
 wie der automatisierte Datentransfer, die Strukturierung und die Sicherung der Mediendaten umgesetzt werden können.  
  
-    \subsection{Datenquelle}
+    \subsection{Datenquellen}
     Skript zur Digitalisierung
     Skript zur Metadatenanreicherung
     Externe und weitere Quellen
