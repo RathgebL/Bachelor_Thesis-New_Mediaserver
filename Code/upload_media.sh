@@ -62,16 +62,24 @@ rsync -avz --remove-source-files --progress \
 RSYNC_EXIT=$?
 
 # -------------------------------
-# Nachbearbeitung
+# Nachbearbeitung / Aufräumen
 # -------------------------------
 if [[ $RSYNC_EXIT -eq 0 ]]; then
     echo "$(date '+%F %T') [OK] Upload erfolgreich abgeschlossen." >> "$LOGFILE"
 
-    # Versteckte Systemdateien löschen, dann leere Verzeichnisse entfernen
-    find "$SOURCE" -name '.DS_Store' -delete
-    find "$SOURCE" -name '._*' -delete
+    # Leere Unterordner entfernen (Hauptordner bleibt bestehen)
     find "$SOURCE" -mindepth 1 -type d -empty -delete
     echo "$(date '+%F %T') [CLEANUP] Leere Unterordner entfernt." >> "$LOGFILE"
+
+    # Alte temporäre Teil-Uploads löschen (.rsync-partials)
+    # -type f : nur Dateien löschen
+    # -mtime +2 : nur Dateien, die älter als 2 Tage sind (zur Sicherheit, falls rsync sie noch braucht)
+    # -empty : leere Ordner im Anschluss entfernen
+    if [[ -d "$SOURCE/.rsync-partials" ]]; then
+        find "$SOURCE/.rsync-partials" -type f -mtime +2 -delete 2>/dev/null
+        find "$SOURCE/.rsync-partials" -type d -empty -delete 2>/dev/null
+        echo "$(date '+%F %T') [CLEANUP] Alte temporäre rsync-Teildateien entfernt." >> "$LOGFILE"
+    fi
 else
     echo "$(date '+%F %T') [ERROR] Upload fehlgeschlagen (Exit-Code: $RSYNC_EXIT)." >> "$LOGFILE"
 fi
