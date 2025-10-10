@@ -25,7 +25,8 @@ if [[ -S "$HOME/.ssh/ssh_auth_sock" ]]; then
 fi
 
 # PATH explizit setzen (Launchd hat oft nur /usr/bin:/bin)
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# Optional: /opt/homebrew/bin hinzufügen, falls rsync über Homebrew installiert ist
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # -------------------------------
 # Konfiguration
@@ -37,17 +38,36 @@ LOGFILE="/Users/bibliothek/Logs/upload_media.log"               # Lokale Log-Dat
 # -------------------------------
 # Vorbereitung
 # -------------------------------
-mkdir -p "$(dirname "$LOGFILE")"    # Log-Verzeichnis anlegen, falls fehlt
-touch "$LOGFILE"                    # Log-Datei sicherstellen
+# Stelle sicher, dass das Logverzeichnis existiert
+mkdir -p "$(dirname "$LOGFILE")"
 
+# Stelle sicher, dass die Logdatei existiert
+touch "$LOGFILE"
+
+# Trenner für neue Upload-Sitzung im Log
 echo "-------------------------------------------------------" >> "$LOGFILE"
 echo "$(date '+%F %T') [INFO] Starte Upload-Prozess..." >> "$LOGFILE"
 
-# Prüfen, ob der Upload-Ordner existiert und Dateien enthält
-if ! find "$SOURCE" -type f | grep -q .; then
+# Prüfen, ob der Upload-Ordner existiert
+if [[ ! -d "$SOURCE" ]]; then
+    echo "$(date '+%F %T') [ERROR] Upload-Ordner '$SOURCE' nicht gefunden." >> "$LOGFILE"
+    exit 1
+fi
+
+# Dateien im Upload-Ordner zählen
+FILE_COUNT=$(find "$SOURCE" -type f ! -name ".DS_Store" ! -name "._*" | wc -l | tr -d ' ')
+
+# Wenn keine Dateien vorhanden sind, sauber beenden
+if [[ "$FILE_COUNT" -eq 0 ]]; then
     echo "$(date '+%F %T') [INFO] Keine Dateien im Upload-Ordner – Upload übersprungen." >> "$LOGFILE"
     exit 0
 fi
+
+# Zeitstempel für spätere Dauerberechnung speichern
+START_TIME=$(date +%s)
+
+# Statusmeldung mit Dateianzahl im Log
+echo "$(date '+%F %T') [INFO] Starte Upload von $FILE_COUNT Dateien aus '$SOURCE'." >> "$LOGFILE"
 
 # -------------------------------
 # Upload via rsync
@@ -66,7 +86,8 @@ fi
 # --delay-updates : sorgt dafür, dass Dateien erst nach vollständigem Upload umbenannt/aktiviert werden
 #                   → verhindert, dass der Server halbfertige Dateien sieht
 # Zusätzliche --exclude-Regeln schließen macOS-spezifische Metadaten aus
-rsync -avz --remove-source-files --progress \
+
+caffeinate -i rsync -avz --remove-source-files --progress \
   --partial --partial-dir=".rsync-partials" \
   --temp-dir="/tmp" \
   --delay-updates \
