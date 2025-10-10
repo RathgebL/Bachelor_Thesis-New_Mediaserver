@@ -1746,52 +1746,72 @@ sudo nano /etc/systemd/system/process_incoming.service
 # Zweck:
 #   Führt das Skript /srv/scripts/process_incoming.sh aus,
 #   das neue Uploads aus /srv/incoming_media automatisch
-#   in die Zielstruktur verschiebt.
+#   in die Zielstruktur verschiebt (z. B. /mnt/media/music, /booklets).
 #
 # Besonderheiten:
-#   - läuft automatisch über process_incoming.timer
-#   - startet bei Fehlern neu
-#   - schreibt Logdateien nach /srv/logs/
+#   - Wird automatisch durch process_incoming.timer gestartet.
+#   - Kann auch manuell per systemctl start process_incoming.service
+#     ausgeführt werden.
+#   - Arbeitet als One-Shot-Job (kein Dauerdienst).
+#   - Schreibt alle Ausgaben in ein zentrales Logfile unter /srv/logs/.
+#   - Neustart bei Fehlern (z. B. temporäre Sperren, Netzunterbrechung).
 # ===============================================
 
 [Unit]
-# Beschreibung, erscheint in 'systemctl list-units'
+# Beschreibung (wird in 'systemctl list-units' angezeigt)
 Description=Verarbeite neue Uploads aus /srv/incoming_media
 
-# Warten, bis Netzwerk verfügbar ist (nicht zwingend, aber sicher)
-After=network.target
+# Netzwerk muss verfügbar sein (rsync-/SSH-basierte Jobs benötigen Netzwerk)
+After=network.target network-online.target
+Wants=network-online.target
 
 
 [Service]
 # --- Allgemeine Ausführungseinstellungen ---
-# "oneshot" bedeutet: das Skript läuft einmal und beendet sich.
-# (nicht als dauerhaft laufender Prozess)
+# "oneshot" bedeutet: das Skript läuft einmal durch und beendet sich.
 Type=oneshot
 
-# Das eigentliche Skript, das ausgeführt wird
+# Das eigentliche Verarbeitungsskript
 ExecStart=/srv/scripts/process_incoming.sh
 
-# Ausführender Benutzer und Gruppe (nicht root!)
+# Benutzer und Gruppe, unter denen das Skript läuft (keine root-Rechte!)
 User=medienserver
 Group=medienserver
 
-# CPU-Priorität senken, um andere Prozesse nicht zu blockieren
+# CPU- und IO-Priorität senken, damit reguläre Benutzeraktivitäten nicht behindert werden
 Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
 
+# Arbeitsverzeichnis setzen (optional, aber sauber)
+WorkingDirectory=/srv/incoming_media
 
 # --- Fehlerbehandlung ---
-# Service wird neu gestartet, falls ein Fehler (Exit-Code != 0) auftritt
+# Neustart nur bei echten Fehlern (Exit-Code ungleich 0)
 Restart=on-failure
-
-# Wartezeit zwischen zwei Neustarts
 RestartSec=30s
-
 
 # --- Logging ---
 # Standard- und Fehlerausgabe (stdout/stderr) in Logdatei umleiten.
-# Die Datei wird automatisch erstellt, falls sie fehlt.
+# Datei wird bei Bedarf automatisch erstellt.
 StandardOutput=append:/srv/logs/systemd_process_incoming.log
 StandardError=append:/srv/logs/systemd_process_incoming.log
+
+# --- Umgebungsvariablen (optional, hilfreich für PATH) ---
+# Falls dein Skript rsync, find, chmod o.ä. nutzt, ist PATH hier explizit gesetzt
+Environment="PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+# --- Sicherheit (optional, aber empfehlenswert) ---
+# Verhindert versehentliche Schreibzugriffe außerhalb der relevanten Pfade
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+
+
+[Install]
+# Ermöglicht Aktivierung per Timer
+WantedBy=multi-user.target
     \end{minted}
 
     \noindent Service anschließend testen:
@@ -1817,34 +1837,43 @@ sudo nano /etc/systemd/system/process_incoming.timer
 #   der neue Uploads aus /srv/incoming_media verarbeitet.
 #
 # Vorteile:
-#   - Keine Cronjobs nötig (sauber über systemd integriert)
-#   - Logging & Fehlerbehandlung über systemd
-#   - Zeitplan flexibel konfigurierbar
+#   - Kein Cronjob nötig (saubere systemd-Integration)
+#   - Automatisches Logging & Fehlerbehandlung über systemd
+#   - Flexible Steuerung: Intervall + täglicher Hauptlauf möglich
+#
+# Verhalten:
+#   - Startet 1 Minute nach dem Bootvorgang
+#   - Läuft alle 5 Minuten (um kleine Uploads zu verarbeiten)
+#   - Führt zusätzlich einmal täglich um 02:00 Uhr einen
+#     vollständigen Nachtlauf durch (für große Uploads)
+#   - Verpasste Läufe werden nachgeholt (z. B. nach Reboot)
 # ===============================================
 
 [Unit]
-# Beschreibung, wird in systemctl-Übersicht angezeigt
-Description=Timer für process_incoming.service – prüft regelmäßig auf neue Uploads
+# Beschreibung, erscheint in systemctl list-units und journalctl
+Description=Timer für process_incoming.service – automatische Upload-Verarbeitung
 
 [Timer]
 # --- Ausführungsplan ---
-# Startet 1 Minute nach dem Bootvorgang
-OnBootSec=1m
+# Startet 1 Minute nach dem Boot
+OnBootSec=1min
 
-# Wiederholt alle 5 Minuten
-OnUnitActiveSec=5m
+# Wiederholt alle 5 Minuten (Standardintervall)
+OnUnitActiveSec=5min
 
-# --- Optionale Alternativen ---
-# • Nur einmal täglich:  OnCalendar=daily
-# • Jede Stunde:         OnUnitActiveSec=1h
-# • Manuelle Testvariante: OnActiveSec=30s (für Debugging)
+# Zusätzlich einmal täglich um 22:00 Uhr (Hauptlauf)
+OnCalendar=*-*-* 22:00:00
 
 # --- Stabilität ---
-# Startet den Service nach verpassten Ausführungen (z. B. nach Reboot)
+# Falls der Server zum geplanten Zeitpunkt ausgeschaltet war,
+# wird der Job beim nächsten Start automatisch nachgeholt.
 Persistent=true
 
+# Kleine Zeitabweichung zulassen, damit nicht mehrere Timer exakt gleichzeitig starten
+AccuracySec=1min
+
 [Install]
-# Verknüpfung mit systemd (wird beim Booten aktiviert)
+# Aktiviert den Timer automatisch beim Booten
 WantedBy=timers.target
     \end{minted}
 
