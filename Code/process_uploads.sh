@@ -1,17 +1,20 @@
 #!/bin/bash
 # ============================================================
-# Medienserver Upload-Verarbeitung
-# Verschiebt neue Uploads aus /incoming in die passende Zielstruktur
-# und sorgt für korrekte Rechte & Logging
+#  Medienserver Upload-Verarbeitung
+#  ------------------------------------------------------------
+#  Zweck:
+#    - Verschiebt neue Uploads aus /incoming in die passende Zielstruktur.
+#    - Setzt korrekte Rechte & führt Logrotation durch.
+#    - Entfernt leere oder temporäre Upload-Ordner nach erfolgreicher Verarbeitung.
 # ============================================================
 
-INCOMING="/srv/incoming_media"
-TARGET_MUSIC="/mnt/media/music"
-TARGET_BOOKLETS="/mnt/media/booklets"
-LOG="/srv/logs/process.log"
+INCOMING="/srv/incoming_media"         # Eingangsverzeichnis (Uploads)
+TARGET_MUSIC="/mnt/media/music"        # Zielverzeichnis für FLAC-Dateien
+TARGET_BOOKLETS="/mnt/media/booklets"  # Zielverzeichnis für PDFs
+LOG="/srv/logs/process.log"            # Logdatei
 
 # -------------------------------
-# Vorbereitung
+# Vorbereitung & Logrotation
 # -------------------------------
 mkdir -p "$(dirname "$LOG")"
 touch "$LOG"
@@ -79,9 +82,9 @@ fi
 # Aufräumen: versteckte Dateien & leere Ordner
 # -------------------------------
 # Entfernt macOS-Systemdateien und leert übrig gebliebene Upload-Verzeichnisse
-find "$INCOMING" -name '.DS_Store' -delete
-find "$INCOMING" -name '._*' -delete
-find "$INCOMING" -mindepth 1 -type d -empty -delete
+find "$INCOMING" -name '.DS_Store' -delete 2>/dev/null
+find "$INCOMING" -name '._*' -delete 2>/dev/null
+find "$INCOMING" -mindepth 1 -type d -empty -delete 2>/dev/null
 echo "$(date '+%F %T') [CLEANUP] Leere Ordner aus Incoming entfernt." >> "$LOG"
 
 # -------------------------------
@@ -90,4 +93,8 @@ echo "$(date '+%F %T') [CLEANUP] Leere Ordner aus Incoming entfernt." >> "$LOG"
 chmod -R o+r "$TARGET_MUSIC" "$TARGET_BOOKLETS" 2>/dev/null
 find "$TARGET_MUSIC" "$TARGET_BOOKLETS" -type d -exec chmod o+x {} \; 2>/dev/null
 
+# -------------------------------
+# Abschlussmeldung
+# -------------------------------
 echo "$(date '+%F %T') [INFO] Verarbeitung abgeschlossen." >> "$LOG"
+echo "-------------------------------------------------------" >> "$LOG"
