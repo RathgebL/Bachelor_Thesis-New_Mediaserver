@@ -6,32 +6,41 @@
 #   der neue Uploads aus /srv/incoming_media verarbeitet.
 #
 # Vorteile:
-#   - Keine Cronjobs nötig (sauber über systemd integriert)
-#   - Logging & Fehlerbehandlung über systemd
-#   - Zeitplan flexibel konfigurierbar
+#   - Kein Cronjob nötig (saubere systemd-Integration)
+#   - Automatisches Logging & Fehlerbehandlung über systemd
+#   - Flexible Steuerung: Intervall + täglicher Hauptlauf möglich
+#
+# Verhalten:
+#   - Startet 1 Minute nach dem Bootvorgang
+#   - Läuft alle 5 Minuten (um kleine Uploads zu verarbeiten)
+#   - Führt zusätzlich einmal täglich um 02:00 Uhr einen
+#     vollständigen Nachtlauf durch (für große Uploads)
+#   - Verpasste Läufe werden nachgeholt (z. B. nach Reboot)
 # ===============================================
 
 [Unit]
-# Beschreibung, wird in systemctl-Übersicht angezeigt
-Description=Timer für process_incoming.service – prüft regelmäßig auf neue Uploads
+# Beschreibung, erscheint in systemctl list-units und journalctl
+Description=Timer für process_incoming.service – automatische Upload-Verarbeitung
 
 [Timer]
 # --- Ausführungsplan ---
-# Startet 1 Minute nach dem Bootvorgang
-OnBootSec=1m
+# Startet 1 Minute nach dem Boot
+OnBootSec=1min
 
-# Wiederholt alle 5 Minuten
-OnUnitActiveSec=5m
+# Wiederholt alle 5 Minuten (Standardintervall)
+OnUnitActiveSec=5min
 
-# --- Optionale Alternativen ---
-# • Nur einmal täglich:  OnCalendar=daily
-# • Jede Stunde:         OnUnitActiveSec=1h
-# • Manuelle Testvariante: OnActiveSec=30s (für Debugging)
+# Zusätzlich einmal täglich um 22:00 Uhr (Hauptlauf)
+OnCalendar=*-*-* 22:00:00
 
 # --- Stabilität ---
-# Startet den Service nach verpassten Ausführungen (z. B. nach Reboot)
+# Falls der Server zum geplanten Zeitpunkt ausgeschaltet war,
+# wird der Job beim nächsten Start automatisch nachgeholt.
 Persistent=true
 
+# Kleine Zeitabweichung zulassen, damit nicht mehrere Timer exakt gleichzeitig starten
+AccuracySec=1min
+
 [Install]
-# Verknüpfung mit systemd (wird beim Booten aktiviert)
+# Aktiviert den Timer automatisch beim Booten
 WantedBy=timers.target
