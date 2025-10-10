@@ -2460,6 +2460,34 @@ sudo tail -n 20 /srv/logs/process.log
 
     Auf diese Weise kann sowohl der Datenfluss vom Client zum Server als auch die automatische Verarbeitung der Mediendateien verifiziert werden.
 
+    \subsubsection*{Probleme mit \texttt{.command}-Dateien (Upload-Start auf macOS)}
+    Damit die Datei \texttt{\_upload-starten.command} auf dem Mac durch einen Doppelklick ausgeführt werden kann, 
+    muss sie die entsprechenden Ausführungsrechte besitzen und darf nicht durch die macOS-Sicherheitsmechanismen (Gatekeeper) blockiert werden.  
+    Fehlende Berechtigungen oder Quarantäne-Attribute führen häufig zu Meldungen wie 
+    \enquote{\_upload-starten.command kann nicht geöffnet werden} oder dazu, dass sich beim Doppelklick gar kein Terminalfenster öffnet.  
+
+    Nachfolgende Befehle stellen sicher, dass die Datei ausführbar ist und von macOS nicht blockiert wird:
+
+    \begin{minted}[breaklines, linenos]{bash}
+# 1. Ausführungsrechte für das Skript setzen
+chmod +x "/Users/bibliothek/Desktop/_upload-starten.command"
+
+# 2. Eventuelles Quarantäne-Attribut (Gatekeeper) entfernen
+xattr -d com.apple.quarantine "/Users/bibliothek/Desktop/_upload-starten.command"
+
+# 3. (Optional) Test über Terminal — prüft, ob das Skript startet
+bash "/Users/bibliothek/Desktop/_upload-starten.command"
+    \end{minted}
+
+    Falls macOS beim ersten Start weiterhin warnt, dass das Skript von einem nicht verifizierten Entwickler stammt,  
+    kann die Ausführung in den \emph{Systemeinstellungen → Sicherheit → Allgemein} durch Klick auf 
+    \enquote{Trotzdem öffnen} dauerhaft erlaubt werden.  
+
+    Damit wird sichergestellt, dass das Skript \texttt{\_upload-starten.command} vom Finder korrekt an das Terminal übergeben wird, 
+    die Startsequenz des Upload-Skripts zuverlässig ausführt und der manuelle Upload-Vorgang ohne weitere Sicherheitsabfragen funktioniert.  
+    Besonders nach Änderungen am Skript oder Kopien auf ein anderes Volume ist das Entfernen des Quarantäne-Attributs erforderlich, 
+    da macOS die Datei sonst als potenziell unsicher einstuft und deren Ausführung blockiert.
+
    
 % ------ Fazit ------
 \chapter*{Fazit}
