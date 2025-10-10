@@ -34,9 +34,16 @@ fi
 # Hauptlogik
 # -------------------------------
 count=0
+MIN_AGE=60  # Sekunden, die eine Datei unverändert sein muss (z. B. 60s)
 
-# Robustes Einlesen von Dateien (Nullbyte-separiert, sicher für Leerzeichen/Umlaute)
-find "$INCOMING" -type f -print0 | while IFS= read -r -d '' FILE; do
+# Robustes Einlesen von stabilen Dateien (nicht jünger als MIN_AGE)
+find "$INCOMING" -type f -mmin +$((MIN_AGE/60)) \
+     ! -path "*/.rsync-partials/*" \
+     ! -name ".*.tmp" \
+     ! -name "*.part" \
+     ! -name ".*" \
+     -print0 | while IFS= read -r -d '' FILE; do
+
     ((count++))
     REL_PATH="${FILE#$INCOMING/}"
 
@@ -53,8 +60,8 @@ find "$INCOMING" -type f -print0 | while IFS= read -r -d '' FILE; do
     # Zielverzeichnis anlegen
     mkdir -p "$(dirname "$DEST")"
 
-    # Datei verschieben
-    if mv "$FILE" "$DEST"; then
+    # Datei verschieben (atomar)
+    if mv -n "$FILE" "$DEST"; then
         echo "$(date '+%F %T') [OK] Verschoben: $FILE → $DEST" >> "$LOG"
     else
         echo "$(date '+%F %T') [ERROR] Konnte Datei nicht verschieben: $FILE" >> "$LOG"
