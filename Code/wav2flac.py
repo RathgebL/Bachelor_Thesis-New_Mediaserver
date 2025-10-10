@@ -117,15 +117,24 @@ def classify_path(wav_path: Path) -> str: # Klassifikation des Pfads: "single", 
     single_keywords = ["einzelcd", "einzel-cd", "einzelcds", "einzel-cds", "singlecd", "single-cd"]
     box_keywords = ["box", "boxen", "cd-box", "cdbox", "boxset", "box-set"]
 
+    found_single = False
+    found_box = False
+
     # Jeden Ordnernamen auf diese Muster prüfen
     for name in parts:
-        normalized = re.sub(r"[^a-z0-9]", "", name)  # Bindestriche & Sonderzeichen entfernen
-        if any(key in normalized for key in single_keywords):
-            return "single"
-        if any(key in normalized for key in box_keywords):
-            return "box"
+        normalized = re.sub(r"[^a-z0-9]", "", name) # Bindestriche & Sonderzeichen entfernen
 
-    return "unknown"    
+        if any(key in normalized for key in single_keywords):
+            found_single = True
+        if any(key in normalized for key in box_keywords):
+            found_box = True
+
+    if found_single:
+        return "single"
+    elif found_box:
+        return "box"
+    else:
+        return "unknown"    
 
 # --- Parser ---
 def parse_single(wav_path: Path) -> dict:
@@ -146,7 +155,7 @@ def parse_single(wav_path: Path) -> dict:
     composer = smart_titlecase(nfc(m_work.group("comp"))) if m_work else "Unknown Artist" # Komponist für Metadaten aus Werkverzeichnis
 
     # Titel und Satznummer aus dem Dateinamen
-    fname = wav_path.name
+    fname = str(wav_path.name).replace("--", placeholder)
     m_num = re.match(r"^(?P<comp>[^-]+?)-(?P<work>.+?)-(?P<num>\d{1,3})-(?P<title>.+?)\.wav$", fname, re.I)
     m_non = re.match(r"^(?P<comp>[^-]+?)-(?P<title>.+?)\.wav$", fname, re.I)
 
@@ -195,7 +204,7 @@ def parse_box(wav_path: Path) -> dict:
     placeholder = "§§§"  # Platzhalter für doppelten Bindestrich
 
     # Pfade mit Platzhalter
-    work_dir  = Path(str(wav_path.parent).replace("--", placeholder)) # Komponist,Vorname-Werk
+    work_dir = Path(str(wav_path.parent).replace("--", placeholder)) # Komponist,Vorname-Werk
     disc_dir = Path(str(work_dir.parent).replace("--", placeholder)) # Komponist,Vorname-Medientitel_CDNummer
     box_dir = Path(str(disc_dir.parent).replace("--", placeholder)) # Komponist,Vorname-BoxTitel
 
@@ -216,7 +225,7 @@ def parse_box(wav_path: Path) -> dict:
     composer = norm_name(nfc(m_work.group("comp"))) if m_work else "Unknown Artist" # Komponist für Metadaten aus Werkverzeichnis
 
     # Titel aus Dateiname
-    fname = wav_path.name
+    fname = str(wav_path.name).replace("--", placeholder)
     m_num = re.match(r"^(?P<comp>[^-]+?)-(?P<work>.+?)-(?P<num>\d{1,3})-(?P<title>.+?)\.wav$", fname, re.I)
     m_non = re.match(r"^(?P<comp>[^-]+?)-(?P<title>.+?)\.wav$", fname, re.I)
 
@@ -373,9 +382,9 @@ def embed_cover(flac_file: Path, source_wav: Path, dry_run: bool = False) -> Non
     # Container bestimmen (eine Ebene über dem Werk-Ordner)
     kind = classify_path(source_wav)
     if kind == "single":
-        container = source_wav.parents[1]
+        container = source_wav.parents[1] # Werkordner
     elif kind == "box":
-        container = source_wav.parents[2]
+        container = source_wav.parents[2] # Box-Werk-Ordner
     elif kind == "unknown":
         print(f"[COVER] Kein Medientyp erkannt: {source_wav}")
         return False
@@ -398,7 +407,7 @@ def embed_cover(flac_file: Path, source_wav: Path, dry_run: bool = False) -> Non
     # Kandidat wählen
     img_path = next((p for p in candidates if p.exists()), None)
     if not img_path:
-        print(f"[COVER] Kein Cover gefunden in: {container}")
+        print(f"[COVER] Kein Cover gefunden für Album:\n  {container}\n  Quelle: {source_wav}")
         return
 
     if dry_run:
