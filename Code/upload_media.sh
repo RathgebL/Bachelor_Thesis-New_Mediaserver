@@ -1,20 +1,38 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ============================================================
-#  Upload-Skript für Medienserver (macOS)
+#  Upload-Skript für Medienserver (macOS, Launchd-kompatibel)
 #  ------------------------------------------------------------
 #  Zweck:
-#    - Überträgt neue Medien-Dateien (FLACs, PDFs, JPGs etc.)
-#      aus dem lokalen Upload-Ordner auf den zentralen Server.
-#    - Erfolgreich übertragene Dateien werden lokal gelöscht.
-#    - Logdatei dokumentiert alle Aktionen.
+#    - Überträgt neue Medien-Dateien (FLAC, PDF, JPG etc.)
+#      aus dem lokalen Upload-Ordner auf den Server.
+#    - Wird automatisch per Launchd gestartet.
+#    - Arbeitet zuverlässig auch bei eingeschränkter Umgebung.
 # ============================================================
+
+# -------------------------------
+# Umgebungsvariablen / Sicherheit
+# -------------------------------
+
+# Setze absolutes Arbeitsverzeichnis, da Launchd nicht im Desktop-Kontext startet:
+cd "/Users/bibliothek/Desktop/_upload-to-server" || {
+  echo "$(date '+%F %T') [ERROR] Konnte Upload-Ordner nicht finden oder betreten."
+  exit 1
+}
+
+# Stelle sicher, dass SSH-Agent bekannt ist (für rsync via SSH)
+if [[ -S "$HOME/.ssh/ssh_auth_sock" ]]; then
+  export SSH_AUTH_SOCK="$HOME/.ssh/ssh_auth_sock"
+fi
+
+# PATH explizit setzen (Launchd hat oft nur /usr/bin:/bin)
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # -------------------------------
 # Konfiguration
 # -------------------------------
 SOURCE="/Users/bibliothek/Desktop/_upload-to-server"            # Lokaler Upload-Ordner
 DEST="medienserver@193.197.85.23:/srv/incoming_media"           # Ziel auf Server
-LOGFILE="/Users/bibliothek/Desktop/Logs/upload_media.log"       # Lokale Log-Datei
+LOGFILE="/Users/bibliothek/Logs/upload_media.log"               # Lokale Log-Datei
 
 # -------------------------------
 # Vorbereitung
@@ -67,14 +85,16 @@ RSYNC_EXIT=$?
 if [[ $RSYNC_EXIT -eq 0 ]]; then
     echo "$(date '+%F %T') [OK] Upload erfolgreich abgeschlossen." >> "$LOGFILE"
 
+    # Versteckte macOS-Dateien löschen, damit Ordner wirklich leer sind
+    find "$SOURCE" -name '.DS_Store' -delete 2>/dev/null
+    find "$SOURCE" -name '._*' -delete 2>/dev/null
+    find "$SOURCE" -name '.localized' -delete 2>/dev/null
+
     # Leere Unterordner entfernen (Hauptordner bleibt bestehen)
     find "$SOURCE" -mindepth 1 -type d -empty -delete
     echo "$(date '+%F %T') [CLEANUP] Leere Unterordner entfernt." >> "$LOGFILE"
 
     # Alte temporäre Teil-Uploads löschen (.rsync-partials)
-    # -type f : nur Dateien löschen
-    # -mtime +2 : nur Dateien, die älter als 2 Tage sind (zur Sicherheit, falls rsync sie noch braucht)
-    # -empty : leere Ordner im Anschluss entfernen
     if [[ -d "$SOURCE/.rsync-partials" ]]; then
         find "$SOURCE/.rsync-partials" -type f -mtime +2 -delete 2>/dev/null
         find "$SOURCE/.rsync-partials" -type d -empty -delete 2>/dev/null
