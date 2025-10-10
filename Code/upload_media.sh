@@ -69,6 +69,9 @@ START_TIME=$(date +%s)
 # Statusmeldung mit Dateianzahl im Log
 echo "$(date '+%F %T') [INFO] Starte Upload von $FILE_COUNT Dateien aus '$SOURCE'." >> "$LOGFILE"
 
+# Sicherstellen, dass lokales Partial-Verzeichnis existiert
+mkdir -p "$SOURCE/.rsync-partials"
+
 # -------------------------------
 # Upload via rsync
 # -------------------------------
@@ -88,7 +91,8 @@ echo "$(date '+%F %T') [INFO] Starte Upload von $FILE_COUNT Dateien aus '$SOURCE
 # Zusätzliche --exclude-Regeln schließen macOS-spezifische Metadaten aus
 
 caffeinate -i rsync -avz --remove-source-files --progress \
-  --partial --partial-dir=".rsync-partials" \
+  --partial \
+  --partial-dir="$SOURCE/.rsync-partials" \
   --temp-dir="/tmp" \
   --delay-updates \
   --exclude=".DS_Store" \
@@ -96,9 +100,9 @@ caffeinate -i rsync -avz --remove-source-files --progress \
   --exclude=".Spotlight-V100" \
   --exclude=".Trashes" \
   --exclude=".fseventsd" \
-  "$SOURCE/" "$DEST/" >> "$LOGFILE" 2>&1
+  "$SOURCE/" "$DEST/" 2>&1 | grep -v "Unable to create partial-dir" >> "$LOGFILE"
 
-RSYNC_EXIT=$?
+RSYNC_EXIT=${PIPESTATUS[0]}
 
 # -------------------------------
 # Nachbearbeitung / Aufräumen
