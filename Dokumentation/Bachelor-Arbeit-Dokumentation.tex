@@ -2450,6 +2450,42 @@ bash "/Users/bibliothek/Desktop/_upload-starten.command"
     Besonders nach Änderungen am Skript oder Kopien auf ein anderes Volume ist das Entfernen des Quarantäne-Attributs erforderlich, 
     da macOS die Datei sonst als potenziell unsicher einstuft und deren Ausführung blockiert.
 
+    \subsubsection*{Probleme mit der SSH-Ausführung von Systemdiensten}
+    Bei der automatischen Ausführung des Serverprozesses über SSH kann ein Berechtigungsproblem auftreten.  
+    Das auslösende Skript auf dem macOS-Client sollte nach erfolgreichem Upload den systemd-Dienst 
+    \texttt{process\_incoming.service} auf dem Server starten. Der Aufruf erfolgte dabei über:
+
+    \begin{minted}[breaklines, linenos]{bash}
+ssh medienserver@193.197.85.23 "sudo systemctl start process_incoming.service"
+
+# Ausgabe:
+sudo: a terminal is required to read the password;
+either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+    \end{minted}
+
+    Kommt es zu obiger Ausgabe, liegt die Ursache darin, dass \texttt{sudo} standardmäßig eine interaktive Passworteingabe über ein Terminal erwartet.  
+    Da SSH-Befehle in diesem Kontext jedoch ohne TTY (Terminalzuweisung) ausgeführt werden, kann keine Passwortabfrage erfolgen.  
+    Der Befehl scheitert somit an fehlender Eingabemöglichkeit.
+
+    Um dieses Problem zu beheben, muss auf dem Zielsystem (Server) eine gezielte Ausnahme in der \texttt{sudoers}-Konfiguration definiert werden.  
+    Damit darf der Benutzer \texttt{medienserver} den betreffenden systemd-Dienst ohne Passworteingabe starten.  
+    Dies geschieht über die Anpassung der \texttt{sudoers}-Datei mittels:
+
+    \begin{minted}[breaklines, linenos]{bash}
+sudo visudo
+    \end{minted}
+
+    Dort folgende Zeile ergänzen:
+
+    \begin{minted}[breaklines, linenos]{bash}
+medienserver ALL=(ALL) NOPASSWD: /bin/systemctl start process_incoming.service
+    \end{minted}
+
+    Damit ist ausschließlich der Befehl zum Starten des Dienstes \texttt{process\_incoming.service} 
+    für den Benutzer \texttt{medienserver} ohne Passwort ausführbar, 
+    was eine sichere und automatisierte Prozessausführung über SSH ermöglicht, 
+    ohne die Systemintegrität zu gefährden.
    
 % ------ Fazit ------
 \chapter*{Fazit}
