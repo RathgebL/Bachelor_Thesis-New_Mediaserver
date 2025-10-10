@@ -40,8 +40,23 @@ fi
 # --remove-source-files : löscht Dateien, wenn erfolgreich übertragen
 # --progress : Fortschrittsanzeige (hier ins Log umgeleitet)
 # --exclude : ignoriert Systemdateien
+#
+# Erweiterte Optionen:
+# --partial : erlaubt das Fortsetzen abgebrochener Übertragungen
+# --partial-dir : speichert unfertige Dateien temporär im Unterordner .rsync-partials
+# --temp-dir : legt temporäre Upload-Dateien außerhalb des Zielverzeichnisses ab (z. B. /tmp)
+# --delay-updates : sorgt dafür, dass Dateien erst nach vollständigem Upload umbenannt/aktiviert werden
+#                   → verhindert, dass der Server halbfertige Dateien sieht
+# Zusätzliche --exclude-Regeln schließen macOS-spezifische Metadaten aus
 rsync -avz --remove-source-files --progress \
+  --partial --partial-dir=".rsync-partials" \
+  --temp-dir="/tmp" \
+  --delay-updates \
   --exclude=".DS_Store" \
+  --exclude="._*" \
+  --exclude=".Spotlight-V100" \
+  --exclude=".Trashes" \
+  --exclude=".fseventsd" \
   "$SOURCE/" "$DEST/" >> "$LOGFILE" 2>&1
 
 RSYNC_EXIT=$?
