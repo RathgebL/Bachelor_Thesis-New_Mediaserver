@@ -52,7 +52,9 @@ RSYNC_EXIT=$?
 if [[ $RSYNC_EXIT -eq 0 ]]; then
     echo "$(date '+%F %T') [OK] Upload erfolgreich abgeschlossen." >> "$LOGFILE"
 
-    # Leere Unterordner entfernen (Hauptordner bleibt bestehen)
+    # Versteckte Systemdateien löschen, dann leere Verzeichnisse entfernen
+    find "$SOURCE" -name '.DS_Store' -delete
+    find "$SOURCE" -name '._*' -delete
     find "$SOURCE" -mindepth 1 -type d -empty -delete
     echo "$(date '+%F %T') [CLEANUP] Leere Unterordner entfernt." >> "$LOGFILE"
 else

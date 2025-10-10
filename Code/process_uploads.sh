@@ -24,7 +24,7 @@ fi
 
 # Logrotation ab ~50 KB (einfacher Schutz gegen Überlauf)
 MAXSIZE=50000  # ~50 KB
-if [[ -f "$LOG" && $(stat -c%s "$LOG") -gt $MAXSIZE ]]; then
+if [[ -f "$LOG" && $(stat -c%s "$LOG" 2>/dev/null || stat -f%z "$LOG") -gt $MAXSIZE ]]; then
     mv "$LOG" "${LOG}.1"
     touch "$LOG"
     echo "$(date '+%F %T') [INFO] Logdatei rotiert (zu groß)" >> "$LOG"
@@ -35,7 +35,8 @@ fi
 # -------------------------------
 count=0
 
-find "$INCOMING" -type f | while read -r FILE; do
+# Robustes Einlesen von Dateien (Nullbyte-separiert, sicher für Leerzeichen/Umlaute)
+find "$INCOMING" -type f -print0 | while IFS= read -r -d '' FILE; do
     ((count++))
     REL_PATH="${FILE#$INCOMING/}"
 
@@ -66,6 +67,15 @@ done
 if [[ $count -eq 0 ]]; then
     echo "$(date '+%F %T') [INFO] Keine neuen Dateien gefunden." >> "$LOG"
 fi
+
+# -------------------------------
+# Aufräumen: versteckte Dateien & leere Ordner
+# -------------------------------
+# Entfernt macOS-Systemdateien und leert übrig gebliebene Upload-Verzeichnisse
+find "$INCOMING" -name '.DS_Store' -delete
+find "$INCOMING" -name '._*' -delete
+find "$INCOMING" -mindepth 1 -type d -empty -delete
+echo "$(date '+%F %T') [CLEANUP] Leere Ordner aus Incoming entfernt." >> "$LOG"
 
 # -------------------------------
 # Rechte setzen (Leserechte für nginx/Navidrome)
