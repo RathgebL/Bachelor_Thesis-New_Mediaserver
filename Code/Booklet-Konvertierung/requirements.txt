@@ -1,0 +1,6 @@
+# requirements.txt
+# Abhängigkeiten für booklet2pdf.py
+# Python-Version: >= 3.9
+
+Pillow>=10.0.0
+tqdm>=4.66.0

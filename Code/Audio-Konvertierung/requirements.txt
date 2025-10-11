@@ -1,0 +1,6 @@
+# requirements.txt
+# Abhängigkeiten für wav2flac.py
+# Python-Version: >= 3.9
+
+tqdm>=4.66.0
+mutagen>=1.47.0
