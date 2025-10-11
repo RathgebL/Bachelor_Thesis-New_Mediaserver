@@ -1566,17 +1566,79 @@ In diesem Abschnitt wird erläutert, wie diese Daten bislang erstellt und verwal
 welche Anpassungen für die Integration in den Medienserver notwendig sind und 
 wie der automatisierte Datentransfer, die Strukturierung und die Sicherung der Mediendaten umgesetzt werden können.  
  
-    \subsection{Datenquellen}
-    Skript zur Digitalisierung
-    Skript zur Metadatenanreicherung
-    Externe und weitere Quellen
+  \subsection{Datenstruktur}
+  Beim Digitalisieren der CDs wird zunächst das Booklet gescannt. 
+  Anschließend werden die Audiodateien in voller Qualität kopiert, benannt und gemeinsam nach der folgenden Struktur abgelegt.
+  \\
+  \newline
+  \textbf{Einzel-CDs:}
+  \begin{minted}[breaklines, linenos]{css}
+audio1/
+  Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Medientitel/
+    booklet/
+      booklet-b.jpg
+      booklet.jpg
+      booklet0001.jpg
+      booklet0002.jpg
+      ...
+    Nachname_Komponist_1,Vorname_Komponist_1-Werk1/
+      Nachname_Komponist_1-Werk1-01-Erster_Satz.wav
+      Nachname_Komponist_1-Werk1-02-Zweiter_Satz.wav
+      ...
+    Nachname_Komponist_2,Vorname_Komponist_2-Werk2/
+      Nachname_Komponist_2-Werk2.wav
+    ...
+  \end{minted}
 
-    \subsection{Datenstruktur}
+  In diesem Beispiel sind mehrere Komponisten beteiligt. 
+  Werden es mehr als vier, werden die Namen nicht mehr ausgeschrieben, 
+  sondern stattdessen durch den Eintrag \enquote{Verschiedene} ersetzt.
+  \\
+  \newline
+  \textbf{Boxen:}
+  \begin{minted}[breaklines, linenos]{css}
+audio1/
+  Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Boxtitel/
+    booklet/
+      booklet-b.jpg
+      booklet.jpg
+      booklet0001.jpg
+      booklet0002.jpg
+      ...
+    Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Medientitel_1._CD1/
+      Nachname_Komponist_1,Vorname_Komponist_1-Werk1/
+        Nachname_Komponist_1-Werk1-01-Erster_Satz.wav
+        Nachname_Komponist_1-Werk1-02-Zweiter_Satz.wav
+        ...
+      Nachname_Komponist_2,Vorname_Komponist_2-Werk2/
+        Nachname_Komponist_2-Werk2.wav
+      ...
+    Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Medientitel_2._CD2/ 
+      Nachname_Komponist_1,Vorname_Komponist_1-Werk1/
+        ...
+    ...
+  \end{minted}
 
-    \subsection{Datenübertragung}
-    Um die Übertragung neu erstellter Mediendateien (\texttt{.flac}, \texttt{.pdf}) vom Digitalisierungsrechner auf den Medienserver zu vereinfachen 
-    und zu automatisieren, kann auf dem Server ein Upload-Mechanismus eingerichtet werden. 
-    Zunächst wird ein Ordner angelegt, der als Zwischenablage für neu bereitgestellte Dateien dient. 
+  Bei einer Box können verschiedene Medientitel vorkommen, die vom Boxtitel abweichen.
+
+  Es fehlen jedoch noch Metadaten, die die gewünschte Darstellung auf der Weboberfläche ermöglichen.
+  Im folgenden Abschnitt wird erläutert, wie diese hinzugefügt werden können.
+  
+  \subsection{Datenquellen}
+  Im Rahmen meiner Arbeit habe ich folgende Skripte erstellt, um die bereits vorhandenen "Rohdaten" zu konvertieren,
+  dass diese für den Serverbetrieb geeignet sind. Dieser Teil brachte einige herausforderungen mit sich 
+  und ist essentiell für die Funktion des Servers, weshalb sie nachfolgend kurz erklärt werden sollen.
+  Der Code findet sich auf GitHub oder im Anhang.
+
+  \subsubsection*{Skript zur Digitalisierung}
+  \subsubsection*{Skript zur Metadatenanreicherung}
+  \subsubsection*{Skript für Booklet-Aufbereitung}
+  \subsubsection*{Externe und weitere Quellen}
+
+  \subsection{Datenübertragung}
+  Um die Übertragung neu erstellter Mediendateien (\texttt{.flac}, \texttt{.pdf}) vom Digitalisierungsrechner auf den Medienserver zu vereinfachen 
+  und zu automatisieren, kann auf dem Server ein Upload-Mechanismus eingerichtet werden. 
+  Zunächst wird ein Ordner angelegt, der als Zwischenablage für neu bereitgestellte Dateien dient. 
 
   \begin{minted}[breaklines, linenos]{bash}
 cd /srv
