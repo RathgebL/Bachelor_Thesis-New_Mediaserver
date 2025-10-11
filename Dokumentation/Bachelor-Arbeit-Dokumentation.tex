@@ -10,6 +10,7 @@
 \usepackage[backend=biber,style=authoryear]{biblatex}
 \usepackage[printonlyused]{acronym}
 \usepackage{fvextra}
+\usepackage{xurl}
 
 \addbibresource{bibliography.bib}
 
@@ -933,8 +934,7 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   Um die Installation zu starten, wird der Stick angeschlossen und über das Boot-Menü (Taste \texttt{F12}, \texttt{Esc} oder \texttt{Del}, abhängig vom Hersteller) ausgewählt.  
   Die textbasierte Installationsroutine führt anschließend durch Partitionierung, Netzwerkkonfiguration und die Einrichtung eines Administratorkontos. 
   Dabei können SSH und Docker bereits mitinstalliert werden. Der USB-Stick kann danach entfernt und der Server neu gestartet werden.
-  Nähere Informationen zu diesem Vorgang sind in der offiziellen Dokumentation verfügbar:\\
-  \url{https://ubuntu.com/server/docs/installation}.
+  Nähere Informationen zu diesem Vorgang sind in der offiziellen Dokumentation verfügbar: \url{https://ubuntu.com/server/docs/installation}.
 
   % --------------------------------------------------------------- 
 
@@ -1276,7 +1276,7 @@ MaxLength = 512
 SessionTimeout = 1800
     \end{minted}
 
-    Nähere Informationen zu den Konfigurationsmöglichkeiten sind in der offiziellen Dokumentation verfügbar:\\
+    Nähere Informationen zu den Konfigurationsmöglichkeiten sind in der offiziellen Dokumentation verfügbar:
     \url{https://www.navidrome.org/docs/configuration/}.
     
     Beim ersten Start wird man aufgefordert, ein Administrationskonto anzulegen.
@@ -1296,8 +1296,7 @@ sudo docker-compose up -d --build
     \end{minted}
 
     \item Zugriff und Nutzung:
-    Nach dem Start des Containers kann die Weboberfläche von Navidrome im Browser über die Adresse\\
-    \url{http://<SERVER-IP>:4533} aufgerufen werden.   
+    Nach dem Start des Containers kann die Weboberfläche von Navidrome im Browser über die Adresse \url{http://<SERVER-IP>:4533} aufgerufen werden.   
     Navidrome durchsucht den angegeben Ordner für Musik automatisch nach passenden dateien.  
   
     Alle Benutzerdaten, Playlisten und Metainformationen werden im Ordner \texttt{/srv/navidrome/data} gespeichert 
