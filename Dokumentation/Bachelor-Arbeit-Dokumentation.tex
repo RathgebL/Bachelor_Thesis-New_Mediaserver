@@ -2311,9 +2311,37 @@ chmod +x ~/Desktop/Upload-starten.command
     \end{minted}
   \end{enumerate}
 
-  \subsection{Datenverwaltung}
-    Datenpflege
-    Backup-Strategie
+\subsection{Datenverwaltung}
+Eine zentrale Voraussetzung für den langfristigen Betrieb des Medienservers ist eine strukturierte und nachhaltige Verwaltung der digitalen Bestände. 
+Hierzu zählen sowohl die kontinuierliche Pflege der vorhandenen Metadaten als auch eine verlässliche Backup-Strategie für die Sicherung der Audiodateien und zugehörigen Booklets.
+
+  \subsubsection*{Datenpflege}
+  Die Pflege der Datenbestände umfasst sowohl inhaltliche als auch technische Aspekte. 
+  Auf inhaltlicher Ebene müssen neu digitalisierte oder nachträglich korrigierte Medien regelmäßig in das System eingepflegt werden. 
+  Hierbei ist insbesondere auf eine konsistente Benennung und vollständige Metadatenstruktur zu achten, 
+  damit die Such- und Filterfunktionen des Medienservers korrekt arbeiten. 
+  Die im Rahmen dieser Arbeit entwickelten Skripte zur Metadatenanreicherung und Booklet-Aufbereitung 
+  unterstützen diesen Prozess, indem sie eine einheitliche Datenstruktur sicherstellen und somit die Pflege der Bestände erheblich vereinfachen.
+
+  Darüber hinaus sollte in regelmäßigen Abständen eine Kontrolle der Metadatenqualität erfolgen, 
+  um mögliche Inkonsistenzen oder fehlerhafte Zuordnungen frühzeitig zu erkennen. 
+  Hierfür kann die bestehende Ordnerstruktur automatisiert überprüft oder über die Web-Oberfläche 
+  ein Abgleich der gespeicherten Daten vorgenommen werden.
+
+  \subsubsection*{Backup-Strategie}
+  Für die Sicherung der Mediendaten wurde eine neue 8\,TB-HDD beschafft, 
+  die als zentrales Backup-Medium für alle FLAC-Dateien und die dazugehörigen PDF-Booklets dient. 
+  Die Sicherung erfolgt regelmäßig und soll gewährleisten, 
+  dass auch im Falle eines Hardwareausfalls oder versehentlichen Löschens keine Datenverluste auftreten. 
+  Das Backup wird dabei als vollständige Kopie des aktuellen Serverbestands geführt, 
+  wobei sichergestellt ist, dass sowohl die Dateistruktur als auch alle Metadaten erhalten bleiben.
+
+  Da sämtliche Daten des Medienservers aus den originalen Digitalisaten jederzeit erneut erzeugt werden können, 
+  stellt das Backup in erster Linie eine operative Redundanz dar, 
+  die eine schnelle Wiederherstellung des Systems im Störungsfall ermöglicht. 
+  Langfristig kann darüber hinaus geprüft werden, ob zusätzlich eine zweite, 
+  externe Sicherung (z.\,B. auf einem separaten Speichersystem oder Cloud-Speicher) eingerichtet werden sollte, 
+  um den Schutz der Archivdaten weiter zu erhöhen.
 
 \section{Benutzerverwaltung und Zugriffsrechte}
 \section{Testen und Fehlerbehebung}
