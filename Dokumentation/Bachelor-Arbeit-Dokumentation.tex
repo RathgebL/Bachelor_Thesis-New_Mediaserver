@@ -9,6 +9,7 @@
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=cyan]{hyperref}
 \usepackage[backend=biber,style=authoryear]{biblatex}
 \usepackage[printonlyused]{acronym}
+\usepackage{fvextra}
 
 \addbibresource{bibliography.bib}
 
@@ -425,8 +426,8 @@ Sie bildet die Voraussetzung für einen stabilen und sicheren Betrieb und ist in
   \\
   \newline
   \textbf{Intrusion Detection und Monitoring}:  
-  \acp{IDS} überwachen den Datenverkehr oder Host-Systeme auf verdächtige Aktivitäten. 
-  \acp{IPS} gehen noch einen Schritt weiter und können erkannte Angriffe automatisch blockieren. 
+  \ac{IDS} überwachen den Datenverkehr oder Host-Systeme auf verdächtige Aktivitäten. 
+  \ac{IPS} gehen noch einen Schritt weiter und können erkannte Angriffe automatisch blockieren. 
   Beispiele sind Snort (Netzwerk-\ac{IDS}) oder OSSEC (Host-basiertes \ac{IDS}). 
   In Kombination mit einer kontinuierlichen Log-Analyse ermöglichen diese Werkzeuge eine frühzeitige Erkennung von Angriffen.\footcite[Vgl.][S.~918~ff.]{nemeth_unixlinux} 
   \\ 
@@ -575,7 +576,7 @@ Sie kombinieren Datenbanken, Streaming-Protokolle und Benutzerverwaltung und mü
   \\
   \newline
   \textbf{Jellyfin:}
-  Jellyfin ist eine vollständig freie und quelloffene Medienserver-Software, die als Community-getragene Alternative zu Plex und Emby entwickelt wird. 
+  Jellyfin ist eine vollständig freie und quelloffene Software für Medienserver, die als Community-getragene Alternative zu Plex und Emby entwickelt wird. 
   Sie eignet sich besonders für Szenarien, in denen Transparenz, Datenschutz 
   und Unabhängigkeit von kommerziellen Modellen eine Rolle spielen, wie etwa in Hochschulen oder öffentlichen Bibliotheken. 
   Jellyfin unterstützt die Verwaltung und das Streaming von Audio-, Video- und Bilddateien und bietet Clients für Webbrowser, Mobilgeräte und Smart-TVs. 
@@ -842,7 +843,7 @@ und welche Verbesserungen oder Erweiterungen in Zukunft möglich wären.
   Die Installation und Konfiguration der Server-Software sollte möglichst standardisiert erfolgen, um eine einfache Reproduzierbarkeit zu gewährleisten. 
   Der Einsatz von Containervirtualisierung (z.\,B. Docker) erleichtert dabei sowohl die Installation als auch spätere Updates.  
 
-  Wartung umfasst zudem die regelmäßige Aktualisierung der Server-Software und der darunterliegenden Betriebssystemkomponenten, 
+  Wartung umfasst zudem die regelmäßige Aktualisierung der Software des Servers und der darunterliegenden Betriebssystemkomponenten, 
   sowie die Sicherstellung von Backups der Musikdaten und Konfigurationsdateien.  
   Eine klare Dokumentation der Systemarchitektur und der administrativen Abläufe ist erforderlich, 
   damit auch Personen ohne tiefgehende technische Vorkenntnisse die Verwaltung übernehmen können.  
@@ -863,7 +864,7 @@ und welche Verbesserungen oder Erweiterungen in Zukunft möglich wären.
 
   Die Authentifizierung erfolgt entweder über einen allgemeinen Bibliotheks-Account oder über persönliche Benutzerkonten. 
   Dabei sollten Passwörter sicher verschlüsselt gespeichert und Mindestanforderungen an die Passwortstärke durchgesetzt werden.  
-  Darüber hinaus ist es notwendig, dass die Server-Software regelmäßig aktualisiert wird, um bekannte Sicherheitslücken zu schließen.  
+  Darüber hinaus ist es notwendig, dass die Server-Software regelmäßig aktualisiert wird, um bekannte Sicherheitslücken zu\\schließen.  
 
   Wichtige Anforderungen an die Sicherheit sind:
   \begin{itemize}
@@ -932,7 +933,8 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   Um die Installation zu starten, wird der Stick angeschlossen und über das Boot-Menü (Taste \texttt{F12}, \texttt{Esc} oder \texttt{Del}, abhängig vom Hersteller) ausgewählt.  
   Die textbasierte Installationsroutine führt anschließend durch Partitionierung, Netzwerkkonfiguration und die Einrichtung eines Administratorkontos. 
   Dabei können SSH und Docker bereits mitinstalliert werden. Der USB-Stick kann danach entfernt und der Server neu gestartet werden.
-  Nähere Informationen zu diesem Vorgang sind in der offiziellen Dokumentation verfügbar: \url{https://ubuntu.com/server/docs/installation}.
+  Nähere Informationen zu diesem Vorgang sind in der offiziellen Dokumentation verfügbar:\\
+  \url{https://ubuntu.com/server/docs/installation}.
 
   % --------------------------------------------------------------- 
 
@@ -944,7 +946,7 @@ Damit soll der Aufbau des Medienservers in der Bibliothek nachvollziehbar und re
   \begin{enumerate}
     \item Installation:
     
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # System aktualisieren
 sudo apt update && sudo apt upgrade
 
@@ -961,7 +963,7 @@ sudo systemctl status ssh
     \item Loggin:
     der Zugriff erfolgt dann von einem Client aus über:  
     
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Zunächst IP-Adresse des Servers ermitteln (siehe unter enp0... inet z. B. 100.123.1.2)
 ip a
 
@@ -977,7 +979,7 @@ exit
     Für erhöhte Sicherheit wird empfohlen, die Passwort-Authentifizierung zu deaktivieren und stattdessen SSH-Schlüssel zu verwenden.
     Dafür sind folgende Schritte notwendig:
   
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Auf dem Client SSH-Schlüssel generieren (falls noch nicht vorhanden)
 ssh-keygen -t ed25519 -C "user@client"
 
@@ -1004,7 +1006,7 @@ sudo systemctl restart ssh
 
     \item Wichtige Befehle:
     für die Nutzung von SSH lohnt es sich folgende Befehle zu kennen:   
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Service steuern
 sudo systemctl start ssh
 sudo systemctl stop ssh
@@ -1039,7 +1041,7 @@ rsync -av benutzername@server-ip:/remote/verzeichnis/ ./lokal/
 
   \begin{enumerate}
     \item Datenträger mit Skript verfügbar machen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Stick anschließen und Gerät ermitteln (z.B. sdb1)
 lsblk
 
@@ -1062,13 +1064,13 @@ cd /mnt/usb
     \end{minted}
 
     \item Skript ausführbar machen und starten:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 chmod +x install-docker.sh
 ./install-docker.sh
     \end{minted}
 
     \item Überprüfen der Installation:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Verifiziere, dass der Docker-Dienst läuft
 sudo systemctl status docker
 
@@ -1081,7 +1083,7 @@ sudo docker run hello-world
     Dafür ist es sehr nützlich folgende Befehle, die im Verzeichnis ausgeführt werden, 
     in dem sich die \texttt{docker-compose.yml}-Datei befindet, zu kennen:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Container erstellen und im Hintergrund starten
 sudo docker compose up -d
 
@@ -1113,16 +1115,17 @@ sudo docker compose down
 
   \begin{enumerate}
     \item Vorbereitungen:
-    zunächst wird ein Arbeitsverzeichnis für den Container erstellt, in dem sich sowohl die Mediendateien als auch die Konfigurations- und Datenbankordner befinden:
+    zunächst wird ein Arbeitsverzeichnis für den Container erstellt, 
+    in dem sich sowohl die Mediendateien als auch die Konfigurationsordner und Datenbankordner befinden:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo mkdir -p /srv/navidrome
 sudo mkdir -p /srv/navidrome/data
     \end{minted}
 
     Außerdem muss die Festplatte mit den Musikdateien und Booklets eingebunden werden.
     
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Platte montieren, dann Gerät ermitteln (z.B. sdb)
 lsblk
 
@@ -1188,14 +1191,14 @@ mkdir /mnt/media/booklets
     Im Anschluss wird eine \texttt{docker-compose.yml}-Datei mit den notwendigen Einstellungen angelegt. 
     Dazu muss folgender Befehl ausgeführt werden:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 cd /srv/navidrome
 sudo nano docker-compose.yml
     \end{minted}
 
     Die Datei sollte folgenden Inhalt haben (Beispiel-Datei auch im GitHub-Repository verfügbar):
     
-    \begin{minted}[breaklines, linenos]{yaml}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{yaml}
 version: "3" # gegebenfalls anpassen oder weglassen
 services:
   navidrome:
@@ -1219,7 +1222,7 @@ services:
     die Konfiguration von Navidrome erfolgt in der Datei \texttt{navidrome.toml} und auf der Weboberfläche.
     Der Inhalt der Datei sollte wie folgt sein (Beispielkonfigurationsdatei ist ebenfalls im GitHub-Repository verfügbar):
   
-    \begin{minted}[breaklines, linenos]{toml}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{toml}
 # -----------------------------
 # Pfade
 # -----------------------------
@@ -1273,13 +1276,14 @@ MaxLength = 512
 SessionTimeout = 1800
     \end{minted}
 
-    Nähere Informationen zu den Konfigurationsmöglichkeiten sind in der offiziellen Dokumentation verfügbar: \url{https://www.navidrome.org/docs/configuration/}.
+    Nähere Informationen zu den Konfigurationsmöglichkeiten sind in der offiziellen Dokumentation verfügbar:\\
+    \url{https://www.navidrome.org/docs/configuration/}.
     
     Beim ersten Start wird man aufgefordert, ein Administrationskonto anzulegen.
     Über dieses Konto können weitere Nutzer angelegt und Rechte vergeben werden.
 
     \item Container starten:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo docker-compose up -d
 
 # Status prüfen
@@ -1292,7 +1296,8 @@ sudo docker-compose up -d --build
     \end{minted}
 
     \item Zugriff und Nutzung:
-    Nach dem Start des Containers kann die Weboberfläche von Navidrome im Browser über die Adresse \url{http://<SERVER-IP>:4533} aufgerufen werden.   
+    Nach dem Start des Containers kann die Weboberfläche von Navidrome im Browser über die Adresse\\
+    \url{http://<SERVER-IP>:4533} aufgerufen werden.   
     Navidrome durchsucht den angegeben Ordner für Musik automatisch nach passenden dateien.  
   
     Alle Benutzerdaten, Playlisten und Metainformationen werden im Ordner \texttt{/srv/navidrome/data} gespeichert 
@@ -1301,7 +1306,7 @@ sudo docker-compose up -d --build
     \item Updates:
     Ein Update des Containers erfolgt in zwei Schritten:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 cd /srv/navidrome
 sudo docker-compose pull
 sudo docker-compose up -d
@@ -1319,7 +1324,7 @@ sudo docker-compose up -d
 
   \begin{enumerate}
     \item Installation:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Paketliste aktualisieren
 sudo apt update
 
@@ -1338,7 +1343,7 @@ curl http://localhost
 
     \item Konfiguration:
     die Konfiguration erfolgt über Dateien im Verzeichnis \texttt{/etc/nginx/sites-available/}, 
-    die durch Symlinks nach \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
+    die durch Symlinks nach\\ \texttt{/etc/nginx/sites-enabled/} aktiviert werden.  
     Für den Medienserver empfiehlt sich eine Konfiguration wie im folgenden Beispiel (als txt-Datei auch im     GitHub-Repository verfügbar):  
 
     \begin{minted}[breaklines, linenos]{nginx}
@@ -1393,9 +1398,9 @@ server {
     \end{minted}  
 
     \item Aktivierung:
-    die Datei wird in \texttt{/etc/nginx/sites-available/medienserver} abgelegt 
+    die Datei wird in\\ \texttt{/etc/nginx/sites-available/medienserver} abgelegt 
     und über einen Symlink aktiviert:  
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo ln -s /etc/nginx/sites-available/medienserver \
            /etc/nginx/sites-enabled/
 sudo nginx -t
@@ -1404,7 +1409,7 @@ sudo systemctl reload nginx
 
     \item Nutzung:
     Nach erfolgreicher Installation und Konfiguration, sind folgen Befehle nützlich zur Verwaltung von nginx:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Service steuern
 sudo nginx -t                  # Konfiguration testen
 sudo systemctl start nginx     # starten
@@ -1442,14 +1447,14 @@ tail -f /var/log/nginx/error.log
 
   \begin{enumerate}
     \item Installation:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo apt update
 sudo apt install ufw
 sudo ufw enable
     \end{minted}
 
     \item Konfiguration:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Standardregeln setzen
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
@@ -1469,7 +1474,7 @@ sudo ufw status verbose
 
     \item Nutzung:
     nun werden noch alle wichtigen Befle zur Nutzung von \ac{UFW} vorgestellt:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
   # Status prüfen
 sudo ufw status
 sudo ufw status verbose     # mehr Details
@@ -1535,7 +1540,7 @@ sicher betrieben und von den vorgesehenen Nutzergruppen zuverlässig erreicht we
 Die Firewall der Hochschule wird durch einen externen Dienstleister verwaltet; Anpassungen müssen daher über das IT-Team der HfM beauftragt werden. 
 Die Netzwerkkonfiguration des Servers wurde durch das IT-Team erstellt und unter \texttt{/etc/netplan/01-netcfg.yaml} abgelegt:
 
-\begin{minted}[breaklines, linenos]{yaml}
+\begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{yaml}
 network: # Beginn der Netzwerkkonfiguration (Oberstruktur)
   ethernets: # Definition kabelgebundener Netzwerkschnittstellen
     enp0s31f6: # Name der Netzwerkschnittstelle (vom System erkannt)
@@ -1553,7 +1558,7 @@ network: # Beginn der Netzwerkkonfiguration (Oberstruktur)
 Diese Datei muss bei zukünftigen Änderungen der Netzwerkinfrastruktur gegebenenfalls angepasst werden
 Mit folgendem Befehl kann die neue Konfiguration dann aktiviert werden:
 
-\begin{minted}[breaklines, linenos]{bash}
+\begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo netplan apply
 \end{minted}
 
@@ -1572,9 +1577,10 @@ wie der automatisierte Datentransfer, die Strukturierung und die Sicherung der M
   \\
   \newline
   \textbf{Einzel-CDs:}
-  \begin{minted}[breaklines, linenos]{css}
+
+  \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{text}
 audio1/
-  Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Medientitel/
+  Nachname_Komponist_1,Vorname_Komponist_1+ Nachname_Komponist_2,Vorname_Komponist_2-Medientitel/
     booklet/
       booklet-b.jpg
       booklet.jpg
@@ -1596,16 +1602,17 @@ audio1/
   \\
   \newline
   \textbf{Boxen:}
-  \begin{minted}[breaklines, linenos]{css}
+
+  \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{text}
 audio1/
-  Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Boxtitel/
+  Nachname_Komponist_1,Vorname_Komponist_1+ Nachname_Komponist_2,Vorname_Komponist_2-Boxtitel/
     booklet/
       booklet-b.jpg
       booklet.jpg
       booklet0001.jpg
       booklet0002.jpg
       ...
-    Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Medientitel_1._CD1/
+    Nachname_Komponist_1,Vorname_Komponist_1+ Nachname_Komponist_2,Vorname_Komponist_2-Medientitel_1._CD1/
       Nachname_Komponist_1,Vorname_Komponist_1-Werk1/
         Nachname_Komponist_1-Werk1-01-Erster_Satz.wav
         Nachname_Komponist_1-Werk1-02-Zweiter_Satz.wav
@@ -1613,7 +1620,7 @@ audio1/
       Nachname_Komponist_2,Vorname_Komponist_2-Werk2/
         Nachname_Komponist_2-Werk2.wav
       ...
-    Nachname_Komponist_1,Vorname_Komponist_1+Nachname_Komponist_2,Vorname_Komponist_2-Medientitel_2._CD2/ 
+    Nachname_Komponist_1,Vorname_Komponist_1+ Nachname_Komponist_2,Vorname_Komponist_2-Medientitel_2._CD2/ 
       Nachname_Komponist_1,Vorname_Komponist_1-Werk1/
         ...
     ...
@@ -1640,9 +1647,8 @@ audio1/
   und zu automatisieren, kann auf dem Server ein Upload-Mechanismus eingerichtet werden. 
   Zunächst wird ein Ordner angelegt, der als Zwischenablage für neu bereitgestellte Dateien dient. 
 
-  \begin{minted}[breaklines, linenos]{bash}
-cd /srv
-sudo mkdir incoming_media
+  \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
+sudo mkdir /srv/incoming_media
   \end{minted}
 
   Alle Dateien, die in diesem Verzeichnis abgelegt werden, werden regelmäßig überprüft 
@@ -1659,32 +1665,32 @@ sudo mkdir incoming_media
   Folgende Schritte müssen dafür durchgeführt werden:
 
   \begin{enumerate}
-    \item Script anlegen:
-    \begin{minted}[breaklines, linenos]{bash}
-sudo mkdir scripts
-sudo nano process_incoming.sh
+    \item Skript anlegen:
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
+sudo mkdir /srv/scripts
+sudo nano /srv/process_incoming.sh
     \end{minted}
 
     Nun folgendes einfügen (Beispiel-Datei auch im GitHub-Repository verfügbar):
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 #!/bin/bash
-# ============================================================
+# ========================================================
 #  Medienserver Upload-Verarbeitung
-#  ------------------------------------------------------------
+# --------------------------------------------------------
 #  Zweck:
 #    - Verschiebt neue Uploads aus /incoming in die passende Zielstruktur.
 #    - Setzt korrekte Rechte & führt Logrotation durch.
 #    - Entfernt leere oder temporäre Upload-Ordner nach erfolgreicher Verarbeitung.
-# ============================================================
+# ========================================================
 
 INCOMING="/srv/incoming_media"
 TARGET_MUSIC="/mnt/media/music"
 TARGET_BOOKLETS="/mnt/media/booklets"
 LOG="/srv/logs/process.log"
 
-# -------------------------------
+# --------------------------------------------------------
 # Vorbereitung
-# -------------------------------
+# --------------------------------------------------------
 mkdir -p "$(dirname "$LOG")"
 touch "$LOG"
 
@@ -1702,9 +1708,9 @@ if [[ -f "$LOG" && $(stat -c%s "$LOG" 2>/dev/null || stat -f%z "$LOG") -gt $MAXS
     echo "$(date '+%F %T') [INFO] Logdatei rotiert (zu groß)" >> "$LOG"
 fi
 
-# -------------------------------
+# --------------------------------------------------------
 # Hauptlogik 
-# -------------------------------
+# --------------------------------------------------------
 count=0
 MIN_AGE=60  # Sekunden, die eine Datei unverändert sein muss (z. B. 60s)
 
@@ -1740,25 +1746,25 @@ find "$INCOMING" -type f -mmin +$((MIN_AGE/60)) \
     fi
 done
 
-# -------------------------------
+# --------------------------------------------------------
 # Wenn keine Dateien gefunden
-# -------------------------------
+# --------------------------------------------------------
 if [[ $count -eq 0 ]]; then
     echo "$(date '+%F %T') [INFO] Keine neuen Dateien gefunden." >> "$LOG"
 fi
 
-# -------------------------------
+# --------------------------------------------------------
 # Aufräumen: versteckte Dateien & leere Ordner
-# -------------------------------
+# --------------------------------------------------------
 # Entfernt macOS-Systemdateien und leert übrig gebliebene Upload-Verzeichnisse
 find "$INCOMING" -name '.DS_Store' -delete
 find "$INCOMING" -name '._*' -delete
 find "$INCOMING" -mindepth 1 -type d -empty -delete
 echo "$(date '+%F %T') [CLEANUP] Leere Ordner aus Incoming entfernt." >> "$LOG"
 
-# -------------------------------
+# --------------------------------------------------------
 # Rechte setzen (Leserechte für nginx/Navidrome)
-# -------------------------------
+# --------------------------------------------------------
 chmod -R o+r "$TARGET_MUSIC" "$TARGET_BOOKLETS" 2>/dev/null
 find "$TARGET_MUSIC" "$TARGET_BOOKLETS" -type d -exec chmod o+x {} \; 2>/dev/null
 
@@ -1766,13 +1772,13 @@ echo "$(date '+%F %T') [INFO] Verarbeitung abgeschlossen." >> "$LOG"
     \end{minted}
 
     \item Skript ausführbar machen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 chmod +x /usr/local/bin/process_uploads.sh
     \end{minted}
 
     \item Skript testen:
-    \begin{minted}[breaklines, linenos]{bash}
-# Script manuell ausführen
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
+# Skript manuell ausführen
 sudo /srv/scripts/process_incoming.sh
 
 # Log einsehen
@@ -1788,23 +1794,23 @@ tail -n 10 /srv/logs/process.log
   \end{itemize}
 
   Die Kombination aus Service und Timer hat den Vorteil, dass sie eine robustere und besser protokollierte Alternative zu Cron darstellt. 
-  Systemd-Timer starten automatisch nach einem Neustart des Servers, unterstützen persistente Intervalle und integrieren sich in das zentrale Linux-Loggingsystem (\texttt{journalctl}). 
+  Systemd-Timer starten automatisch nach einem Neustart des Servers, unterstützen persistente Intervalle und integrieren sich ins zentrale Linux-Loggingsystem (\texttt{journalctl}). 
   Zudem werden alle Aktionen des Skripts zusätzlich in einer separaten Logdatei unter \texttt{/srv/logs/process.log} festgehalten.
 
   Dafür müssen folgende Schritte unternommen werden:
 
   \begin{enumerate}
     \item Service anlegen und testen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Service-Datei erstellen
 sudo nano /etc/systemd/system/process_incoming.service
     \end{minted}
 
     Inhalt der Datei:
-    \begin{minted}[breaklines, linenos]{ini}
-# ===============================================
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{ini}
+# ========================================================
 # Systemd Service: process_incoming.service
-# -----------------------------------------------
+# --------------------------------------------------------
 # Zweck:
 #   Führt das Skript /srv/scripts/process_incoming.sh aus,
 #   das neue Uploads aus /srv/incoming_media automatisch
@@ -1817,7 +1823,7 @@ sudo nano /etc/systemd/system/process_incoming.service
 #   - Arbeitet als One-Shot-Job (kein Dauerdienst).
 #   - Schreibt alle Ausgaben in ein zentrales Logfile unter /srv/logs/.
 #   - Neustart bei Fehlern (z. B. temporäre Sperren, Netzunterbrechung).
-# ===============================================
+# ========================================================
 
 [Unit]
 # Beschreibung (wird in 'systemctl list-units' angezeigt)
@@ -1856,12 +1862,12 @@ RestartSec=30s
 # --- Logging ---
 # Standard- und Fehlerausgabe (stdout/stderr) in Logdatei umleiten.
 # Datei wird bei Bedarf automatisch erstellt.
-StandardOutput=append:/srv/logs/systemd_process_incoming.log
-StandardError=append:/srv/logs/systemd_process_incoming.log
+StandardOutput=append:/srv/logs/ systemd_process_incoming.log
+StandardError=append:/srv/logs/ systemd_process_incoming.log
 
 # --- Umgebungsvariablen (optional, hilfreich für PATH) ---
 # Falls dein Skript rsync, find, chmod o.ä. nutzt, ist PATH hier explizit gesetzt
-Environment="PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+Environment="PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/ sbin"
 
 # --- Sicherheit (optional, aber empfehlenswert) ---
 # Verhindert versehentliche Schreibzugriffe außerhalb der relevanten Pfade
@@ -1877,23 +1883,23 @@ WantedBy=multi-user.target
     \end{minted}
 
     \noindent Service anschließend testen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo systemctl daemon-reload
 sudo systemctl start process_incoming.service
 sudo systemctl status process_incoming.service
     \end{minted}
 
     \item Timer anlegen und testen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Timer-Datei erstellen
 sudo nano /etc/systemd/system/process_incoming.timer
     \end{minted}
 
     \noindent Inhalt der Datei:
-    \begin{minted}[breaklines, linenos]{ini}
-# ===============================================
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{ini}
+# ========================================================
 # Systemd Timer: process_incoming.timer
-# -----------------------------------------------
+# --------------------------------------------------------
 # Zweck:
 #   Startet regelmäßig den Service 'process_incoming.service',
 #   der neue Uploads aus /srv/incoming_media verarbeitet.
@@ -1909,7 +1915,7 @@ sudo nano /etc/systemd/system/process_incoming.timer
 #   - Führt zusätzlich einmal täglich um 02:00 Uhr einen
 #     vollständigen Nachtlauf durch (für große Uploads)
 #   - Verpasste Läufe werden nachgeholt (z. B. nach Reboot)
-# ===============================================
+# ========================================================
 
 [Unit]
 # Beschreibung, erscheint in systemctl list-units und journalctl
@@ -1940,7 +1946,7 @@ WantedBy=timers.target
     \end{minted}
 
     \noindent Timer aktivieren und testen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo systemctl daemon-reload
 sudo systemctl enable --now process_incoming.timer
 sudo systemctl list-timers --all | grep process_incoming
@@ -1954,7 +1960,7 @@ sudo systemctl list-timers --all | grep process_incoming
 
   \begin{enumerate}
     \item Upload-Ordner und Skript anlegen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 mkdir /Users/bibliothek/Scripts
 mkdir /Users/bibliothek/Logs
 mkdir /Users/bibliothek/Desktop/_upload-to-server
@@ -1963,21 +1969,21 @@ nano /Users/bibliothek/Scripts/upload_media.sh
 
     Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren):
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 #!/usr/bin/env bash
-# ============================================================
+# ========================================================
 #  Upload-Skript für Medienserver (macOS)
-#  ------------------------------------------------------------
+#  -------------------------------------------------------
 #  Zweck:
 #    - Überträgt neue Medien-Dateien (FLACs, PDFs, JPGs etc.)
 #      aus dem lokalen Upload-Ordner auf den zentralen Server.
 #    - Erfolgreich übertragene Dateien werden lokal gelöscht.
 #    - Logdatei dokumentiert alle Aktionen.
-# ============================================================
+# ========================================================
 
-# -------------------------------
+# --------------------------------------------------------
 # SSH-Agent aktivieren (macOS-kompatibel)
-# -------------------------------
+# --------------------------------------------------------
 if ! pgrep -u "$USER" ssh-agent >/dev/null; then
     eval "$(ssh-agent -s)" >/dev/null
 fi
@@ -1989,20 +1995,20 @@ if ! ssh-add -l 2>/dev/null | grep -q "$SSH_KEY"; then
     ssh-add "$SSH_KEY"
 fi
 
-# -------------------------------
+# --------------------------------------------------------
 # Konfiguration
-# -------------------------------
+# --------------------------------------------------------
 SOURCE="/Users/bibliothek/Desktop/_upload-to-server"            # Lokaler Upload-Ordner
 DEST="medienserver@193.197.85.23:/srv/incoming_media"           # Ziel auf Server
 LOGFILE="/Users/bibliothek/Desktop/Logs/upload_media.log"       # Lokale Log-Datei
 
-# -------------------------------
+# --------------------------------------------------------
 # Vorbereitung
-# -------------------------------
+# --------------------------------------------------------
 mkdir -p "$(dirname "$LOGFILE")"    # Log-Verzeichnis anlegen, falls fehlt
 touch "$LOGFILE"                    # Log-Datei sicherstellen
 
-echo "-------------------------------------------------------" >> "$LOGFILE"
+echo "---------------------------------------------------" >> "$LOGFILE"
 echo "$(date '+%F %T') [INFO] Starte Upload-Prozess..." >> "$LOGFILE"
 
 # Prüfen, ob der Upload-Ordner existiert und Dateien enthält
@@ -2011,18 +2017,18 @@ if ! find "$SOURCE" -type f | grep -q .; then
     exit 0
 fi
 
-# -------------------------------
+# --------------------------------------------------------
 # Upload via rsync
-# -------------------------------
+# --------------------------------------------------------
 caffeinate -i rsync -avz --remove-source-files --progress \
   --exclude=".DS_Store" \
   "$SOURCE/" "$DEST/" >> "$LOGFILE" 2>&1
 
 RSYNC_EXIT=$?
 
-# -------------------------------
+# --------------------------------------------------------
 # Nachbearbeitung
-# -------------------------------
+# --------------------------------------------------------
 if [[ $RSYNC_EXIT -eq 0 ]]; then
     echo "$(date '+%F %T') [OK] Upload erfolgreich abgeschlossen." >> "$LOGFILE"
 
@@ -2036,9 +2042,9 @@ else
     echo "$(date '+%F %T') [ERROR] Upload fehlgeschlagen (Exit-Code: $RSYNC_EXIT)." >> "$LOGFILE"
 fi
 
-# ------------------------------------------
+# --------------------------------------------------------
 # Serververarbeitung mit Verzögerung starten
-# ------------------------------------------
+# --------------------------------------------------------
 WAIT_SECONDS=60
 echo "$(date '+%F %T') [INFO] Warte $WAIT_SECONDS Sekunden, um Dateiabschlüsse zu sichern..." >> "$LOGFILE"
 sleep $WAIT_SECONDS
@@ -2054,31 +2060,31 @@ else
 fi
 
 echo "$(date '+%F %T') [INFO] Upload-Vorgang beendet." >> "$LOGFILE"
-echo "-------------------------------------------------------" >> "$LOGFILE"
+echo "---------------------------------------------------" >> "$LOGFILE"
     \end{minted}
 
     \item Aktivieren:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 chmod +x /Users/bibliothek/Desktop/Scripts/upload_media.sh # Pfad zur Datei gegebenfalls anpassen
     \end{minted}
 
     \item Laucnchd-Job zur Automatisierung des Prozesses anlegen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 cd ~/Library/LaunchAgents
 nano de.hfm.upload_media.plist
     \end{minted}
 
     Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren):
 
-    \begin{minted}[breaklines, linenos]{XML}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{XML}
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 
-    <!-- ===========================================================
+    <!-- =================================================
          Launchd-Job für automatischen Upload zum Medienserver
-         ===========================================================
+         =================================================
          Dieses LaunchAgent-File sorgt dafür, dass das Skript
          „upload_media.sh“ regelmäßig ausgeführt wird.
          Der Job läuft im Benutzerkontext (nicht systemweit) und
@@ -2086,23 +2092,23 @@ nano de.hfm.upload_media.plist
     -->
 
     <!-- Label: interner Name des Jobs
-         ---------------------------------
+         -------------------------------------------------
          Wird von launchd verwendet, um den Job zu identifizieren.
          Der Name sollte eindeutig und im Reverse-Domain-Format sein. -->
     <key>Label</key>
     <string>de.hfm.upload_media</string>
 
     <!-- ProgramArguments: Pfad und Argumente des Skripts
-         ---------------------------------
+        -------------------------------------------------
          Gibt an, welches Skript oder Programm ausgeführt wird.
          Hier nur ein Argument: der vollständige Pfad zur .sh-Datei. -->
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/bibliothek/Desktop/Scripts/upload_media.sh</string>
+        <string>/Users/bibliothek/Desktop/Scripts/ upload_media.sh</string>
     </array>
 
     <!-- RunAtLoad: Start beim Login
-         ---------------------------------
+         -------------------------------------------------
          Wenn der Benutzer sich anmeldet, wird das Skript sofort
          einmal ausgeführt. Praktisch, damit der Prozess gleich
          nach dem Hochfahren aktiv ist. -->
@@ -2110,24 +2116,24 @@ nano de.hfm.upload_media.plist
     <true/>
 
     <!-- StartInterval: Wiederholungsintervall
-         ---------------------------------
+         -------------------------------------------------
          Legt fest, wie oft der Job automatisch ausgeführt wird.
          Zeitangabe in Sekunden → 1800 = 30 Minuten. -->
     <key>StartInterval</key>
     <integer>1800</integer>
 
     <!-- StandardOutPath & StandardErrorPath: Logdateien
-         ---------------------------------
+         -------------------------------------------------
          Hier werden alle Standard-Ausgaben und Fehler des Skripts
          gespeichert, damit man prüfen kann, ob alles korrekt läuft.
          Beide Dateien liegen im Ordner ~/Desktop/Logs -->
     <key>StandardOutPath</key>
-    <string>/Users/bibliothek/Desktop/Logs/upload_media_launchd.log</string>
+    <string>/Users/bibliothek/Desktop/Logs/ upload_media_launchd.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/bibliothek/Desktop/Logs/upload_media_launchd_error.log</string>
+    <string>/Users/bibliothek/Desktop/Logs/ upload_media_launchd_error.log</string>
 
     <!-- EnvironmentVariables: Umgebungsvariablen
-         ---------------------------------
+         -------------------------------------------------
          Optional, falls PATH-Probleme auftreten.
          Manche macOS-LaunchAgents haben eine minimale PATH-Umgebung.
          Hier wird der Standard-Systempfad explizit angegeben,
@@ -2135,7 +2141,7 @@ nano de.hfm.upload_media.plist
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/ sbin</string>
     </dict>
 
 </dict>
@@ -2143,13 +2149,13 @@ nano de.hfm.upload_media.plist
     \end{minted}
 
     \item Launchd-Job laden und testen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 launchctl load ~/Library/LaunchAgents/de.hfm.upload_media.plist
     \end{minted}
 
     Datei (.pdf oder .flac) in den Upload-Ordner legen und Test durchführen
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 launchctl start de.hfm.upload_media # manuell starten
 launchctl list | grep upload_media # Status prüfen
 
@@ -2172,52 +2178,52 @@ launchctl load ~/Library/LaunchAgents/de.hfm.upload_media.plist
   \begin{enumerate}
     \item Skript anlegen:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 nano /Users/bibliothek/Desktop/_upload-starten.command
     \end{minted}
 
     Datei mit folgendem Inhalt füllen (oder aus dem Github-Repository kopieren):
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 #!/bin/bash
-# ============================================================
+# ========================================================
 #  Upload-Starter für den Medienserver (per Doppelklick)
-# ============================================================
+# ========================================================
 
-# -------------------------------
+# --------------------------------------------------------
 # Pfadkonfiguration
-# -------------------------------
+# --------------------------------------------------------
 SCRIPT="/Users/bibliothek/Scripts/upload_media.sh"     # Hauptskript
 LOGFILE="/Users/bibliothek/Logs/upload_media_manual.log"  # Log-Datei
 
-# -------------------------------
+# --------------------------------------------------------
 # Vorbereitung: Log sicherstellen
-# -------------------------------
+# --------------------------------------------------------
 mkdir -p "$(dirname "$LOGFILE")"   # Log-Verzeichnis anlegen, falls nicht vorhanden
 touch "$LOGFILE"                   # Leere Log-Datei erstellen (falls nicht existiert)
 
-# -------------------------------
+# --------------------------------------------------------
 # Startzeit in Log schreiben
-# -------------------------------
-echo "-------------------------------------------------------" >> "$LOGFILE"
+# --------------------------------------------------------
+echo "---------------------------------------------------" >> "$LOGFILE"
 echo "$(date '+%F %T') [INFO] Manuell gestarteter Upload..." >> "$LOGFILE"
 
-# -------------------------------
+# --------------------------------------------------------
 # Upload ausführen
-# -------------------------------
+# --------------------------------------------------------
 # Führt das eigentliche Upload-Skript aus und leitet
 # Standardausgabe und Fehlerausgabe in die Log-Datei um.
 bash "$SCRIPT" >> "$LOGFILE" 2>&1
 
-# -------------------------------
+# --------------------------------------------------------
 # Abschlussmeldung
-# -------------------------------
+# --------------------------------------------------------
 echo "$(date '+%F %T') [INFO] Upload abgeschlossen." >> "$LOGFILE"
-echo "-------------------------------------------------------" >> "$LOGFILE"
+echo "---------------------------------------------------" >> "$LOGFILE"
 
-# -------------------------------
+# --------------------------------------------------------
 # Rückmeldung im Terminalfenster
-# -------------------------------
+# --------------------------------------------------------
 echo "Upload abgeschlossen. Details im Log unter: $LOGFILE"
 read -n 1 -s -r -p "Drücke eine Taste zum Schließen..."
     \end{minted}
@@ -2225,7 +2231,7 @@ read -n 1 -s -r -p "Drücke eine Taste zum Schließen..."
     \item Skript ausführbar machen:
     Danach kann der Upload-Prozess jederzeit durch Doppelklick auf die Datei gestartet werden.
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 chmod +x ~/Desktop/Upload-starten.command
     \end{minted}
   \end{enumerate}
@@ -2243,7 +2249,7 @@ chmod +x ~/Desktop/Upload-starten.command
       \item Container läuft nicht:
       Bei "Error 502 Bad Gateway", sollte zunächst geprüft werden, ob der Docker-Container vorhanden ist und richtig läuft.
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Status des Containers prüfen
 sudo docker ps
 
@@ -2253,7 +2259,7 @@ abcd1234efgh   deluan/navidrome:latest   "/entrypoint.sh /bin/…"   10 minutes 
       \end{minted} 
 
       Falls der Container nicht läuft (kein Eintrag vorhanden), kann dieser mit folgendem Befehl gestartet werden:
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo docker-compose up -d
       \end{minted}
 
@@ -2264,7 +2270,7 @@ sudo docker-compose up -d
       Sollte ein anderer Pfad genutzt werden, muss dieser entsprechend angepasst werden.
       Dafür folgenden Code ausführen:
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Inhalt der docker-compose.yml anzeigen
 sudo nano /srv/navidrome/docker-compose.yml # gegebenfalls Pfad zur yml-Datei anpassen
       \end{minted}
@@ -2272,7 +2278,7 @@ sudo nano /srv/navidrome/docker-compose.yml # gegebenfalls Pfad zur yml-Datei an
       Nach jeder Anpassung der \texttt{docker-compose.yml} muss der Container neu gestartet werden.  
       Andernfalls verwendet Navidrome weiterhin die alte Konfiguration.
       
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Container neu starten
 sudo docker-compose up -d --build
       \end{minted}
@@ -2281,7 +2287,7 @@ sudo docker-compose up -d --build
       Falls das Passwort für das Admin-Konto vergessen wurde, kann dieses zurückgesetzt werden, indem ein temporärer Container mit einer Umgebungsvariable gestartet wird.  
       Dies geschiet mit folgendem Code (das normale Setup über \texttt{docker-compose} bleibt unverändert):
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Temporären Navidrome-Container starten und neues Passwort setzen. Gegebenenfalls Pfade und Port anpassen.
 docker run --rm \
   -e ND_ADMIN_PASSWORD=Passwort \
@@ -2296,7 +2302,7 @@ docker run --rm \
     
       \item Änderung von Umgebeungsvariablen:
       Werden Änderungen von Umgebungsvariablen im docker-compose.yml bei Navidrome nicht direkt übernommen, kann folgender Schritt helfen:
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Zuerst ins Richtige Verzeichnis wechseln
 cd /srv/navidrome
 
@@ -2318,17 +2324,18 @@ sudo docker exec -it navidrome printenv | grep ENABLEDOWNLOADS # Variable anpass
     
     \begin{enumerate}
       \item Berechtigungen:
-      Falls Nginx beim Zugriff auf Dateien mit \texttt{403 Forbidden} antwortet, liegt dies meist an fehlenden Berechtigungen für den Prozessbenutzer \texttt{www-data}.  
+      Falls Nginx beim Zugriff auf Dateien mit\\ \texttt{403 Forbidden} antwortet, 
+      liegt dies meist an fehlenden Berechtigungen für den Prozessbenutzer \texttt{www-data}.  
       Dieser benötigt Lesezugriff auf die Dateien und Ausführungsrechte auf allen übergeordneten Verzeichnissen.
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Test: kann www-data den Ordner sehen?
 sudo -u www-data ls /mnt/media/booklets
       \end{minted}
 
       Falls dabei \texttt{Permission denied} ausgegeben wird, müssen die Rechte angepasst werden:
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Ausführungsrechte für /mnt und /mnt/media hinzufügen
 sudo chmod o+x /mnt /mnt/media
 
@@ -2346,7 +2353,7 @@ sudo chmod -R o+r /mnt/media/booklets
       Nach jeder Anpassung einer nginx-Konfigurationsdatei muss überprüft und anschließend ein Reload durchgeführt werden.  
       Andernfalls verwendet nginx weiterhin die alte Konfiguration.
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Syntax der Konfiguration prüfen
 sudo nginx -t
 
@@ -2359,41 +2366,42 @@ sudo systemctl reload nginx
       \item Hostname nicht auflösbar:
       Bei der Konfiguration des Reverse Proxys mit Nginx kann es vorkommen, dass der Server zwar über die IP-Adresse erreichbar ist, 
       nicht jedoch über den gewünschten Hostnamen (\texttt{mediaserver.local}).  
-      Dieses Verhalten liegt nicht an Nginx, sondern an der Namensauflösung: Der Client kennt die Adresse für \texttt{mediaserver.local} nicht.  
+      Dieses Verhalten liegt nicht an Nginx, sondern an der Namensauflösung: Der Client kennt die Adresse für\\
+      \texttt{mediaserver.local} nicht.  
       Es gibt zwei mögliche Lösungswege.
       \\
       \newline
-      \texttt{Variante 1: Eintrag in der \texttt{/etc/hosts}-Datei des Clients}
+      \texttt{Variante 1: Eintrag in der \texttt{/etc/hosts}-Datei des Clients}\\
       Durch einen manuellen Eintrag in die \texttt{/etc/hosts}-Datei des Clients (z.\,B. macOS) wird der Hostname einer festen IP-Adresse zugeordnet.  
       Dazu wird die Datei mit Root-Rechten geöffnet:
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo nano /etc/hosts
       \end{minted}
 
       Am Ende der Datei wird folgender Eintrag ergänzt (IP-Adresse anpassen):
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 100.123.42.40   mediaserver.local # IP-Adresse des Servers anpassen
       \end{minted}
 
       Nach dem Speichern und Schließen der Datei kann der Name per \texttt{ping} überprüft werden:
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 ping mediaserver.local # ctrl+c zum Abbrechen
       \end{minted}
 
-      Erfolgt eine Antwort, ist der Server nun auch unter \texttt{http://mediaserver.local} im Browser erreichbar.  
+      Erfolgt eine Antwort, ist der Server nun auch unter\\ \texttt{http://mediaserver.local} im Browser erreichbar.  
       Diese Methode gilt allerdings nur für den jeweiligen Client und muss auf allen Endgeräten einzeln wiederholt werden.
       \\
       \newline
-      \texttt{Variante 2: Multicast-DNS (mDNS) mit Avahi auf dem Server}
-      Eine elegantere Lösung für lokale Netzwerke ist die Nutzung von Multicast-DNS (mDNS).  
+      \texttt{Variante 2: Multicast-DNS (mDNS) mit Avahi auf dem Server}\\
+      Eine elegantere Lösung für lokale Netzwerke ist die Nutzung von Multi-cast-DNS (\acs{mDNS}).  
       Dadurch kündigt der Server seinen Hostnamen automatisch im Netzwerk an, sodass alle Clients diesen ohne manuelle Anpassungen auflösen können.
 
       Dazu wird auf dem Server das Paket \texttt{avahi-daemon} installiert:
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo apt install avahi-daemon -y
 sudo systemctl enable avahi-daemon
 sudo systemctl start avahi-daemon
@@ -2401,7 +2409,7 @@ sudo systemctl start avahi-daemon
 
       Anschließend kann der Hostname (z.\,B. \texttt{mediaserver.local}) direkt im Browser oder per \texttt{ping} genutzt werden:
 
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 ping mediaserver.local
       \end{minted}
 
@@ -2413,20 +2421,20 @@ ping mediaserver.local
     Wenn für den SSH-Key bei der Erstellung ein Passwort vergeben wurde, kann es zu Problemen bei der Automatisierung des Datentransfers mit \texttt{launchd} kommen.  
     Dies lässt sich jedoch einfach beheben, indem das Passwort in der macOS-Keychain hinterlegt wird.
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 ssh-add --apple-use-keychain ~/.ssh/id_ed25519   # Key gegebenenfalls anpassen
     \end{minted}
 
     Nun das Passwort einmalig eingeben. Anschließend kann die Verbindung getestet werden:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 ssh medienserver@Server-IP
     \end{minted}
 
     Es sollte nun keine Passwortabfrage mehr erscheinen.  
     Falls der Upload trotz korrektem SSH-Schlüssel nicht funktioniert, kann das manuelle Startskript auf dem Desktop verwendet werden:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 bash ~/Desktop/Upload-starten.command
     \end{minted}
 
@@ -2438,12 +2446,12 @@ bash ~/Desktop/Upload-starten.command
     Je nach Startmethode liegen diese in unterschiedlichen Dateien:
     \begin{itemize}
       \item \texttt{\textasciitilde/Logs/upload\_media\_manual.log} – manueller Start (Doppelklick auf \texttt{.command})
-      \item \texttt{\textasciitilde/Logs/upload\_media\_launchd.log} – automatischer Start über \texttt{launchd}
-      \item \texttt{\textasciitilde/Logs/upload\_media\_launchd\_error.log} – Fehlerausgabe von \texttt{launchd}
+      \item \texttt{\textasciitilde/Logs/upload\_media\_launchd.log} – automatischer Start über\\ \texttt{launchd}
+      \item \texttt{\textasciitilde/Logs/upload\_media\_launchd\_error.log} – Fehlerausgabe von\\ \texttt{launchd}
     \end{itemize}
 
     Die letzten Einträge einer Logdatei lassen sich wie folgt anzeigen:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 tail -n 20 ~/Logs/upload_media_manual.log
     \end{minted}
 
@@ -2457,7 +2465,7 @@ tail -n 20 ~/Logs/upload_media_manual.log
     Falls der lokale Upload-Ordner nach der Übertragung leer oder verschwunden ist, liegt das an der Option \texttt{--remove-source-files} im Upload-Skript.  
     Diese löscht Dateien nach erfolgreichem Transfer, um den Ordner automatisch zu bereinigen.  
     Soll dies nicht geschehen, kann die Option entfernt oder auskommentiert werden:
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Variante ohne automatisches Löschen:
 rsync -avz --progress --exclude=".DS_Store" "$SOURCE/" "$DEST/"
     \end{minted}
@@ -2469,7 +2477,7 @@ rsync -avz --progress --exclude=".DS_Store" "$SOURCE/" "$DEST/"
 
     Nachfolgende Befehle stellen sicher, dass der Benutzer \texttt{medienserver} alle benötigten Rechte besitzt:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Eigentümer und Gruppe setzen
 sudo chown -R medienserver:medienserver /srv/scripts
 sudo chown -R medienserver:medienserver /srv/incoming_media
@@ -2494,7 +2502,7 @@ sudo chmod 664 /srv/logs/process.log
 
     \begin{itemize}
       \item \textbf{Upload prüfen (Client):}
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Testdatei in den Upload-Ordner legen
 cp ~/Desktop/test.flac ~/Desktop/_upload-to-server/
 # Logausgabe live beobachten
@@ -2502,7 +2510,7 @@ tail -f ~/Logs/upload_media_manual.log
       \end{minted}
 
       \item \textbf{Verarbeitung prüfen (Server):}
-      \begin{minted}[breaklines, linenos]{bash}
+      \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # Status des systemd-Timers anzeigen
 sudo systemctl status process_incoming.timer
 
@@ -2521,7 +2529,7 @@ sudo tail -n 20 /srv/logs/process.log
 
     Nachfolgende Befehle stellen sicher, dass die Datei ausführbar ist und von macOS nicht blockiert wird:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 # 1. Ausführungsrechte für das Skript setzen
 chmod +x "/Users/bibliothek/Desktop/_upload-starten.command"
 
@@ -2543,10 +2551,10 @@ bash "/Users/bibliothek/Desktop/_upload-starten.command"
 
     \subsubsection*{Probleme mit der SSH-Ausführung von Systemdiensten}
     Bei der automatischen Ausführung des Serverprozesses über SSH kann ein Berechtigungsproblem auftreten.  
-    Das auslösende Skript auf dem macOS-Client sollte nach erfolgreichem Upload den systemd-Dienst 
+    Das auslösende Skript auf dem macOS-Client sollte nach erfolgreichem Upload den systemd-Dienst\\
     \texttt{process\_incoming.service} auf dem Server starten. Der Aufruf erfolgte dabei über:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 ssh medienserver@193.197.85.23 "sudo systemctl start process_incoming.service"
 
 # Ausgabe:
@@ -2563,17 +2571,18 @@ sudo: a password is required
     Damit darf der Benutzer \texttt{medienserver} den betreffenden systemd-Dienst ohne Passworteingabe starten.  
     Dies geschieht über die Anpassung der \texttt{sudoers}-Datei mittels:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 sudo visudo
     \end{minted}
 
     Dort folgende Zeile ergänzen:
 
-    \begin{minted}[breaklines, linenos]{bash}
+    \begin{minted}[breaklines, breaksymbolleft=, breaksymbolright=, linenos]{bash}
 medienserver ALL=(ALL) NOPASSWD: /bin/systemctl start process_incoming.service
     \end{minted}
 
-    Damit ist ausschließlich der Befehl zum Starten des Dienstes \texttt{process\_incoming.service} 
+    Damit ist ausschließlich der Befehl zum Starten des Dienstes\\
+    \texttt{process\_incoming.service} 
     für den Benutzer \texttt{medienserver} ohne Passwort ausführbar, 
     was eine sichere und automatisierte Prozessausführung über SSH ermöglicht, 
     ohne die Systemintegrität zu gefährden.
