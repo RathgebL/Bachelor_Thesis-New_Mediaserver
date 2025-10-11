@@ -1668,6 +1668,36 @@ audio1/
   sowie im Anhang zu finden.
 
   \subsubsection*{Skript für Booklet-Aufbereitung}
+  Das Skript \texttt{jpg2pdf.py} übernimmt die automatisierte Aufbereitung und Vereinheitlichung der digitalisierten CD-Booklets. 
+  Da die Scans der Begleithefte im Digitalisierungsprozess zunächst als einzelne \texttt{.jpg}-Dateien vorliegen, 
+  ist eine strukturierte Zusammenführung zu vollständigen PDF-Dokumenten erforderlich. 
+  Diese PDFs werden anschließend gemeinsam mit den konvertierten Audiodateien auf dem Medienserver bereitgestellt 
+  und bilden die Grundlage für den Zugriff auf die digitalen Booklets im Web-Browser.
+
+  Das Skript durchsucht rekursiv alle Unterverzeichnisse des gewählten Eingabeordners nach \texttt{booklet}-Ordnern 
+  und erkennt automatisch die enthaltenen JPG-Dateien. 
+  Die einzelnen Seiten werden in logischer Reihenfolge (beginnend mit \texttt{booklet-b.jpg}, gefolgt von \texttt{booklet.jpg} und etwaigen nummerierten Varianten) 
+  zu einem zusammenhängenden PDF-Dokument kombiniert. 
+  Der Name des erzeugten PDF-Files wird dabei automatisch aus der Verzeichnisstruktur abgeleitet, 
+  sodass eine konsistente und menschenlesbare Benennung nach dem Schema \texttt{<Komponist>-<Medientitel>.pdf} entsteht.
+
+  Besonders wichtig ist dabei, dass die Benennung exakt nach demselben Schema wie im Metadatenskript erfolgt. 
+  Nur dadurch kann gewährleistet werden, dass die in den FLAC-Dateien hinterlegten Booklet-URLs 
+  mit den tatsächlich erzeugten PDF-Dateien übereinstimmen und die Verknüpfung über die Web-Oberfläche korrekt funktioniert. 
+  Um dies sicherzustellen, verwendet das Skript dieselben Funktionen zur Text- und Unicode-Normalisierung wie das Metadatenskript.
+
+  Der Booklet-Generator arbeitet ebenfalls parallelisiert über mehrere CPU-Kerne 
+  und zeigt den Fortschritt der Verarbeitung im Terminal an. 
+  Bereits vorhandene PDF-Dateien werden erkannt und übersprungen, um unbeabsichtigtes Überschreiben zu vermeiden. 
+  Fehlerhafte oder unvollständige Bilddateien werden mit einer Warnung übersprungen, 
+  ohne den Ablauf der Verarbeitung zu unterbrechen.  
+  Durch diese robuste Verarbeitung kann das Skript auch auf große Mengen digitalisierter Medienordner angewendet werden.
+
+  Mit diesem Werkzeug wird sichergestellt, dass alle digitalen Booklets in einem einheitlichen, 
+  archivtauglichen und serverkompatiblen Format vorliegen.  
+  Der vollständige Quellcode des Skripts ist sowohl im GitHub-Repository dieser Bachelorarbeit als auch im Anhang enthalten 
+  und kann bei Bedarf leicht erweitert oder in andere Verarbeitungsschritte integriert werden.
+
   \subsubsection*{Externe und weitere Quellen}
 
   \subsection{Datenübertragung}
