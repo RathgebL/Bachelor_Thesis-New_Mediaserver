@@ -1678,7 +1678,7 @@ audio1/
   und erkennt automatisch die enthaltenen JPG-Dateien. 
   Die einzelnen Seiten werden in logischer Reihenfolge (beginnend mit \texttt{booklet-b.jpg}, gefolgt von \texttt{booklet.jpg} und etwaigen nummerierten Varianten) 
   zu einem zusammenhängenden PDF-Dokument kombiniert. 
-  Der Name des erzeugten PDF-Files wird dabei automatisch aus der Verzeichnisstruktur abgeleitet, 
+  Der Name des erzeugten PDFs wird dabei automatisch aus der Verzeichnisstruktur abgeleitet, 
   sodass eine konsistente und menschenlesbare Benennung nach dem Schema \texttt{<Komponist>-<Medientitel>.pdf} entsteht.
 
   Besonders wichtig ist dabei, dass die Benennung exakt nach demselben Schema wie im Metadatenskript erfolgt. 
@@ -1699,6 +1699,23 @@ audio1/
   und kann bei Bedarf leicht erweitert oder in andere Verarbeitungsschritte integriert werden.
 
   \subsubsection*{Externe und weitere Quellen}
+  Neue Mediendaten können mithilfe der zuvor beschriebenen Skripte jederzeit in das System integriert werden. 
+  Die beiden Werkzeuge zur Metadatenanreicherung und Booklet-Aufbereitung sind so konzipiert, 
+  dass sie auch mit extern erzeugten Digitalisaten oder bereits vorhandenen Musikdateien arbeiten können. 
+  Das zugrunde liegende Datenformat kann bei Bedarf an die Struktur des Medienservers angepasst oder, 
+  sofern kompatibel, direkt übernommen werden (siehe hierzu nach unterstützte Datenformate für Navidrome).
+
+  Beispielsweise können MP3-Dateien ohne vorherige Konvertierung direkt auf den Server hochgeladen werden. 
+  Sind in diesen Dateien bereits Metadaten enthalten, werden diese von Navidrome automatisch übernommen und verarbeitet. 
+  Alternativ können vorhandene Audiodateien mit Hilfe der beschriebenen Konvertierungs- und Metadaten-Skripte 
+  vereinheitlicht und mit zusätzlichen Informationen angereichert werden, um eine konsistente Darstellung im System sicherzustellen.
+
+  Darüber hinaus besteht die Möglichkeit, zukünftig auch spezielle Audiodatenbestände einzubinden, 
+  wie etwa einzigartige Aufnamen, die das Institut für Musikinformatik der Hochschule 
+  vom ZKM Karlsruhe erworben hat. 
+  Diese Daten konnten im Rahmen der vorliegenden Arbeit aus Zeitgründen noch nicht berücksichtigt werden, 
+  sollen jedoch perspektivisch in das System integriert werden, 
+  um das digitale Angebot des Medienservers weiter zu vervollständigen.
 
   \subsection{Datenübertragung}
   Um die Übertragung neu erstellter Mediendateien (\texttt{.flac}, \texttt{.pdf}) vom Digitalisierungsrechner auf den Medienserver zu vereinfachen 
