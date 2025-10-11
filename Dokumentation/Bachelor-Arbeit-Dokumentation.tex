@@ -1645,6 +1645,28 @@ audio1/
   sondern wird auf einer eigenen GitHub-Seite bereitgestellt: \url{https://github.com/RathgebL/mk-msdir}
  
   \subsubsection*{Skript zur Metadatenanreicherung}
+  Das Skript \texttt{wav2flac.py} spielt eine zentrale Rolle im Prozess der Datenaufbereitung für den Medienserver. 
+  Es dient der automatisierten Konvertierung von digitalisierten \texttt{.wav}-Dateien in das platzsparende und für die Langzeitarchivierung geeignete 
+  \texttt{FLAC}-Format, welches vom neuen Server unterstützt wird. 
+  Darüber hinaus werden die Audiodateien mit einer Vielzahl an Metadaten angereichert, die für die Strukturierung, 
+  Suche und Darstellung der Werke auf der Web-Oberfläche des Medienservers von wesentlicher Bedeutung sind.  
+  Damit bildet das Skript einen entscheidenden Zwischenschritt zwischen der reinen Digitalisierung und der endgültigen Bereitstellung.
+
+  Das Skript analysiert rekursiv die vorliegende Ordnerstruktur und extrahiert daraus relevante Informationen wie Komponist, Werk, Album, Titel, 
+  Satznummer, Discnummer und gegebenenfalls den Box-Titel. 
+  Diese Daten werden anschließend in die FLAC-Dateien als Vorbis-Kommentare (Tags) geschrieben. 
+  Auch die zugehörigen Booklet-URLs werden automatisch generiert und den entsprechenden Dateien zugeordnet, 
+  sodass ein direkter Verweis auf die digitalen Begleithefte im System besteht.  
+  Wenn im jeweiligen Medienordner ein Coverbild vorhanden ist, wird dieses zusätzlich direkt in die FLAC-Datei eingebettet.
+
+  Die Verarbeitung erfolgt parallelisiert über mehrere CPU-Kerne, wodurch auch umfangreiche Datensätze effizient konvertiert werden können. 
+  Eine Fortschrittsanzeige im Terminal informiert über den aktuellen Status der Umwandlung. 
+  Optional kann das Skript im sogenannten „Dry-Run“-Modus ausgeführt werden, um die Struktur und Metadatenverarbeitung zu simulieren, 
+  ohne tatsächlich Dateien zu schreiben – ein nützliches Werkzeug zur Qualitätssicherung.
+
+  Der Quellcode des Skripts ist vollständig dokumentiert und im Repository dieser Bachelorarbeit 
+  sowie im Anhang zu finden.
+
   \subsubsection*{Skript für Booklet-Aufbereitung}
   \subsubsection*{Externe und weitere Quellen}
 
